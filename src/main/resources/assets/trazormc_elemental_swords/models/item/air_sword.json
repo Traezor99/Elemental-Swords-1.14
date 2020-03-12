@@ -1,0 +1,6 @@
+{
+    "parent": "item/handheld",
+    "textures": {
+        "layer0": "trazormc_elemental_swords:item/air_sword"
+     }
+}

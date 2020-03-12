@@ -1,0 +1,6 @@
+{ 
+    "parent": "block/cube_all",
+    "textures": {
+        "all": "trazormc_elemental_swords:block/amethyst_block"
+    }
+}

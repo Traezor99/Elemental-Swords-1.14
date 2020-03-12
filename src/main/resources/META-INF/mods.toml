@@ -1,0 +1,33 @@
+# Find more information on toml format here:  https://github.com/toml-lang/toml
+modLoader="javafml" #mandatory
+loaderVersion="[25,)" #mandatory (24 is current forge version)
+#issueTrackerURL="http://my.issue.tracker/" #optional  ADD LATER
+[[mods]] #mandatory
+modId="trazormc_elemental_swords" #mandatory
+version="0.5" #mandatory
+displayName="Elemental Swords Mod" #mandatory
+#updateJSONURL="http://myurl.me/" #optional
+#displayURL="http://example.com/" #optional ADD LAter
+#logoFile="examplemod.png" #optional
+credits="" #optional
+authors="TrazorMC" #optional
+# The description text for the mod (multi line!) (#mandatory)
+description='''
+	A very cool mod FIX ME IM NOT DONE!!!!11!!!!11!1!!11!
+'''
+# A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
+[[dependencies.trazormc_elemental_swords]] #optional
+    modId="forge" #mandatory
+    mandatory=true #mandatory
+    versionRange="[25,)" #mandatory
+    # An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
+    ordering="NONE"
+    # Side this dependency is applied on - BOTH, CLIENT or SERVER
+    side="BOTH"
+# Here's another dependency
+[[dependencies.trazormc_elemental_swords]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.14.4]"
+    ordering="NONE"
+    side="BOTH"

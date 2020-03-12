@@ -1,0 +1,67 @@
+{
+    "item.trazormc_elemental_swords.amethyst": "Amethyst",
+    "item.trazormc_elemental_swords.amethyst_king's_ring": "Amethyst King's Ring",
+    
+    "item.trazormc_elemental_swords.gust_of_wind": "Gust of Wind",
+    "item.trazormc_elemental_swords.earth_stone": "Earth Stone",
+    "item.trazormc_elemental_swords.flaming_ember": "Flaming Ember",
+    "item.trazormc_elemental_swords.spark_of_energy": "Spark of Energy",
+    "item.trazormc_elemental_swords.shimmering_water": "Shimmering Water",
+
+    "item.trazormc_elemental_swords.amethyst_sword": "Amethyst Sword",
+    "item.trazormc_elemental_swords.fire_sword": "Fire Sword",
+    "item.trazormc_elemental_swords.lightning_sword": "Lightning Sword",
+    "item.trazormc_elemental_swords.earth_sword": "Earth Sword",
+    "item.trazormc_elemental_swords.water_sword": "Water Sword",
+    "item.trazormc_elemental_swords.amethyst_king's_sword": "Amethyst King's Sword",
+    "item.trazormc_elemental_swords.air_sword": "Air Sword",
+
+    "item.trazormc_elemental_swords.amethyst_helmet": "Amethyst Helmet",
+    "item.trazormc_elemental_swords.amethyst_chestplate": "Amethyst Chestplate",
+    "item.trazormc_elemental_swords.amethyst_leggings": "Amethyst Leggings",
+    "item.trazormc_elemental_swords.amethyst_boots": "Amethyst Boots",
+
+    "item.trazormc_elemental_swords.air_helmet": "Air Helmet",
+    "item.trazormc_elemental_swords.air_chestplate": "Air Chestplate",
+    "item.trazormc_elemental_swords.air_leggings": "Air Leggings",
+    "item.trazormc_elemental_swords.air_boots": "Air Boots",
+    
+    "item.trazormc_elemental_swords.earth_helmet": "Earth Helmet",
+    "item.trazormc_elemental_swords.earth_chestplate": "Earth Chestplate",
+    "item.trazormc_elemental_swords.earth_leggings": "Earth Leggings",
+    "item.trazormc_elemental_swords.earth_boots": "Earth Boots",
+
+    "item.trazormc_elemental_swords.fire_helmet": "Fire Helmet",
+    "item.trazormc_elemental_swords.fire_chestplate": "Fire Chestplate",
+    "item.trazormc_elemental_swords.fire_leggings": "Fire Leggings",
+    "item.trazormc_elemental_swords.fire_boots": "Fire Boots",
+
+    "item.trazormc_elemental_swords.lightning_helmet": "Lightning Helmet",
+    "item.trazormc_elemental_swords.lightning_chestplate": "Lightning Chestplate",
+    "item.trazormc_elemental_swords.lightning_leggings": "Lightning Leggings",
+    "item.trazormc_elemental_swords.lightning_boots": "Lightning Boots",
+
+    "item.trazormc_elemental_swords.water_helmet": "Water Helmet",
+    "item.trazormc_elemental_swords.water_chestplate": "Water Chestplate",
+    "item.trazormc_elemental_swords.water_leggings": "Water Leggings",
+    "item.trazormc_elemental_swords.water_boots": "Water Boots",
+
+    "block.trazormc_elemental_swords.imbuement_table": "Imbuement Table",
+    "block.trazormc_elemental_swords.amethyst_block": "Amethyst Block",
+    "block.trazormc_elemental_swords.amethyst_ore": "Amethyst Ore",
+    "block.trazormc_elemental_swords.amethyst_stone": "Amethyst Stone",
+    "block.trazormc_elemental_swords.teleporter_block": "Teleporter Block",
+
+    "entity.trazormc_elemental_swords.amethyst_miner": "Amethyst Miner",
+    "entity.trazormc_elemental_swords.amethyst_king": "Amethyst King",
+    "entity.trazormc_elemental_swords.air_boss": "Air Boss",
+    "entity.trazormc_elemental_swords.earth_boss": "Earth Boss",
+    "entity.trazormc_elemental_swords.fire_boss": "Fire Boss",
+    "entity.trazormc_elemental_swords.lightning_boss": "Lightning Boss",
+    "entity.trazormc_elemental_swords.water_boss": "Water Boss",
+    "entity.trazormc_elemental_swords.charged_fireball": "Charged Fireball",
+
+    "container.trazormc_elemental_swords.imbuement_table": "Imbuement Table",
+
+    "itemGroup.tab_swords": "Elemental Swords"
+}

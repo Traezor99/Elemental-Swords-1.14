@@ -1,0 +1,36 @@
+{
+	"type": "minecraft:entity",
+    "pools": [
+        {
+            "name": "miner_amethyst",
+            "rolls": 1,
+            "entries": [
+                {
+                    "type": "item",                 
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 0,
+                                "max": 3
+                            }
+                        },
+                        {
+				            "function": "minecraft:looting_enchant",
+				            "count": {
+				            	"min": 0.0,
+				              	"max": 1.0
+				            }
+                        }
+                    ],
+                    "name": "trazormc_elemental_swords:amethyst"
+                }
+            ],
+            "conditions": [
+                {
+                    "condition": "killed_by_player"
+                }
+            ]
+        }
+    ]
+}

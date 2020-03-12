@@ -1,0 +1,16 @@
+[
+{
+  "modid": "trazormc_elemental_swords",
+  "name": "Elemental Swords Mod",
+  "description": "Allows the player to customize swords.",
+  "version": "${1.0}",
+  "mcversion": "${1.14}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["TrazorMC"],
+  "credits": "The people on the Minecraft forge forums, especially Choonster.",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
