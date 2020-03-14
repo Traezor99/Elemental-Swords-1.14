@@ -49,8 +49,8 @@ public class ModUtils {
 	/**
 	 * Randomly generates a number within the specified radius of the player
 	 * @param rand
-	 * @param xzPos the player's x or z coordinate (method must be called once for each) 
 	 * @param radius the radius for generation
+	 * @param xzPos the player's x or z coordinate (method must be called once for each) 
 	 * @return the x or z coordinate of the spawnpoint
 	 */
 	public static int getPos(Random rand, int radius, int xzPos) {	

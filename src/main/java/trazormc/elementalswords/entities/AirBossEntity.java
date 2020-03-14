@@ -175,22 +175,20 @@ public class AirBossEntity extends MonsterEntity {
 		return false;
 	}
 
-	//Drowned? Not water boss so no
 	@Override
 	protected SoundEvent getAmbientSound() {
-		return SoundEvents.ENTITY_SQUID_AMBIENT;
+		return SoundEvents.ITEM_ELYTRA_FLYING;
 	}
 
-	//Drowned?
 	@Override
 	protected SoundEvent getDeathSound() {
-		return SoundEvents.ENTITY_SQUID_DEATH;
+		return SoundEvents.ENTITY_GENERIC_EXPLODE;
 	}
-
-	//Drowned?
+	
+	//Probably change sounds?
 	@Override
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-		return SoundEvents.ENTITY_SQUID_HURT;
+		return SoundEvents.ENTITY_PUFFER_FISH_HURT;
 	}
 
 }

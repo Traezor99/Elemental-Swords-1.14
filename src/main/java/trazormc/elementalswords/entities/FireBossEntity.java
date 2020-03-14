@@ -1,7 +1,5 @@
 package trazormc.elementalswords.entities;
 
-import java.util.EnumSet;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntitySize;
 import net.minecraft.entity.EntityType;
@@ -128,45 +126,6 @@ public class FireBossEntity extends BlazeEntity {
 
 		super.updateAITasks();
 	}
-	//Doesn't appear to work!!!!
-	static class SpawnBlazeGoal extends Goal {
-		private final FireBossEntity fireBoss;
-		private int spawnTime;
-
-		public SpawnBlazeGoal(FireBossEntity fireBoss) {
-			this.fireBoss = fireBoss;
-			this.setMutexFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
-		}
-
-		@Override
-		public boolean shouldExecute() {
-			LivingEntity livingEntity = this.fireBoss.getAttackTarget();
-			return livingEntity != null && livingEntity.isAlive();
-		}
-
-		@Override
-		public void startExecuting() {
-			this.spawnTime = 0;
-		}
-
-		@Override
-		public void tick() {
-			super.tick();
-			if(this.spawnTime >= 200 && !fireBoss.world.isRemote) {
-				this.spawnTime = 0;
-				BlazeEntity blaze = new BlazeEntity(EntityType.BLAZE, fireBoss.world);
-				int x = ModUtils.getPos(fireBoss.rand, 5, (int)fireBoss.posX);
-				int z = ModUtils.getPos(fireBoss.rand, 5, (int)fireBoss.posZ);
-				int y = ModUtils.calculateGenerationHeight(fireBoss.world, x, z) + 1;  		
-				blaze.setPosition(x, y, z);
-				fireBoss.world.addEntity(blaze);
-				System.out.println("Spawned blaze");
-			} else {
-				this.spawnTime++;
-			}
-		}
-
-	}
 
 	static class FireballAttackGoal extends Goal {
 		private final FireBossEntity fireBoss;
@@ -175,13 +134,11 @@ public class FireBossEntity extends BlazeEntity {
 
 		public FireballAttackGoal(FireBossEntity fireBoss) {
 			this.fireBoss = fireBoss;
-			this.setMutexFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
 		}
 
 		@Override
 		public boolean shouldExecute() {
-			LivingEntity livingEntity = this.fireBoss.getAttackTarget();
-			return livingEntity != null && livingEntity.isAlive();
+			return this.fireBoss.getAttackTarget() instanceof PlayerEntity;
 		}
 
 		@Override
@@ -244,5 +201,41 @@ public class FireBossEntity extends BlazeEntity {
 			IAttributeInstance iattributeinstance = this.fireBoss.getAttribute(SharedMonsterAttributes.FOLLOW_RANGE);
 			return iattributeinstance == null ? 16.0D : iattributeinstance.getValue();
 		}
+	}
+	
+	static class SpawnBlazeGoal extends Goal {
+		private final FireBossEntity fireBoss;
+		private int spawnTime;
+
+		public SpawnBlazeGoal(FireBossEntity fireBoss) {
+			this.fireBoss = fireBoss;
+		}
+
+		@Override
+		public boolean shouldExecute() {
+			return this.fireBoss != null && this.fireBoss.isAlive();
+		}
+
+		@Override
+		public void startExecuting() {
+			this.spawnTime = 0;
+		}
+
+		@Override
+		public void tick() {
+			super.tick();
+			if(this.spawnTime >= 200 && !fireBoss.world.isRemote) {
+				this.spawnTime = 0;
+				BlazeEntity blaze = new BlazeEntity(EntityType.BLAZE, fireBoss.world);
+				int x = ModUtils.getPos(fireBoss.rand, 5, (int)fireBoss.posX);
+				int z = ModUtils.getPos(fireBoss.rand, 5, (int)fireBoss.posZ);
+				int y = ModUtils.calculateGenerationHeight(fireBoss.world, x, z) + 1;  		
+				blaze.setPosition(x, y, z);
+				fireBoss.world.addEntity(blaze);
+			} else {
+				this.spawnTime++;
+			}
+		}
+
 	}
 }
