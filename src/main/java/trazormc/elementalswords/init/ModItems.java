@@ -5,6 +5,11 @@ import net.minecraft.item.Item;
 import net.minecraft.item.SwordItem;
 import net.minecraftforge.registries.ObjectHolder;
 import trazormc.elementalswords.ElementalSwords;
+import trazormc.elementalswords.items.shards.AirShardItem;
+import trazormc.elementalswords.items.shards.EarthShardItem;
+import trazormc.elementalswords.items.shards.FireShardItem;
+import trazormc.elementalswords.items.shards.LightningShardItem;
+import trazormc.elementalswords.items.shards.WaterShardItem;
 
 @ObjectHolder(ElementalSwords.MOD_ID)
 public class ModItems {
@@ -16,6 +21,14 @@ public class ModItems {
 	public static Item FLAMING_EMBER = null;
 	public static Item SPARK_OF_ENERGY = null;
 	public static Item SHIMMERING_WATER = null;
+	
+	//Spawn Items
+	public static Item SUMMONING_SHARD = null;
+	public static AirShardItem AIR_SHARD = null;
+	public static EarthShardItem EARTH_SHARD = null;
+	public static FireShardItem FIRE_SHARD = null;
+	public static LightningShardItem LIGHTNING_SHARD = null;
+	public static WaterShardItem WATER_SHARD = null;
 	
 	//Swords
 	public static SwordItem AMETHYST_SWORD = null;

@@ -31,7 +31,6 @@ import trazormc.elementalswords.blocks.ImbuementTableBlock;
 import trazormc.elementalswords.blocks.TeleporterBlock;
 import trazormc.elementalswords.containers.ImbuementTableContainer;
 import trazormc.elementalswords.crafting.ImbuementShapelessRecipes;
-import trazormc.elementalswords.entities.AmethystKingEntity;
 import trazormc.elementalswords.entities.AmethystMinerEntity;
 import trazormc.elementalswords.entities.AirBossEntity;
 import trazormc.elementalswords.entities.ChargedFireballEntity;
@@ -49,6 +48,11 @@ import trazormc.elementalswords.init.ModItems;
 import trazormc.elementalswords.items.armor.EarthArmor;
 import trazormc.elementalswords.items.armor.FireArmor;
 import trazormc.elementalswords.items.armor.WaterArmor;
+import trazormc.elementalswords.items.shards.AirShardItem;
+import trazormc.elementalswords.items.shards.EarthShardItem;
+import trazormc.elementalswords.items.shards.FireShardItem;
+import trazormc.elementalswords.items.shards.LightningShardItem;
+import trazormc.elementalswords.items.shards.WaterShardItem;
 import trazormc.elementalswords.items.swords.AirSword;
 import trazormc.elementalswords.items.swords.EarthSword;
 import trazormc.elementalswords.items.swords.FireSword;
@@ -68,6 +72,13 @@ public class RegistryHandler {
 		createEntityTypes();		
 		event.getRegistry().registerAll(
 				ModItems.AMETHYST = new Item(new Item.Properties().group(ElementalSwords.tabSwords)).setRegistryName(ElementalSwords.MOD_ID, "amethyst"),
+				ModItems.SUMMONING_SHARD = new Item(new Item.Properties().group(ElementalSwords.tabSwords)).setRegistryName(ElementalSwords.MOD_ID, "summoning_shard"),
+				
+				ModItems.AIR_SHARD = setup(new AirShardItem(new Item.Properties().group(ElementalSwords.tabSwords)), "air_shard"),
+				ModItems.EARTH_SHARD = setup(new EarthShardItem(new Item.Properties().group(ElementalSwords.tabSwords)), "earth_shard"),
+				ModItems.FIRE_SHARD = setup(new FireShardItem(new Item.Properties().group(ElementalSwords.tabSwords)), "fire_shard"),
+				ModItems.LIGHTNING_SHARD = setup(new LightningShardItem(new Item.Properties().group(ElementalSwords.tabSwords)), "lightning_shard"),
+				ModItems.WATER_SHARD = setup(new WaterShardItem(new Item.Properties().group(ElementalSwords.tabSwords)), "water_shard"),
 				
 				ModItems.GUST_OF_WIND = new Item(new Item.Properties().group(ElementalSwords.tabSwords)).setRegistryName(ElementalSwords.MOD_ID, "gust_of_wind"),
 				ModItems.EARTH_STONE = new Item(new Item.Properties().group(ElementalSwords.tabSwords)).setRegistryName(ElementalSwords.MOD_ID, "earth_stone"),
@@ -113,7 +124,6 @@ public class RegistryHandler {
 				ModItems.WATER_BOOTS = setup(new WaterArmor(ArmorMaterialTypes.STANDARD, EquipmentSlotType.FEET, new Item.Properties().group(ElementalSwords.tabSwords)), "water_boots"),
 				
 				ModItems.AIR_BOSS_SPAWN_EGG = setupEggs("air_boss_spawn_egg", ModEntityTypes.ENTITY_AIR_BOSS, 9987080, 3381306),
-				ModItems.AMETHYST_KING_SPAWN_EGG = setupEggs("amethyst_king_spawn_egg", ModEntityTypes.ENTITY_AMETHYST_KING, 12071583, 15654912),
 				ModItems.AMETHYST_MINER_SPAWN_EGG = setupEggs("amethyst_miner_spawn_egg", ModEntityTypes.ENTITY_AMETHYST_MINER, 12071583, 000000),
 				ModItems.EARTH_BOSS_SPAWN_EGG = setupEggs("earth_boss_spawn_egg", ModEntityTypes.ENTITY_EARTH_BOSS, 9987080, 3381306),
 				ModItems.FIRE_BOSS_SPAWN_EGG = setupEggs("fire_boss_spawn_egg", ModEntityTypes.ENTITY_FIRE_BOSS, 13313792, 13345280),
@@ -172,7 +182,6 @@ public class RegistryHandler {
 	@SubscribeEvent
 	public static void onEntityRegistry(RegistryEvent.Register<EntityType<?>> event) {
 		event.getRegistry().registerAll(
-				ModEntityTypes.ENTITY_AMETHYST_KING,
 				ModEntityTypes.ENTITY_AMETHYST_MINER,
 				ModEntityTypes.ENTITY_AIR_BOSS,
 				ModEntityTypes.ENTITY_EARTH_BOSS,
@@ -199,7 +208,6 @@ public class RegistryHandler {
 	
 	private static void createEntityTypes() {
 		setup(ModEntityTypes.ENTITY_AIR_BOSS = EntityType.Builder.create(AirBossEntity::new, EntityClassification.MONSTER).setTrackingRange(85).size(0.6F, 1.95F).build(ElementalSwords.MOD_ID + ":air_boss"), "air_boss");
-		setup(ModEntityTypes.ENTITY_AMETHYST_KING = EntityType.Builder.create(AmethystKingEntity::new, EntityClassification.MONSTER).setTrackingRange(100).size(1.0f, 3.0f).build(ElementalSwords.MOD_ID + ":amethyst_king"), "amethyst_king");
 		setup(ModEntityTypes.ENTITY_AMETHYST_MINER = EntityType.Builder.create(AmethystMinerEntity::new, EntityClassification.MONSTER).setTrackingRange(85).size(0.6F, 1.95F).build(ElementalSwords.MOD_ID + ":amethyst_miner"), "amethyst_miner");
 		setup(ModEntityTypes.ENTITY_EARTH_BOSS = EntityType.Builder.create(EarthBossEntity::new, EntityClassification.MONSTER).setTrackingRange(85).size(0.6F, 1.95F).build(ElementalSwords.MOD_ID + ":earth_boss"), "earth_boss");
 		setup(ModEntityTypes.ENTITY_FIRE_BOSS = EntityType.Builder.create(FireBossEntity::new, EntityClassification.MONSTER).setTrackingRange(85).size(0.6F, 1.95F).immuneToFire().build(ElementalSwords.MOD_ID + ":fire_boss"), "fire_boss");
@@ -207,5 +215,4 @@ public class RegistryHandler {
 		setup(ModEntityTypes.ENTITY_WATER_BOSS = EntityType.Builder.create(WaterBossEntity::new, EntityClassification.MONSTER).setTrackingRange(85).size(0.6F, 1.95F).build(ElementalSwords.MOD_ID + ":water_boss"), "water_boss");
 		setup(ModEntityTypes.ENTITY_CHARGED_FIREBALL = EntityType.Builder.<ChargedFireballEntity>create(ChargedFireballEntity::new, EntityClassification.MISC).setTrackingRange(85).setCustomClientFactory((spawnEntity, world) -> new ChargedFireballEntity(world)).build(ElementalSwords.MOD_ID + ":charged_fireball"), "charged_fireball");
 	}
-
 }

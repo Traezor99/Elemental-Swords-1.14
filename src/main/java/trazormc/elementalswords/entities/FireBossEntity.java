@@ -224,18 +224,12 @@ public class FireBossEntity extends BlazeEntity {
 		@Override
 		public void tick() {
 			super.tick();
-			if(this.spawnTime >= 200 && !fireBoss.world.isRemote) {
+			if(this.spawnTime >= 200 && !this.fireBoss.world.isRemote) {
 				this.spawnTime = 0;
-				BlazeEntity blaze = new BlazeEntity(EntityType.BLAZE, fireBoss.world);
-				int x = ModUtils.getPos(fireBoss.rand, 5, (int)fireBoss.posX);
-				int z = ModUtils.getPos(fireBoss.rand, 5, (int)fireBoss.posZ);
-				int y = ModUtils.calculateGenerationHeight(fireBoss.world, x, z) + 1;  		
-				blaze.setPosition(x, y, z);
-				fireBoss.world.addEntity(blaze);
+				ModUtils.attemptSpawnBossAdd(this.fireBoss, new BlazeEntity(EntityType.BLAZE, this.fireBoss.world), 10);
 			} else {
 				this.spawnTime++;
 			}
 		}
-
 	}
 }

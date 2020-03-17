@@ -4,6 +4,8 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
@@ -31,6 +33,62 @@ public class ModUtils {
 		}
 		
 		return y;
+	}
+	
+	/**
+	 * Attempts to spawn the given entity in a safe location the specified number of tries.
+	 * @param bossIn the Boss spawning the entity
+	 * @param spawnEntity the entity to be spawned
+	 * @param attempts the number of attempts allowed to find a safe location.
+	 */
+	public static void attemptSpawnBossAdd(MonsterEntity bossIn, Entity spawnEntity, int attempts) {
+		boolean repeat = false;
+		int attemptsTried = 0;
+		do {
+			int x = ModUtils.getPos(new Random(), 5, (int)bossIn.posX);
+			int z = ModUtils.getPos(new Random(), 5, (int)bossIn.posZ);
+			int y = calculateMobSpawnHeight(bossIn.world, (int)bossIn.posY, x, z);  
+			if(y != 0) {
+				spawnEntity.setPosition(x, y, z);
+				bossIn.world.addEntity(spawnEntity);
+				repeat = false;
+			}
+			else {
+				repeat = true;
+				attemptsTried++;
+			}
+		} while(repeat && attemptsTried < attempts);
+	}
+	
+	/**
+	 * Used to find a safe height for spawning entities near a boss. Checks 15 blocks above and below the entity for a safe y height
+	 * @param world the world to spawn the entity in
+	 * @param yEntity the y height of the boss
+	 * @param x the x coordinate to spawn the mob at
+	 * @param z the z coordinate to spawn the mob at
+	 * @return the safe y height, if none is found 0 is returned. Check that 0 is not returned before spawning.
+	 */
+	public static int calculateMobSpawnHeight(World world, int yEntity, double x, double z) {
+		int y = yEntity + 5;
+		boolean isSafe = false;
+		
+		while(y > yEntity - 5) {
+			Block block = world.getBlockState(new BlockPos(x, y, z)).getBlock();
+			Block block1 = world.getBlockState(new BlockPos(x, y - 1, z)).getBlock();
+			if(isSafe) {
+				if(!block.equals(Blocks.AIR)) {
+					return y + 1;
+				} else {
+					y--;
+				}
+			} else if(block.equals(Blocks.AIR) && block1.equals(Blocks.AIR)) {
+				isSafe = true;
+				y--;
+			} else {
+				y--;
+			}
+		}
+		return 0;
 	}
 	
 	/**

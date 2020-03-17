@@ -1,6 +1,12 @@
 {
     "item.trazormc_elemental_swords.amethyst": "Amethyst",
-    "item.trazormc_elemental_swords.amethyst_king's_ring": "Amethyst King's Ring",
+    "item.trazormc_elemental_swords.summoning_shard": "Summoning Shard",
+    
+    "item.trazormc_elemental_swords.air_shard": "Air Shard",
+    "item.trazormc_elemental_swords.earth_shard": "Earth Shard",
+    "item.trazormc_elemental_swords.fire_shard": "Fire Shard",
+    "item.trazormc_elemental_swords.lightning_shard": "Lightning Shard",
+    "item.trazormc_elemental_swords.water_shard": "Water Shard",
     
     "item.trazormc_elemental_swords.gust_of_wind": "Gust of Wind",
     "item.trazormc_elemental_swords.earth_stone": "Earth Stone",
@@ -9,12 +15,11 @@
     "item.trazormc_elemental_swords.shimmering_water": "Shimmering Water",
 
     "item.trazormc_elemental_swords.amethyst_sword": "Amethyst Sword",
+    "item.trazormc_elemental_swords.air_sword": "Air Sword",
+    "item.trazormc_elemental_swords.earth_sword": "Earth Sword",
     "item.trazormc_elemental_swords.fire_sword": "Fire Sword",
     "item.trazormc_elemental_swords.lightning_sword": "Lightning Sword",
-    "item.trazormc_elemental_swords.earth_sword": "Earth Sword",
     "item.trazormc_elemental_swords.water_sword": "Water Sword",
-    "item.trazormc_elemental_swords.amethyst_king's_sword": "Amethyst King's Sword",
-    "item.trazormc_elemental_swords.air_sword": "Air Sword",
 
     "item.trazormc_elemental_swords.amethyst_helmet": "Amethyst Helmet",
     "item.trazormc_elemental_swords.amethyst_chestplate": "Amethyst Chestplate",
@@ -46,14 +51,13 @@
     "item.trazormc_elemental_swords.water_leggings": "Water Leggings",
     "item.trazormc_elemental_swords.water_boots": "Water Boots",
 
-    "block.trazormc_elemental_swords.imbuement_table": "Imbuement Table",
     "block.trazormc_elemental_swords.amethyst_block": "Amethyst Block",
     "block.trazormc_elemental_swords.amethyst_ore": "Amethyst Ore",
     "block.trazormc_elemental_swords.amethyst_stone": "Amethyst Stone",
+    "block.trazormc_elemental_swords.imbuement_table": "Imbuement Table",
     "block.trazormc_elemental_swords.teleporter_block": "Teleporter Block",
 
     "entity.trazormc_elemental_swords.amethyst_miner": "Amethyst Miner",
-    "entity.trazormc_elemental_swords.amethyst_king": "Amethyst King",
     "entity.trazormc_elemental_swords.air_boss": "Air Boss",
     "entity.trazormc_elemental_swords.earth_boss": "Earth Boss",
     "entity.trazormc_elemental_swords.fire_boss": "Fire Boss",
