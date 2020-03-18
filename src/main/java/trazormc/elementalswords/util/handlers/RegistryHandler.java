@@ -41,7 +41,7 @@ import trazormc.elementalswords.entities.WaterBossEntity;
 import trazormc.elementalswords.init.ModBiomes;
 import trazormc.elementalswords.init.ModBlocks;
 import trazormc.elementalswords.init.ModContainerTypes;
-import trazormc.elementalswords.init.ModCraftingRecipes;
+import trazormc.elementalswords.init.ModRecipeSerializers;
 import trazormc.elementalswords.init.ModDimensions;
 import trazormc.elementalswords.init.ModEntityTypes;
 import trazormc.elementalswords.init.ModItems;
@@ -154,7 +154,7 @@ public class RegistryHandler {
 	@SuppressWarnings("unchecked")
 	@SubscribeEvent
 	public static void onRecipeSerializerRegistry(RegistryEvent.Register<IRecipeSerializer<?>> event) {
-		event.getRegistry().register(ModCraftingRecipes.IMBUEMENT_SHAPELESS = (IRecipeSerializer<ImbuementShapelessRecipes>) new ImbuementShapelessRecipes.Serializer().setRegistryName(new ResourceLocation(ElementalSwords.MOD_ID, "imbuement")));
+		event.getRegistry().register(ModRecipeSerializers.IMBUEMENT_SHAPELESS = (IRecipeSerializer<ImbuementShapelessRecipes>) new ImbuementShapelessRecipes.Serializer().setRegistryName(new ResourceLocation(ElementalSwords.MOD_ID, "imbuement")));
 	}
 	
 	@SubscribeEvent

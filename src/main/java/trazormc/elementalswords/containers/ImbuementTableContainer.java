@@ -24,6 +24,7 @@ import net.minecraft.util.IWorldPosCallable;
 import net.minecraft.world.World;
 import trazormc.elementalswords.containers.slots.SwordInputSlot;
 import trazormc.elementalswords.init.ModContainerTypes;
+import trazormc.elementalswords.init.ModRecipeSerializers;
 import trazormc.elementalswords.items.swords.FireSword;
 
 public class ImbuementTableContainer extends Container  {
@@ -75,8 +76,8 @@ public class ImbuementTableContainer extends Container  {
 	        Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(imbuementInventory.getStackInSlot(0));
 	        Optional<ICraftingRecipe> optional = world.getServer().getRecipeManager().getRecipe(IRecipeType.CRAFTING, inventory, world);
 	        if(optional.isPresent()) {
-	        	ICraftingRecipe icraftingrecipe = optional.get();
-	            if(resultInventory.canUseRecipe(world, serverplayerentity, icraftingrecipe)) {	     
+	        	ICraftingRecipe icraftingrecipe = optional.get(); 
+	            if(resultInventory.canUseRecipe(world, serverplayerentity, icraftingrecipe) && icraftingrecipe.getSerializer() == ModRecipeSerializers.IMBUEMENT_SHAPELESS) {	     
 	            	itemstack = icraftingrecipe.getCraftingResult(inventory);
 	            	if(itemstack.getItem().getClass() == FireSword.class) {
 	            		enchantments.put(Enchantments.FIRE_ASPECT, 2);

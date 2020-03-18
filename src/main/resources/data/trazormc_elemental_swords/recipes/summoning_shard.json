@@ -1,0 +1,16 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+       " A ",
+       "AAA",
+       " A "
+    ],
+    "key": {
+        "A": {
+            "item": "trazormc_elemental_swords:amethyst"
+        }
+    },
+    "result": {
+        "item": "trazormc_elemental_swords:summoning_shard"
+    }
+}

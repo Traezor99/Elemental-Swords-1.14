@@ -230,21 +230,13 @@ public class EarthBossEntity extends MonsterEntity {
 					switch(this.earthBoss.rand.nextInt(2)) {
 					case 0:
 						ZombieEntity zombie = new ZombieEntity(this.earthBoss.world);
-						int x = ModUtils.getPos(this.earthBoss.rand, 10, (int)this.earthBoss.posX);
-						int z = ModUtils.getPos(this.earthBoss.rand, 10, (int)this.earthBoss.posZ);
-						int y = ModUtils.calculateGenerationHeight(this.earthBoss.world, x, z);
-						zombie.setPosition(x, y, z);
-						this.earthBoss.world.addEntity(zombie);
-						zombie.setAttackTarget(this.earthBoss.attackingPlayer);
+						ModUtils.attemptSpawnBossAdd(this.earthBoss, zombie, 7);
+						zombie.setAttackTarget(this.earthBoss.getAttackTarget());
 						break;
 					case 1:
 						SkeletonEntity skeleton = new SkeletonEntity(EntityType.SKELETON, this.earthBoss.world);
-						int x1 = ModUtils.getPos(this.earthBoss.rand, 10, (int)this.earthBoss.posX);
-						int z1 = ModUtils.getPos(this.earthBoss.rand, 10, (int)this.earthBoss.posZ);
-						int y1 = ModUtils.calculateGenerationHeight(this.earthBoss.world, x1, z1);
-						skeleton.setPosition(x1, y1, z1);
-						this.earthBoss.world.addEntity(skeleton);
-						skeleton.setAttackTarget(this.earthBoss.attackingPlayer);
+						ModUtils.attemptSpawnBossAdd(this.earthBoss, skeleton, 7);
+						skeleton.setAttackTarget(this.earthBoss.getAttackTarget());
 						break;
 					}
 				}

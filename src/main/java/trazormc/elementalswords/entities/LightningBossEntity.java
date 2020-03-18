@@ -205,12 +205,8 @@ public class LightningBossEntity extends MonsterEntity {
 			if(summonMobsTimer >= 300 && !this.lightningBoss.world.isRemote) {   		
 				if(this.lightningBoss.rand.nextInt(2) == 0) {
 					CreeperEntity creeper = new CreeperEntity(EntityType.CREEPER, this.lightningBoss.world);
-					int x = ModUtils.getPos(this.lightningBoss.rand, 5, (int)this.lightningBoss.posX);
-					int z = ModUtils.getPos(this.lightningBoss.rand, 5, (int)this.lightningBoss.posZ);
-					int y = ModUtils.calculateGenerationHeight(this.lightningBoss.world, x, z) + 1;
-					creeper.setPosition(x, y, z);	    
-					this.lightningBoss.world.addEntity(creeper);
-					creeper.setAttackTarget(this.lightningBoss.attackingPlayer);
+					ModUtils.attemptSpawnBossAdd(this.lightningBoss, creeper, 10);
+					creeper.setAttackTarget(this.lightningBoss.getAttackTarget());
 
 					LightningBoltEntity lightning = new LightningBoltEntity(this.lightningBoss.world, creeper.posX, creeper.posY, creeper.posZ, false);
 					lightning.setPosition(creeper.posX, creeper.posY, creeper.posZ);
@@ -219,12 +215,8 @@ public class LightningBossEntity extends MonsterEntity {
 
 				for(int i = 0; i <= 4; i++) {
 					ZombiePigmanEntity pigman = new ZombiePigmanEntity(EntityType.ZOMBIE_PIGMAN, this.lightningBoss.world);
-					int x = ModUtils.getPos(this.lightningBoss.rand, 5, (int)this.lightningBoss.posX);
-					int z = ModUtils.getPos(this.lightningBoss.rand, 5, (int)this.lightningBoss.posZ);
-					int y = ModUtils.calculateGenerationHeight(this.lightningBoss.world, x, z) + 1;
-					pigman.setPosition(x, y, z);	           		
-					this.lightningBoss.world.addEntity(pigman);  
-					pigman.setAttackTarget(this.lightningBoss.attackingPlayer);
+					ModUtils.attemptSpawnBossAdd(this.lightningBoss, pigman, 10);  
+					pigman.setAttackTarget(this.lightningBoss.getAttackTarget());
 				}
 
 				summonMobsTimer = 0;    		

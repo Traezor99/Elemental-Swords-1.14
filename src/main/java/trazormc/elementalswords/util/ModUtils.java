@@ -36,7 +36,7 @@ public class ModUtils {
 	}
 	
 	/**
-	 * Attempts to spawn the given entity in a safe location the specified number of tries.
+	 * Attempts to spawn the given entity in a safe location up to the specified number of times.
 	 * @param bossIn the Boss spawning the entity
 	 * @param spawnEntity the entity to be spawned
 	 * @param attempts the number of attempts allowed to find a safe location.
@@ -61,7 +61,7 @@ public class ModUtils {
 	}
 	
 	/**
-	 * Used to find a safe height for spawning entities near a boss. Checks 15 blocks above and below the entity for a safe y height
+	 * Used to find a safe height for spawning entities near a boss. Checks 10 blocks above and below the entity for a safe y height
 	 * @param world the world to spawn the entity in
 	 * @param yEntity the y height of the boss
 	 * @param x the x coordinate to spawn the mob at
@@ -69,15 +69,15 @@ public class ModUtils {
 	 * @return the safe y height, if none is found 0 is returned. Check that 0 is not returned before spawning.
 	 */
 	public static int calculateMobSpawnHeight(World world, int yEntity, double x, double z) {
-		int y = yEntity + 5;
+		int y = yEntity + 10;
 		boolean isSafe = false;
 		
-		while(y > yEntity - 5) {
+		while(y > yEntity - 10) {
 			Block block = world.getBlockState(new BlockPos(x, y, z)).getBlock();
 			Block block1 = world.getBlockState(new BlockPos(x, y - 1, z)).getBlock();
 			if(isSafe) {
 				if(!block.equals(Blocks.AIR)) {
-					return y + 1;
+					return y - 1;
 				} else {
 					y--;
 				}

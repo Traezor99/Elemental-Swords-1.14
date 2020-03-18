@@ -23,7 +23,8 @@ public class SwordInputSlot extends Slot {
 	}
 	
 	private boolean isValid(Item item) {
-		if(item == ModItems.AMETHYST_SWORD || item == ModItems.AMETHSYT_HELMET || item == ModItems.AMETHYST_CHESTPLATE || item == ModItems.AMETHYST_LEGGINGS || item == ModItems.AMETHYST_BOOTS) {
+		if(item == ModItems.AMETHYST_SWORD || item == ModItems.AMETHSYT_HELMET || item == ModItems.AMETHYST_CHESTPLATE 
+				|| item == ModItems.AMETHYST_LEGGINGS || item == ModItems.AMETHYST_BOOTS || item == ModItems.SUMMONING_SHARD) {
 			return true;
 		}
 		return false;

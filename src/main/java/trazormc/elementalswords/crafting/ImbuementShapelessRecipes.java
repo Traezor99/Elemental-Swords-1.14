@@ -22,7 +22,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.RecipeMatcher;
 import net.minecraftforge.registries.ForgeRegistryEntry;
-import trazormc.elementalswords.init.ModCraftingRecipes;
+import trazormc.elementalswords.init.ModRecipeSerializers;
 
 public class ImbuementShapelessRecipes implements ICraftingRecipe {	
 	private final ResourceLocation id;
@@ -41,7 +41,7 @@ public class ImbuementShapelessRecipes implements ICraftingRecipe {
 
 	@Override
 	public IRecipeSerializer<?> getSerializer() {
-		return ModCraftingRecipes.IMBUEMENT_SHAPELESS;
+		return ModRecipeSerializers.IMBUEMENT_SHAPELESS;
 	}
 	 
 	@Override
@@ -107,7 +107,7 @@ public class ImbuementShapelessRecipes implements ICraftingRecipe {
 	          } else if (nonnulllist.size() > 2) {
 	             throw new JsonParseException("Too many ingredients for shapeless recipe the max is " + 2);
 	          } else {
-	        	  ItemStack result = ShapedRecipe.deserializeItem(JSONUtils.getJsonObject(json, "result")); //CraftingHelper.getItemStack(JSONUtils.getJsonObject(json, "result"), true);
+	        	  ItemStack result = ShapedRecipe.deserializeItem(JSONUtils.getJsonObject(json, "result")); 
 	        	  return new ImbuementShapelessRecipes(recipeId, group, result, nonnulllist);	  
 	          }
 	      }

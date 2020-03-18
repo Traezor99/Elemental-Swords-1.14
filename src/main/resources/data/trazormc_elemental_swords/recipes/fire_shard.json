@@ -1,0 +1,14 @@
+{
+  "result": {
+    "item": "trazormc_elemental_swords:fire_shard"
+  },
+  "type": "trazormc_elemental_swords:imbuement",
+  "ingredients": [
+    {
+      "item": "trazormc_elemental_swords:summoning_shard"
+    },
+    {
+      "item": "minecraft:lava_bucket"
+    }
+  ]
+}
