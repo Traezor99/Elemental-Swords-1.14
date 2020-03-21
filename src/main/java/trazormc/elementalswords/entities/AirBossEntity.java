@@ -24,6 +24,8 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.BossInfo;
 import net.minecraft.world.ServerBossInfo;
 import net.minecraft.world.World;
@@ -43,6 +45,7 @@ public class AirBossEntity extends MonsterEntity {
 		this.goalSelector.addGoal(0, new SwimGoal(this));
 		this.goalSelector.addGoal(0, new MeleeAttackGoal(this, 1.5f, false));
 		this.goalSelector.addGoal(1, new WhirlWindGoal(this));
+		this.goalSelector.addGoal(1, new ShootStuffGoal(this));
 		this.goalSelector.addGoal(5, new MoveTowardsRestrictionGoal(this, 1.0));
 		this.goalSelector.addGoal(6, new SpawnPhantomsGoal(this));
 		this.goalSelector.addGoal(8, new LookAtGoal(this, PlayerEntity.class, 7.0f));
@@ -57,20 +60,20 @@ public class AirBossEntity extends MonsterEntity {
 		super.registerAttributes();
 		this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(300.0);
 		this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.23);
-		this.getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(50.0);
+		this.getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(100.0);
 		this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(25.0);
 		this.getAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(4.0);
 	}
-	
+
 	@Override
 	public void applyEntityCollision(Entity entityIn) {
 		if(entityIn instanceof PlayerEntity) {
 			double x = entityIn.posX - this.posX; 
 			double z = entityIn.posZ - this.posZ;
-			
+
 			entityIn.setSprinting(false);
 			entityIn.setVelocity(x * 5, 10, z * 5);
-			entityIn.attackEntityFrom(DamageSource.GENERIC, 8);
+			entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), 8);
 		} else {
 			super.applyEntityCollision(entityIn);
 		}
@@ -92,7 +95,7 @@ public class AirBossEntity extends MonsterEntity {
 	public boolean isNonBoss() {
 		return false;
 	}
-	
+
 	@Override
 	public boolean preventDespawn() {
 		return true;
@@ -102,16 +105,53 @@ public class AirBossEntity extends MonsterEntity {
 	public void tick() {
 		super.tick();
 		bossInfo.setPercent(this.getHealth() / this.getMaxHealth());
-		
+
 	}
 
 	@Override
 	protected float getStandingEyeHeight(Pose poseIn, EntitySize sizeIn) {
 		return 1.74f;
 	}
-	
+
 	@Override
-	public void fall(float distance, float damageMultiplier) {}
+	public void fall(float distance, float damageMultiplier) {
+	}
+
+	@Override
+	public void livingTick() {
+		Vec3d vec3d = this.getMotion().mul(1.0D, 0.6D, 1.0D);
+		if(!this.world.isRemote) {
+			Entity entity = this.getAttackTarget();
+			if(entity != null) {
+				double d0 = vec3d.y;
+				if(this.posY < entity.posY) {
+					d0 = Math.max(0.0D, d0);
+					d0 = d0 + (0.3D - d0 * (double)0.6F);
+				} else if(this.posY > entity.posY) {
+					d0 = Math.min(0.0D, d0);
+					d0 = -d0 - (0.3D - d0 * (double)0.6F);
+				}
+
+				if(this.posY <= 150 && d0 < 0) {
+					d0 *= -1;
+				}
+
+				vec3d = new Vec3d(vec3d.x, d0, vec3d.z);
+				Vec3d vec3d1 = new Vec3d(entity.posX - this.posX, 0.0D, entity.posZ - this.posZ);
+				if(horizontalMag(vec3d1) > 9.0D) {
+					Vec3d vec3d2 = vec3d1.normalize();
+					vec3d = vec3d.add(vec3d2.x * 0.3D - vec3d.x * 0.6D, 0.0D, vec3d2.z * 0.3D - vec3d.z * 0.6D);
+				}
+			}
+		}
+
+		this.setMotion(vec3d);
+		if(horizontalMag(vec3d) > 0.05D) {
+			this.rotationYaw = (float)MathHelper.atan2(vec3d.z, vec3d.x) * (180F / (float)Math.PI) - 90.0F;
+		}
+
+		super.livingTick();
+	}
 
 	@Override
 	public boolean canPickUpLoot() {
@@ -127,17 +167,57 @@ public class AirBossEntity extends MonsterEntity {
 	protected SoundEvent getDeathSound() {
 		return SoundEvents.ENTITY_GENERIC_EXPLODE;
 	}
-	
+
 	//Probably change sounds?
 	@Override
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
 		return SoundEvents.ENTITY_PUFFER_FISH_HURT;
 	}
-	
+
+	static class ShootStuffGoal extends Goal {
+		private final AirBossEntity airBoss;
+		private int shootTimer = 0;
+
+		public ShootStuffGoal(AirBossEntity entity) {
+			this.airBoss = entity;
+		}
+
+		@Override
+		public boolean shouldExecute() {
+			return this.airBoss.getAttackTarget() instanceof PlayerEntity;
+		}
+
+		@Override
+		public void startExecuting() {
+			shootTimer = 0;
+		}
+
+		@Override
+		public void tick() {
+			Entity entity = this.airBoss.getAttackTarget();
+			if(shootTimer >= 100) {
+				shootTimer = 0;
+				double y = entity.posY - this.airBoss.posY;
+				for(int i = 2; i >= -2; i -= 2) {
+					for(int j = 2; j >= -2; j -= 2) {
+						if(!(i == 0 && j == 0)) {
+							ChargedFireballEntity fireBall = new ChargedFireballEntity(this.airBoss.world, this.airBoss, i, y, j);
+							fireBall.setPosition(this.airBoss.posX + i, this.airBoss.posY, this.airBoss.posZ + j);
+							this.airBoss.world.addEntity(fireBall);
+						}
+					}
+				}
+			} else {
+				shootTimer++;
+			}
+			super.tick();
+		}
+	}
+
 	static class SpawnPhantomsGoal extends Goal {
 		private final AirBossEntity airBoss;
 		private int phantomSpawnTimer = 100;
-		
+
 		public SpawnPhantomsGoal(AirBossEntity entity) {
 			this.airBoss = entity;
 		}
@@ -146,12 +226,12 @@ public class AirBossEntity extends MonsterEntity {
 		public boolean shouldExecute() {
 			return this.airBoss != null && this.airBoss.isAlive();
 		}
-		
+
 		@Override
 		public void startExecuting() {
 			phantomSpawnTimer = 100;
 		}
-		
+
 		@Override
 		public void tick() {
 			if(phantomSpawnTimer >= 200) {
@@ -172,11 +252,11 @@ public class AirBossEntity extends MonsterEntity {
 			super.tick();
 		}
 	}
-	
+
 	static class WhirlWindGoal extends Goal {
 		private final AirBossEntity airBoss;
 		private int whirlWindTimer = 0;
-		
+
 		public WhirlWindGoal(AirBossEntity entity) {
 			this.airBoss = entity;
 		}
@@ -185,12 +265,12 @@ public class AirBossEntity extends MonsterEntity {
 		public boolean shouldExecute() {
 			return this.airBoss.getAttackTarget() instanceof PlayerEntity;
 		}
-		
+
 		@Override
 		public void startExecuting() {
 			whirlWindTimer = 0;
 		}
-		
+
 		@Override
 		public void tick() {
 			if(whirlWindTimer >= 100) {//Set to 300, or make better change
@@ -209,10 +289,10 @@ public class AirBossEntity extends MonsterEntity {
 
 					if(e instanceof PlayerEntity) {
 						e.addVelocity(x, y, z); 
-						e.attackEntityFrom(DamageSource.GENERIC, 8);
+						e.attackEntityFrom(DamageSource.causeMobDamage(this.airBoss), 8);
 					} else {
 						e.addVelocity(x, y, z);
-						e.attackEntityFrom(DamageSource.GENERIC, 4);
+						e.attackEntityFrom(DamageSource.causeMobDamage(this.airBoss), 4);
 					}
 				}
 

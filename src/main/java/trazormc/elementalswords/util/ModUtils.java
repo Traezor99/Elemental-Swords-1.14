@@ -2,6 +2,7 @@ package trazormc.elementalswords.util;
 
 import java.util.Random;
 
+import net.minecraft.block.AirBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
@@ -81,7 +82,7 @@ public class ModUtils {
 				} else {
 					y--;
 				}
-			} else if(block.equals(Blocks.AIR) && block1.equals(Blocks.AIR)) {
+			} else if(block instanceof AirBlock && block1 instanceof AirBlock) {
 				isSafe = true;
 				y--;
 			} else {
