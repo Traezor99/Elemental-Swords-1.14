@@ -47,7 +47,6 @@ public class EarthBossEntity extends MonsterEntity {
 		this.goalSelector.addGoal(1, new PoundGoal(this));
 		this.goalSelector.addGoal(1, new SpawnMobsGoal(this));
 		this.goalSelector.addGoal(5, new MoveTowardsRestrictionGoal(this, 1.0));
-		this.goalSelector.addGoal(6, new SetNightGoal(this));
 		this.goalSelector.addGoal(8, new LookAtGoal(this, PlayerEntity.class, 7.0f));
 		this.goalSelector.addGoal(8, new LookRandomlyGoal(this));
 
@@ -180,28 +179,6 @@ public class EarthBossEntity extends MonsterEntity {
 			}
 			
 			super.tick();
-		}
-	}
-	
-	static class SetNightGoal extends Goal {
-		private final EarthBossEntity earthBoss;
-		
-		public SetNightGoal(EarthBossEntity entity) {
-			this.earthBoss = entity;
-		}
-
-		@Override
-		public boolean shouldExecute() {
-			if(this.earthBoss.world.isDaytime())
-				return true;
-			else 
-				return false;
-		}
-		
-		@Override
-		public void startExecuting() {
-			this.earthBoss.world.setDayTime(15000);
-			super.startExecuting();
 		}
 	}
 	

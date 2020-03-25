@@ -1,27 +1,23 @@
 package trazormc.elementalswords.util;
 
-import java.util.function.Supplier;
-
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.item.IArmorMaterial;
+import net.minecraft.item.Item;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.LazyLoadBase;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import trazormc.elementalswords.ElementalSwords;
 import trazormc.elementalswords.init.ModItems;
 
 public enum ArmorMaterialTypes implements IArmorMaterial {
-	STANDARD("amethyst", 35, new int[] {4,6,8,4}, 0, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 3.0f, () -> {
-	      return Ingredient.fromItems(ModItems.AMETHYST);
-	   }),
-	FIRE("fire", 35, new int[] {4,6,8,4}, 0, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 3.0f, () -> {
-	      return Ingredient.fromItems(ModItems.AMETHYST);
-	   }),
-	EARTH("earth", 35, new int[] {5,7,9,5}, 0, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 4.0f, () -> {
-	      return Ingredient.fromItems(ModItems.AMETHYST);
-	   });
+	AMETHYST("amethyst", 35, new int[] {4,6,8,4}, 15, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 3.0f, ModItems.AMETHYST),
+	AIR("air", 35, new int[] {4,6,8,4}, 10, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 3.0f, ModItems.AMETHYST),
+	EARTH("earth", 35, new int[] {5,7,9,5}, 10, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 4.0f, ModItems.AMETHYST),
+	FIRE("fire", 35, new int[] {5,6,9,4}, 10, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 3.0f, ModItems.AMETHYST),
+	LIGHTNING("lightning", 35, new int[] {4,6,8,4}, 10, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 3.0f, ModItems.AMETHYST),
+	WATER("water", 35, new int[] {4,6,8,4}, 10, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 3.0f, ModItems.AMETHYST);
 	
 	private static final int[] MAX_DAMAGE_ARRAY = new int[]{13, 15, 16, 11};
 	private final String name;
@@ -30,16 +26,16 @@ public enum ArmorMaterialTypes implements IArmorMaterial {
 	private final int enchantability;
 	private final SoundEvent soundEvent;
 	private final float toughness;
-	private final LazyLoadBase<Ingredient> repairMaterial;
+	private final Item repairItem;
 	
-	private ArmorMaterialTypes(String name, int maxDamageFactor, int[] damageReductionAmounts, int enchantability, SoundEvent sound, float toughness, Supplier<Ingredient> repairMaterial ) {
-		this.name = name;
+	private ArmorMaterialTypes(String name, int maxDamageFactor, int[] damageReductionAmounts, int enchantability, SoundEvent sound, float toughness, Item repairItem) {
+		this.name = ElementalSwords.MOD_ID + ":" + name;
 		this.maxDamageFactor = maxDamageFactor;
 		this.damageReductionAmounts = damageReductionAmounts;
 		this.enchantability = enchantability;
 		this.soundEvent = sound;
 		this.toughness = toughness;
-		this.repairMaterial = new LazyLoadBase<>(repairMaterial);
+		this.repairItem = repairItem;
 	}
 
 	@Override
@@ -64,7 +60,7 @@ public enum ArmorMaterialTypes implements IArmorMaterial {
 
 	@Override
 	public Ingredient getRepairMaterial() {
-		return this.repairMaterial.getValue();
+		return Ingredient.fromItems(this.repairItem);
 	}
 
 	@Override
@@ -77,5 +73,4 @@ public enum ArmorMaterialTypes implements IArmorMaterial {
 	public float getToughness() {
 		return this.toughness;
 	}
-
 }

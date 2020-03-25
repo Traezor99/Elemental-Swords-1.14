@@ -1,6 +1,5 @@
 package trazormc.elementalswords.entities;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntitySize;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -111,20 +110,6 @@ public class FireBossEntity extends BlazeEntity {
 	@Override
 	protected SoundEvent getDeathSound() {
 		return SoundEvents.BLOCK_FIRE_EXTINGUISH;
-	}
-
-	@Override
-	public boolean attackEntityAsMob(Entity entityIn) {
-		return super.attackEntityAsMob(entityIn);
-	}
-
-	@Override
-	protected void updateAITasks() {
-		if (this.isWet()) {
-			this.attackEntityFrom(DamageSource.DROWN, 1.0F);
-		}
-
-		super.updateAITasks();
 	}
 
 	static class FireballAttackGoal extends Goal {

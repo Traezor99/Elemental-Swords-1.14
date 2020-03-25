@@ -42,7 +42,6 @@ public class LightningBossEntity extends MonsterEntity {
 		this.goalSelector.addGoal(1, new LightningStrikeGoal(this));
 		this.goalSelector.addGoal(1, new SummonMobsGoal(this));
 		this.goalSelector.addGoal(5, new MoveTowardsRestrictionGoal(this, 1.0));
-		this.goalSelector.addGoal(6, new SetThunderingGoal(this));
 		this.goalSelector.addGoal(8, new LookAtGoal(this, PlayerEntity.class, 7.0f));
 		this.goalSelector.addGoal(8, new LookRandomlyGoal(this));
 
@@ -91,13 +90,6 @@ public class LightningBossEntity extends MonsterEntity {
 	public void tick() {
 		super.tick();
 		bossInfo.setPercent(this.getHealth() / this.getMaxHealth());
-	}
-
-	@Override
-	public void onDeath(DamageSource cause) {
-		super.onDeath(cause);
-		this.world.setRainStrength(0.0f);
-		this.world.setThunderStrength(0.0f);
 	}
 
 	@Override
@@ -157,28 +149,6 @@ public class LightningBossEntity extends MonsterEntity {
 				lightningTimer++;
 			}
 			super.tick();
-		}
-	}
-
-	static class SetThunderingGoal extends Goal {
-		private final LightningBossEntity lightningBoss;
-
-		public SetThunderingGoal(LightningBossEntity entity) {
-			this.lightningBoss = entity;
-		}
-
-		@Override
-		public boolean shouldExecute() {
-			if(!this.lightningBoss.world.isRaining() || !this.lightningBoss.world.isThundering()) 
-				return true;
-			else
-				return false;
-		}
-
-		@Override
-		public void startExecuting() {
-			this.lightningBoss.world.setRainStrength(0.5f);
-			this.lightningBoss.world.setThunderStrength(1.3f);
 		}
 	}
 

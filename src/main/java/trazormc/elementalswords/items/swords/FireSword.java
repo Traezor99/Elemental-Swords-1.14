@@ -32,7 +32,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import trazormc.elementalswords.entities.AmethystMinerEntity;
-import trazormc.elementalswords.entities.ChargedFireballEntity;
 import trazormc.elementalswords.init.ModEntityTypes;
 import trazormc.elementalswords.util.ModUtils;
 
@@ -62,7 +61,6 @@ public class FireSword extends SwordItem {
 		if(!worldIn.isRemote) {
 			Vec3d aim = playerIn.getLookVec();
 			FireballEntity fireball = new FireballEntity(worldIn, playerIn, 1, 1, 1);
-			//ChargedFireballEntity fireball = new ChargedFireballEntity(worldIn);
 			
 			fireball.setPosition(playerIn.posX + aim.x * 1.5d, playerIn.posY + 0.5d + aim.y * 1.5d, playerIn.posZ + aim.z * 1.5d);
 			fireball.accelerationX = aim.x * 0.1;

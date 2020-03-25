@@ -1,6 +1,6 @@
 # Find more information on toml format here:  https://github.com/toml-lang/toml
 modLoader="javafml" #mandatory
-loaderVersion="[25,)" #mandatory (24 is current forge version)
+loaderVersion="[28,)" #mandatory (24 is current forge version)
 #issueTrackerURL="http://my.issue.tracker/" #optional  ADD LATER
 [[mods]] #mandatory
 modId="trazormc_elemental_swords" #mandatory

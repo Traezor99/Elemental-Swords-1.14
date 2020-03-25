@@ -68,7 +68,7 @@ import trazormc.elementalswords.world.dimensions.fire.FireModDimension;
 public class RegistryHandler {
 	
 	@SubscribeEvent
-	public static void onItemRegistry(final RegistryEvent.Register<Item> event) {
+	public static void onItemRegistry(RegistryEvent.Register<Item> event) {
 		createEntityTypes();		
 		event.getRegistry().registerAll(
 				ModItems.AMETHYST = new Item(new Item.Properties().group(ElementalSwords.tabSwords)).setRegistryName(ElementalSwords.MOD_ID, "amethyst"),
@@ -93,15 +93,15 @@ public class RegistryHandler {
 				ModItems.LIGHTNING_SWORD = setup(new LightningSword(ItemTiers.LIGHTNING, (int)ItemTiers.LIGHTNING.getAttackDamage(), 0, new Item.Properties().group(ElementalSwords.tabSwords)), "lightning_sword"),
 				ModItems.WATER_SWORD = setup(new WaterSword(ItemTiers.STANDARD, (int)ItemTiers.STANDARD.getAttackDamage(), 0, new Item.Properties().group(ElementalSwords.tabSwords)), "water_sword"),
 				
-				ModItems.AMETHSYT_HELMET = setup(new ArmorItem(ArmorMaterialTypes.STANDARD, EquipmentSlotType.HEAD, new Item.Properties().group(ElementalSwords.tabSwords)), "amethyst_helmet"),
-				ModItems.AMETHYST_CHESTPLATE = setup(new ArmorItem(ArmorMaterialTypes.STANDARD, EquipmentSlotType.CHEST, new Item.Properties().group(ElementalSwords.tabSwords)), "amethyst_chestplate"),
-				ModItems.AMETHYST_LEGGINGS = setup(new ArmorItem(ArmorMaterialTypes.STANDARD, EquipmentSlotType.LEGS, new Item.Properties().group(ElementalSwords.tabSwords)), "amethyst_leggings"),
-				ModItems.AMETHYST_BOOTS = setup(new ArmorItem(ArmorMaterialTypes.STANDARD, EquipmentSlotType.FEET, new Item.Properties().group(ElementalSwords.tabSwords)), "amethyst_boots"),
+				ModItems.AMETHSYT_HELMET = setup(new ArmorItem(ArmorMaterialTypes.AMETHYST, EquipmentSlotType.HEAD, new Item.Properties().group(ElementalSwords.tabSwords)), "amethyst_helmet"),
+				ModItems.AMETHYST_CHESTPLATE = setup(new ArmorItem(ArmorMaterialTypes.AMETHYST, EquipmentSlotType.CHEST, new Item.Properties().group(ElementalSwords.tabSwords)), "amethyst_chestplate"),
+				ModItems.AMETHYST_LEGGINGS = setup(new ArmorItem(ArmorMaterialTypes.AMETHYST, EquipmentSlotType.LEGS, new Item.Properties().group(ElementalSwords.tabSwords)), "amethyst_leggings"),
+				ModItems.AMETHYST_BOOTS = setup(new ArmorItem(ArmorMaterialTypes.AMETHYST, EquipmentSlotType.FEET, new Item.Properties().group(ElementalSwords.tabSwords)), "amethyst_boots"),
 						
-				ModItems.AIR_HELMET = setup(new ArmorItem(ArmorMaterialTypes.STANDARD, EquipmentSlotType.HEAD, new Item.Properties().group(ElementalSwords.tabSwords)), "air_helmet"),
-				ModItems.AIR_CHESTPLATE = setup(new ArmorItem(ArmorMaterialTypes.STANDARD, EquipmentSlotType.CHEST, new Item.Properties().group(ElementalSwords.tabSwords)), "air_chestplate"),
-				ModItems.AIR_LEGGINGS = setup(new ArmorItem(ArmorMaterialTypes.STANDARD, EquipmentSlotType.LEGS, new Item.Properties().group(ElementalSwords.tabSwords)), "air_leggings"),
-				ModItems.AIR_BOOTS = setup(new ArmorItem(ArmorMaterialTypes.STANDARD, EquipmentSlotType.FEET, new Item.Properties().group(ElementalSwords.tabSwords)), "air_boots"),
+				ModItems.AIR_HELMET = setup(new ArmorItem(ArmorMaterialTypes.AIR, EquipmentSlotType.HEAD, new Item.Properties().group(ElementalSwords.tabSwords)), "air_helmet"),
+				ModItems.AIR_CHESTPLATE = setup(new ArmorItem(ArmorMaterialTypes.AIR, EquipmentSlotType.CHEST, new Item.Properties().group(ElementalSwords.tabSwords)), "air_chestplate"),
+				ModItems.AIR_LEGGINGS = setup(new ArmorItem(ArmorMaterialTypes.AIR, EquipmentSlotType.LEGS, new Item.Properties().group(ElementalSwords.tabSwords)), "air_leggings"),
+				ModItems.AIR_BOOTS = setup(new ArmorItem(ArmorMaterialTypes.AIR, EquipmentSlotType.FEET, new Item.Properties().group(ElementalSwords.tabSwords)), "air_boots"),
 				
 				ModItems.EARTH_HELMET = setup(new EarthArmor(ArmorMaterialTypes.EARTH, EquipmentSlotType.HEAD, new Item.Properties().group(ElementalSwords.tabSwords)), "earth_helmet"),
 				ModItems.EARTH_CHESTPLATE = setup(new EarthArmor(ArmorMaterialTypes.EARTH, EquipmentSlotType.CHEST, new Item.Properties().group(ElementalSwords.tabSwords)), "earth_chestplate"),
@@ -113,15 +113,15 @@ public class RegistryHandler {
 				ModItems.FIRE_LEGGINGS = setup(new FireArmor(ArmorMaterialTypes.FIRE, EquipmentSlotType.LEGS, new Item.Properties().group(ElementalSwords.tabSwords)), "fire_leggings"),
 				ModItems.FIRE_BOOTS = setup(new FireArmor(ArmorMaterialTypes.FIRE, EquipmentSlotType.FEET, new Item.Properties().group(ElementalSwords.tabSwords)), "fire_boots"),
 				
-				ModItems.LIGHTNING_HELMET = setup(new ArmorItem(ArmorMaterialTypes.STANDARD, EquipmentSlotType.HEAD, new Item.Properties().group(ElementalSwords.tabSwords)), "lightning_helmet"),
-				ModItems.LIGHTNING_CHESTPLATE = setup(new ArmorItem(ArmorMaterialTypes.STANDARD, EquipmentSlotType.CHEST, new Item.Properties().group(ElementalSwords.tabSwords)), "lightning_chestplate"),
-				ModItems.LIGHTNING_LEGGINGS = setup(new ArmorItem(ArmorMaterialTypes.STANDARD, EquipmentSlotType.LEGS, new Item.Properties().group(ElementalSwords.tabSwords)), "lightning_leggings"),
-				ModItems.LIGHTNING_BOOTS = setup(new ArmorItem(ArmorMaterialTypes.STANDARD, EquipmentSlotType.FEET, new Item.Properties().group(ElementalSwords.tabSwords)), "lightning_boots"),
+				ModItems.LIGHTNING_HELMET = setup(new ArmorItem(ArmorMaterialTypes.LIGHTNING, EquipmentSlotType.HEAD, new Item.Properties().group(ElementalSwords.tabSwords)), "lightning_helmet"),
+				ModItems.LIGHTNING_CHESTPLATE = setup(new ArmorItem(ArmorMaterialTypes.LIGHTNING, EquipmentSlotType.CHEST, new Item.Properties().group(ElementalSwords.tabSwords)), "lightning_chestplate"),
+				ModItems.LIGHTNING_LEGGINGS = setup(new ArmorItem(ArmorMaterialTypes.LIGHTNING, EquipmentSlotType.LEGS, new Item.Properties().group(ElementalSwords.tabSwords)), "lightning_leggings"),
+				ModItems.LIGHTNING_BOOTS = setup(new ArmorItem(ArmorMaterialTypes.LIGHTNING, EquipmentSlotType.FEET, new Item.Properties().group(ElementalSwords.tabSwords)), "lightning_boots"),
 				
-				ModItems.WATER_HELMET = setup(new WaterArmor(ArmorMaterialTypes.STANDARD, EquipmentSlotType.HEAD, new Item.Properties().group(ElementalSwords.tabSwords)), "water_helmet"),
-				ModItems.WATER_CHESTPLATE = setup(new WaterArmor(ArmorMaterialTypes.STANDARD, EquipmentSlotType.CHEST, new Item.Properties().group(ElementalSwords.tabSwords)), "water_chestplate"),
-				ModItems.WATER_LEGGINGS = setup(new WaterArmor(ArmorMaterialTypes.STANDARD, EquipmentSlotType.LEGS, new Item.Properties().group(ElementalSwords.tabSwords)), "water_leggings"),
-				ModItems.WATER_BOOTS = setup(new WaterArmor(ArmorMaterialTypes.STANDARD, EquipmentSlotType.FEET, new Item.Properties().group(ElementalSwords.tabSwords)), "water_boots"),
+				ModItems.WATER_HELMET = setup(new WaterArmor(ArmorMaterialTypes.WATER, EquipmentSlotType.HEAD, new Item.Properties().group(ElementalSwords.tabSwords)), "water_helmet"),
+				ModItems.WATER_CHESTPLATE = setup(new WaterArmor(ArmorMaterialTypes.WATER, EquipmentSlotType.CHEST, new Item.Properties().group(ElementalSwords.tabSwords)), "water_chestplate"),
+				ModItems.WATER_LEGGINGS = setup(new WaterArmor(ArmorMaterialTypes.WATER, EquipmentSlotType.LEGS, new Item.Properties().group(ElementalSwords.tabSwords)), "water_leggings"),
+				ModItems.WATER_BOOTS = setup(new WaterArmor(ArmorMaterialTypes.WATER, EquipmentSlotType.FEET, new Item.Properties().group(ElementalSwords.tabSwords)), "water_boots"),
 				
 				ModItems.AIR_BOSS_SPAWN_EGG = setupEggs("air_boss_spawn_egg", ModEntityTypes.ENTITY_AIR_BOSS, 9987080, 3381306),
 				ModItems.AMETHYST_MINER_SPAWN_EGG = setupEggs("amethyst_miner_spawn_egg", ModEntityTypes.ENTITY_AMETHYST_MINER, 12071583, 000000),
@@ -155,6 +155,7 @@ public class RegistryHandler {
 	@SubscribeEvent
 	public static void onRecipeSerializerRegistry(RegistryEvent.Register<IRecipeSerializer<?>> event) {
 		event.getRegistry().register(ModRecipeSerializers.IMBUEMENT_SHAPELESS = (IRecipeSerializer<ImbuementShapelessRecipes>) new ImbuementShapelessRecipes.Serializer().setRegistryName(new ResourceLocation(ElementalSwords.MOD_ID, "imbuement")));
+		ElementalSwords.logger.info("RecipeSerializers Registered");
 	}
 	
 	@SubscribeEvent
@@ -163,6 +164,7 @@ public class RegistryHandler {
 				ModBiomes.AMETHYST_DIMENSION_BIOME = new DimensionBiome(new SurfaceBuilderConfig(ModBlocks.AMETHYST_STONE.getDefaultState(), ModBlocks.AMETHYST_STONE.getDefaultState(), ModBlocks.AMETHYST_STONE.getDefaultState())).setRegistryName(ElementalSwords.MOD_ID, "amethyst_dimension_biome"),
 				ModBiomes.FIRE_DIMENSION_BIOME = new DimensionBiome(new SurfaceBuilderConfig(Blocks.NETHER_BRICKS.getDefaultState(), Blocks.NETHERRACK.getDefaultState(), Blocks.QUARTZ_BLOCK.getDefaultState())).setRegistryName(ElementalSwords.MOD_ID, "fire_dimension_biome")
 				);
+		ElementalSwords.logger.info("Biomes Registered");
 	}
 	
 	@SubscribeEvent
@@ -171,12 +173,14 @@ public class RegistryHandler {
 				ModDimensions.AMETHYST_DIMENSION = new AmethystModDimension("amethyst_dimension"),
 				ModDimensions.FIRE_DIMENSION = new FireModDimension("fire_dimension")
 				);
+		ElementalSwords.logger.info("Dimensions Registered");
 	}
 	
 	@SuppressWarnings("unchecked")
 	@SubscribeEvent 
 	public static void onContainerTypeRegistry(RegistryEvent.Register<ContainerType<?>> event) {
 		event.getRegistry().register(ModContainerTypes.IMBUEMENT_TABLE = (ContainerType<ImbuementTableContainer>) IForgeContainerType.create(ImbuementTableContainer::new).setRegistryName(ElementalSwords.MOD_ID, "imbuement_table"));
+		ElementalSwords.logger.info("ContainerTypes Registered");
 	}
 
 	@SubscribeEvent
@@ -190,6 +194,7 @@ public class RegistryHandler {
 				ModEntityTypes.ENTITY_WATER_BOSS,
 				ModEntityTypes.ENTITY_CHARGED_FIREBALL
 				);
+		ElementalSwords.logger.info("Entities Registered");
 	}
 	
 	private static Item setupEggs(String name, EntityType<?> entityType, int primary, int secondary) {

@@ -78,7 +78,7 @@ public class ModUtils {
 			Block block1 = world.getBlockState(new BlockPos(x, y - 1, z)).getBlock();
 			if(isSafe) {
 				if(!block.equals(Blocks.AIR)) {
-					return y - 1;
+					return y + 1;
 				} else {
 					y--;
 				}

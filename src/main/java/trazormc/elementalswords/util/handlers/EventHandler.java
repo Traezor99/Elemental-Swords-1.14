@@ -22,18 +22,14 @@ public class EventHandler {
 
 	@SubscribeEvent
 	public void onTick(TickEvent.PlayerTickEvent event) {
-		boolean fly = false;
-		if(event.player.inventory.armorInventory.get(3).getItem() == ModItems.AIR_HELMET 
+		boolean fly = (event.player.inventory.armorInventory.get(3).getItem() == ModItems.AIR_HELMET 
 				&& event.player.inventory.armorInventory.get(2).getItem() == ModItems.AIR_CHESTPLATE
 				&& event.player.inventory.armorInventory.get(1).getItem() == ModItems.AIR_LEGGINGS
-				&& event.player.inventory.armorInventory.get(0).getItem() == ModItems.AIR_BOOTS) {
-			fly = true;	
-		} 
+				&& event.player.inventory.armorInventory.get(0).getItem() == ModItems.AIR_BOOTS); 
 
 		if(fly || event.player.isCreative() || event.player.isSpectator()) {
 			event.player.abilities.allowFlying = true;
 		} else {
-			fly = false;
 			event.player.abilities.allowFlying = false;
 			event.player.abilities.isFlying = false;
 		}
