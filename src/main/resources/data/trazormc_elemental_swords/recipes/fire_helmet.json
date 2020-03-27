@@ -1,11 +1,11 @@
 {
   "result": {
-    "item": "trazormc_elemental_swords:fire_sword"
+    "item": "trazormc_elemental_swords:fire_helmet"
   },
   "type": "trazormc_elemental_swords:imbuement",
   "ingredients": [
     {
-      "item": "trazormc_elemental_swords:amethyst_sword"
+      "item": "trazormc_elemental_swords:amethyst_helmet"
     },
     {
       "item": "trazormc_elemental_swords:flaming_ember"

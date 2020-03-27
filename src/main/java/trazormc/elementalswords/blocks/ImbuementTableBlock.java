@@ -50,7 +50,7 @@ public class ImbuementTableBlock extends Block {
 
 				@Override
 				public Container createMenu(int id, PlayerInventory inv, PlayerEntity player) {
-					return new ImbuementTableContainer(id, inv);
+					return new ImbuementTableContainer(id, inv, null);
 				}
 
 				@Override
@@ -72,5 +72,4 @@ public class ImbuementTableBlock extends Block {
 	public boolean allowsMovement(BlockState state, IBlockReader worldIn, BlockPos pos, PathType type) {
 		return false;
 	}
-	
 }

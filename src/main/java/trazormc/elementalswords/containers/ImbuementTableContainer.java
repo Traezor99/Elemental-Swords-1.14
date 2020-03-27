@@ -3,6 +3,8 @@ package trazormc.elementalswords.containers;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
@@ -20,7 +22,6 @@ import net.minecraft.item.crafting.ICraftingRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.play.server.SSetSlotPacket;
-import net.minecraft.util.IWorldPosCallable;
 import net.minecraft.world.World;
 import trazormc.elementalswords.containers.slots.SwordInputSlot;
 import trazormc.elementalswords.init.ModContainerTypes;
@@ -32,30 +33,23 @@ public class ImbuementTableContainer extends Container  {
 	public CraftingInventory imbuementInventory = new CraftingInventory(this, 3, 1);
 	public CraftResultInventory imbuementResult = new CraftResultInventory();
 	private final PlayerEntity player;	
-	public ImbuementTableContainer(int id, PlayerInventory playerInventory, PacketBuffer data) {
-		this(id, playerInventory);
-	}
 	
-	public ImbuementTableContainer(int id, PlayerInventory playerInventory) {
-		this(id, playerInventory, IWorldPosCallable.DUMMY);
-	}
-	
-	public ImbuementTableContainer(int id, PlayerInventory playerInventory, IWorldPosCallable worldPos) {
+	public ImbuementTableContainer(int id, PlayerInventory playerInventory, @Nullable PacketBuffer data) {
 		super(ModContainerTypes.IMBUEMENT_TABLE, id);
-		player = playerInventory.player;
+		this.player = playerInventory.player;
 		
-		this.addSlot(new CraftingResultSlot(player, imbuementInventory, imbuementResult, 0, 124, 35));
-		this.addSlot(new Slot(imbuementInventory, 1, 66, 35));
-		this.addSlot(new SwordInputSlot(imbuementInventory, 0, 30, 35));
+		this.addSlot(new CraftingResultSlot(this.player, this.imbuementInventory, this.imbuementResult, 0, 124, 35));
+		this.addSlot(new Slot(this.imbuementInventory, 1, 66, 35));
+		this.addSlot(new SwordInputSlot(this.imbuementInventory, 0, 30, 35));
 		
-		for (int k = 0; k < 3; ++k) {
-            for (int i1 = 0; i1 < 9; ++i1) {
-                this.addSlot(new Slot(playerInventory, i1 + k * 9 + 9, 8 + i1 * 18, 84 + k * 18));
+		for(int i = 0; i < 3; ++i) {
+            for (int j = 0; j < 9; ++j) {
+                this.addSlot(new Slot(playerInventory, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
             }
         }
 
-        for (int l = 0; l < 9; ++l) {
-            this.addSlot(new Slot(playerInventory, l, 8 + l * 18, 142));
+        for(int k = 0; k < 9; ++k) {
+            this.addSlot(new Slot(playerInventory, k, 8 + k * 18, 142));
         }
 	}
 	
@@ -73,7 +67,7 @@ public class ImbuementTableContainer extends Container  {
 		if(!world.isRemote) {
 			ServerPlayerEntity serverplayerentity = (ServerPlayerEntity)player;
 	        ItemStack itemstack = ItemStack.EMPTY;
-	        Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(imbuementInventory.getStackInSlot(0));
+	        Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(this.imbuementInventory.getStackInSlot(0));
 	        Optional<ICraftingRecipe> optional = world.getServer().getRecipeManager().getRecipe(IRecipeType.CRAFTING, inventory, world);
 	        if(optional.isPresent()) {
 	        	ICraftingRecipe icraftingrecipe = optional.get(); 
@@ -94,13 +88,13 @@ public class ImbuementTableContainer extends Container  {
 	@Override
 	public void onCraftMatrixChanged(IInventory inventoryIn) {
 		this.detectAndSendChanges();
-		slotChangedCraftMatrix(windowId, player.world, player, imbuementInventory, imbuementResult);
+		slotChangedCraftMatrix(this.windowId, this.player.world, this.player, this.imbuementInventory, this.imbuementResult);
 	}
 	
 	@Override
 	protected void clearContainer(PlayerEntity playerIn, World worldIn, IInventory inventoryIn) {
-		imbuementInventory.clear();
-		imbuementResult.clear();
+		this.imbuementInventory.clear();
+		this.imbuementResult.clear();
 	}
 	
 	@Override
@@ -114,11 +108,11 @@ public class ImbuementTableContainer extends Container  {
 	@Override
 	public void onContainerClosed(PlayerEntity playerIn) {
 		super.onContainerClosed(playerIn);	      
-	    for(int i = 0; i < imbuementInventory.getSizeInventory(); i ++) {
-	    	ItemStack stack = imbuementInventory.getStackInSlot(i).copy();
+	    for(int i = 0; i < this.imbuementInventory.getSizeInventory(); i ++) {
+	    	ItemStack stack = this.imbuementInventory.getStackInSlot(i).copy();
 	    	playerIn.addItemStackToInventory(stack);
 	    }
-	    this.clearContainer(playerIn, playerIn.world, imbuementInventory);
+	    this.clearContainer(playerIn, playerIn.world, this.imbuementInventory);
 	}
 	
 	@Override

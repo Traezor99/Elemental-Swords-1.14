@@ -1,8 +1,14 @@
 package trazormc.elementalswords.items.shards;
 
+import java.util.List;
+
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biomes;
 import trazormc.elementalswords.entities.WaterBossEntity;
@@ -12,6 +18,11 @@ public class WaterShardItem extends Item {
 
 	public WaterShardItem(Properties properties) {
 		super(properties);
+	}
+	
+	@Override
+	public void addInformation(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+		tooltip.add(new TranslationTextComponent("In the depths of the sea lies a hidden foe."));
 	}
 
 	@Override

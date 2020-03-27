@@ -6,6 +6,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.monster.DrownedEntity;
 import net.minecraft.entity.monster.GuardianEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.IItemTier;
@@ -45,7 +46,7 @@ public class WaterSword extends SwordItem {
 	@Override
 	public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
 		super.hitEntity(stack, target, attacker);
-		if(target instanceof GuardianEntity) {
+		if(target instanceof GuardianEntity || target instanceof DrownedEntity) {
 			if(attacker instanceof PlayerEntity) {
 				target.hurtResistantTime = 0;
 			target.attackEntityFrom(DamageSource.causePlayerDamage((PlayerEntity)attacker), 4);

@@ -1,0 +1,16 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+       "AAA",
+       "A A",
+       "A A"
+    ],
+    "key": {
+        "A": {
+            "item": "trazormc_elemental_swords:amethyst"
+        }
+    },
+    "result": {
+        "item": "trazormc_elemental_swords:amethyst_leggings"
+    }
+}

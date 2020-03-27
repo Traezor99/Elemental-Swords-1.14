@@ -1,0 +1,14 @@
+{
+  "result": {
+    "item": "trazormc_elemental_swords:air_boots"
+  },
+  "type": "trazormc_elemental_swords:imbuement",
+  "ingredients": [
+    {
+      "item": "trazormc_elemental_swords:amethyst_boots"
+    },
+    {
+      "item": "trazormc_elemental_swords:gust_of_wind"
+    }
+  ]
+}

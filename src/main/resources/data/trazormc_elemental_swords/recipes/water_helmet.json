@@ -1,0 +1,14 @@
+{
+  "result": {
+    "item": "trazormc_elemental_swords:water_helmet"
+  },
+  "type": "trazormc_elemental_swords:imbuement",
+  "ingredients": [
+    {
+      "item": "trazormc_elemental_swords:amethyst_helmet"
+    },
+    {
+      "item": "trazormc_elemental_swords:shimmering_water"
+    }
+  ]
+}

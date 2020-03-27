@@ -1,12 +1,18 @@
 package trazormc.elementalswords.items.shards;
 
+import java.util.List;
+
 import net.minecraft.block.AirBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.LightType;
 import net.minecraft.world.World;
 import trazormc.elementalswords.entities.EarthBossEntity;
@@ -34,6 +40,11 @@ public class EarthShardItem extends Item {
 			}
 		}
 		return ActionResultType.SUCCESS;
+	}
+	
+	@Override
+	public void addInformation(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+		tooltip.add(new TranslationTextComponent("Down in the darkness roams a secret enemy."));
 	}
 
 }

@@ -1,0 +1,14 @@
+{
+  "result": {
+    "item": "trazormc_elemental_swords:lightning_helmet"
+  },
+  "type": "trazormc_elemental_swords:imbuement",
+  "ingredients": [
+    {
+      "item": "trazormc_elemental_swords:amethyst_helmet"
+    },
+    {
+      "item": "trazormc_elemental_swords:spark_of_energy"
+    }
+  ]
+}

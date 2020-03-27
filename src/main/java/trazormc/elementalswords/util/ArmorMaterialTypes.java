@@ -13,11 +13,11 @@ import trazormc.elementalswords.init.ModItems;
 
 public enum ArmorMaterialTypes implements IArmorMaterial {
 	AMETHYST("amethyst", 35, new int[] {4,6,8,4}, 15, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 3.0f, ModItems.AMETHYST),
-	AIR("air", 35, new int[] {4,6,8,4}, 10, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 3.0f, ModItems.AMETHYST),
-	EARTH("earth", 35, new int[] {5,7,9,5}, 10, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 4.0f, ModItems.AMETHYST),
-	FIRE("fire", 35, new int[] {5,6,9,4}, 10, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 3.0f, ModItems.AMETHYST),
-	LIGHTNING("lightning", 35, new int[] {4,6,8,4}, 10, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 3.0f, ModItems.AMETHYST),
-	WATER("water", 35, new int[] {4,6,8,4}, 10, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 3.0f, ModItems.AMETHYST);
+	AIR("air", 35, new int[] {4,6,8,4}, 0, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 3.0f, ModItems.AMETHYST),
+	EARTH("earth", 35, new int[] {5,7,9,5}, 0, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 4.0f, ModItems.AMETHYST),
+	FIRE("fire", 35, new int[] {5,6,9,4}, 0, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 3.0f, ModItems.AMETHYST),
+	LIGHTNING("lightning", 35, new int[] {4,6,8,4}, 0, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 3.0f, ModItems.AMETHYST),
+	WATER("water", 35, new int[] {4,6,8,4}, 0, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 3.0f, ModItems.AMETHYST);
 	
 	private static final int[] MAX_DAMAGE_ARRAY = new int[]{13, 15, 16, 11};
 	private final String name;

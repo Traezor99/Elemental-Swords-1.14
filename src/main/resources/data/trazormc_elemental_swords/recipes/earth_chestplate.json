@@ -1,0 +1,14 @@
+{
+  "result": {
+    "item": "trazormc_elemental_swords:earth_chestplate"
+  },
+  "type": "trazormc_elemental_swords:imbuement",
+  "ingredients": [
+    {
+      "item": "trazormc_elemental_swords:amethyst_chestplate"
+    },
+    {
+      "item": "trazormc_elemental_swords:earth_stone"
+    }
+  ]
+}
