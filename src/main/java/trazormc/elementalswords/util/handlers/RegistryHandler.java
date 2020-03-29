@@ -38,6 +38,7 @@ import trazormc.elementalswords.entities.EarthBossEntity;
 import trazormc.elementalswords.entities.FireBossEntity;
 import trazormc.elementalswords.entities.LightningBossEntity;
 import trazormc.elementalswords.entities.WaterBossEntity;
+import trazormc.elementalswords.entities.WindSeekerEntity;
 import trazormc.elementalswords.init.ModBiomes;
 import trazormc.elementalswords.init.ModBlocks;
 import trazormc.elementalswords.init.ModContainerTypes;
@@ -123,12 +124,12 @@ public class RegistryHandler {
 				ModItems.WATER_LEGGINGS = setup(new WaterArmor(ArmorMaterialTypes.WATER, EquipmentSlotType.LEGS, new Item.Properties().group(ElementalSwords.tabSwords)), "water_leggings"),
 				ModItems.WATER_BOOTS = setup(new WaterArmor(ArmorMaterialTypes.WATER, EquipmentSlotType.FEET, new Item.Properties().group(ElementalSwords.tabSwords)), "water_boots"),
 				
-				ModItems.AIR_BOSS_SPAWN_EGG = setupEggs("air_boss_spawn_egg", ModEntityTypes.ENTITY_AIR_BOSS, 9987080, 3381306),
-				ModItems.AMETHYST_MINER_SPAWN_EGG = setupEggs("amethyst_miner_spawn_egg", ModEntityTypes.ENTITY_AMETHYST_MINER, 12071583, 000000),
-				ModItems.EARTH_BOSS_SPAWN_EGG = setupEggs("earth_boss_spawn_egg", ModEntityTypes.ENTITY_EARTH_BOSS, 9987080, 3381306),
-				ModItems.FIRE_BOSS_SPAWN_EGG = setupEggs("fire_boss_spawn_egg", ModEntityTypes.ENTITY_FIRE_BOSS, 13313792, 13345280),
-				ModItems.LIGHTNING_BOSS_SPAWN_EGG = setupEggs("lightning_boss_spawn_egg", ModEntityTypes.ENTITY_LIGHTNING_BOSS, 15398463, 16777215),
-				ModItems.WATER_BOSS_SPAWN_EGG = setupEggs("water_boss_spawn_egg", ModEntityTypes.ENTITY_WATER_BOSS, 3093218, 3131903),
+				ModItems.AIR_BOSS_SPAWN_EGG = setupEggs("air_boss_spawn_egg", ModEntityTypes.AIR_BOSS, 9987080, 3381306),
+				ModItems.AMETHYST_MINER_SPAWN_EGG = setupEggs("amethyst_miner_spawn_egg", ModEntityTypes.AMETHYST_MINER, 12071583, 000000),
+				ModItems.EARTH_BOSS_SPAWN_EGG = setupEggs("earth_boss_spawn_egg", ModEntityTypes.EARTH_BOSS, 9987080, 3381306),
+				ModItems.FIRE_BOSS_SPAWN_EGG = setupEggs("fire_boss_spawn_egg", ModEntityTypes.FIRE_BOSS, 13313792, 13345280),
+				ModItems.LIGHTNING_BOSS_SPAWN_EGG = setupEggs("lightning_boss_spawn_egg", ModEntityTypes.LIGHTNING_BOSS, 15398463, 16777215),
+				ModItems.WATER_BOSS_SPAWN_EGG = setupEggs("water_boss_spawn_egg", ModEntityTypes.WATER_BOSS, 3093218, 3131903),
 				
 				setupBlockItems(new BlockItem(ModBlocks.AMETHYST_BLOCK, new Item.Properties().group(ElementalSwords.tabSwords))),
 				setupBlockItems(new BlockItem(ModBlocks.AMETHYST_ORE, new Item.Properties().group(ElementalSwords.tabSwords))),
@@ -186,13 +187,14 @@ public class RegistryHandler {
 	@SubscribeEvent
 	public static void onEntityRegistry(RegistryEvent.Register<EntityType<?>> event) {
 		event.getRegistry().registerAll(
-				ModEntityTypes.ENTITY_AMETHYST_MINER,
-				ModEntityTypes.ENTITY_AIR_BOSS,
-				ModEntityTypes.ENTITY_EARTH_BOSS,
-				ModEntityTypes.ENTITY_FIRE_BOSS,
-				ModEntityTypes.ENTITY_LIGHTNING_BOSS,
-				ModEntityTypes.ENTITY_WATER_BOSS,
-				ModEntityTypes.ENTITY_CHARGED_FIREBALL
+				ModEntityTypes.AMETHYST_MINER,
+				ModEntityTypes.AIR_BOSS,
+				ModEntityTypes.EARTH_BOSS,
+				ModEntityTypes.FIRE_BOSS,
+				ModEntityTypes.LIGHTNING_BOSS,
+				ModEntityTypes.WATER_BOSS,
+				ModEntityTypes.CHARGED_FIREBALL,
+				ModEntityTypes.WIND_SEEKER
 				);
 		ElementalSwords.logger.info("Entities Registered");
 	}
@@ -212,12 +214,13 @@ public class RegistryHandler {
 	}
 	
 	private static void createEntityTypes() {
-		setup(ModEntityTypes.ENTITY_AIR_BOSS = EntityType.Builder.create(AirBossEntity::new, EntityClassification.MONSTER).setTrackingRange(85).size(0.6F, 1.95F).build(ElementalSwords.MOD_ID + ":air_boss"), "air_boss");
-		setup(ModEntityTypes.ENTITY_AMETHYST_MINER = EntityType.Builder.create(AmethystMinerEntity::new, EntityClassification.MONSTER).setTrackingRange(85).size(0.6F, 1.95F).build(ElementalSwords.MOD_ID + ":amethyst_miner"), "amethyst_miner");
-		setup(ModEntityTypes.ENTITY_EARTH_BOSS = EntityType.Builder.create(EarthBossEntity::new, EntityClassification.MONSTER).setTrackingRange(85).size(0.6F, 1.95F).build(ElementalSwords.MOD_ID + ":earth_boss"), "earth_boss");
-		setup(ModEntityTypes.ENTITY_FIRE_BOSS = EntityType.Builder.create(FireBossEntity::new, EntityClassification.MONSTER).setTrackingRange(85).size(0.6F, 1.95F).immuneToFire().build(ElementalSwords.MOD_ID + ":fire_boss"), "fire_boss");
-		setup(ModEntityTypes.ENTITY_LIGHTNING_BOSS = EntityType.Builder.create(LightningBossEntity::new, EntityClassification.MONSTER).setTrackingRange(85).size(0.6F, 1.95F).build(ElementalSwords.MOD_ID + ":lightning_boss"), "lightning_boss");
-		setup(ModEntityTypes.ENTITY_WATER_BOSS = EntityType.Builder.create(WaterBossEntity::new, EntityClassification.MONSTER).setTrackingRange(85).size(0.6F, 1.95F).build(ElementalSwords.MOD_ID + ":water_boss"), "water_boss");
-		setup(ModEntityTypes.ENTITY_CHARGED_FIREBALL = EntityType.Builder.<ChargedFireballEntity>create(ChargedFireballEntity::new, EntityClassification.MISC).setTrackingRange(85).setCustomClientFactory((spawnEntity, world) -> new ChargedFireballEntity(world)).build(ElementalSwords.MOD_ID + ":charged_fireball"), "charged_fireball");
+		setup(ModEntityTypes.AIR_BOSS = EntityType.Builder.create(AirBossEntity::new, EntityClassification.MONSTER).setTrackingRange(85).size(0.6F, 1.95F).build(ElementalSwords.MOD_ID + ":air_boss"), "air_boss");
+		setup(ModEntityTypes.AMETHYST_MINER = EntityType.Builder.create(AmethystMinerEntity::new, EntityClassification.MONSTER).setTrackingRange(85).size(0.6F, 1.95F).build(ElementalSwords.MOD_ID + ":amethyst_miner"), "amethyst_miner");
+		setup(ModEntityTypes.EARTH_BOSS = EntityType.Builder.create(EarthBossEntity::new, EntityClassification.MONSTER).setTrackingRange(85).size(0.6F, 1.95F).build(ElementalSwords.MOD_ID + ":earth_boss"), "earth_boss");
+		setup(ModEntityTypes.FIRE_BOSS = EntityType.Builder.create(FireBossEntity::new, EntityClassification.MONSTER).setTrackingRange(85).size(0.6F, 1.95F).immuneToFire().build(ElementalSwords.MOD_ID + ":fire_boss"), "fire_boss");
+		setup(ModEntityTypes.LIGHTNING_BOSS = EntityType.Builder.create(LightningBossEntity::new, EntityClassification.MONSTER).setTrackingRange(85).size(0.6F, 1.95F).build(ElementalSwords.MOD_ID + ":lightning_boss"), "lightning_boss");
+		setup(ModEntityTypes.WATER_BOSS = EntityType.Builder.create(WaterBossEntity::new, EntityClassification.MONSTER).setTrackingRange(85).size(0.6F, 1.95F).build(ElementalSwords.MOD_ID + ":water_boss"), "water_boss");
+		setup(ModEntityTypes.CHARGED_FIREBALL = EntityType.Builder.<ChargedFireballEntity>create(ChargedFireballEntity::new, EntityClassification.MISC).setTrackingRange(85).setCustomClientFactory((spawnEntity, world) -> new ChargedFireballEntity(world)).build(ElementalSwords.MOD_ID + ":charged_fireball"), "charged_fireball");
+		setup(ModEntityTypes.WIND_SEEKER = EntityType.Builder.<WindSeekerEntity>create(WindSeekerEntity::new, EntityClassification.MISC).setTrackingRange(85).setCustomClientFactory((spawnEntity, world) -> new WindSeekerEntity(world)).build(ElementalSwords.MOD_ID + ":wind_seeker"), "wind_seeker");
 	}
 }

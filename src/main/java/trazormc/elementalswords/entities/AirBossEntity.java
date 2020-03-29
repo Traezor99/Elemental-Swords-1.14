@@ -37,14 +37,17 @@ public class AirBossEntity extends MonsterEntity {
 	public AirBossEntity(EntityType<? extends AirBossEntity> type, World worldIn) {
 		super(type, worldIn);
 		this.experienceValue = 100;
-		bossInfo = (ServerBossInfo)(new ServerBossInfo(this.getDisplayName(), BossInfo.Color.PURPLE, BossInfo.Overlay.PROGRESS)).setDarkenSky(false);
+		if(!this.world.isRemote)
+			bossInfo = (ServerBossInfo)(new ServerBossInfo(this.getDisplayName(), BossInfo.Color.PURPLE, BossInfo.Overlay.PROGRESS)).setDarkenSky(false);
+		else
+			bossInfo = null;
 	}
 
 	@Override
 	protected void registerGoals() {
 		this.goalSelector.addGoal(0, new SwimGoal(this));
 		this.goalSelector.addGoal(0, new MeleeAttackGoal(this, 1.5f, false));
-		this.goalSelector.addGoal(1, new WhirlWindGoal(this));
+		//this.goalSelector.addGoal(1, new WhirlWindGoal(this));
 		this.goalSelector.addGoal(1, new ShootStuffGoal(this));
 		this.goalSelector.addGoal(5, new MoveTowardsRestrictionGoal(this, 1.0));
 		this.goalSelector.addGoal(6, new SpawnPhantomsGoal(this));
@@ -82,13 +85,15 @@ public class AirBossEntity extends MonsterEntity {
 	@Override
 	public void addTrackingPlayer(ServerPlayerEntity player) {
 		super.addTrackingPlayer(player);
-		bossInfo.addPlayer(player);
+		if(!this.world.isRemote)
+			bossInfo.addPlayer(player);
 	}
 
 	@Override
 	public void removeTrackingPlayer(ServerPlayerEntity player) {
 		super.removeTrackingPlayer(player);
-		bossInfo.removePlayer(player);
+		if(!this.world.isRemote)
+			bossInfo.removePlayer(player);
 	}
 
 	@Override
@@ -104,8 +109,8 @@ public class AirBossEntity extends MonsterEntity {
 	@Override
 	public void tick() {
 		super.tick();
-		bossInfo.setPercent(this.getHealth() / this.getMaxHealth());
-
+		if(!this.world.isRemote)
+			bossInfo.setPercent(this.getHealth() / this.getMaxHealth());
 	}
 
 	@Override
@@ -138,7 +143,9 @@ public class AirBossEntity extends MonsterEntity {
 
 				vec3d = new Vec3d(vec3d.x, d0, vec3d.z);
 				Vec3d vec3d1 = new Vec3d(entity.posX - this.posX, 0.0D, entity.posZ - this.posZ);
-				if(horizontalMag(vec3d1) > 9.0D) {
+				if(Math.abs(entity.posX - this.posX) <= 20 || Math.abs(entity.posZ - this.posZ) <= 20) {
+					vec3d = new Vec3d(0, d0, 0);
+				} else if(horizontalMag(vec3d1) > 9.0D) {
 					Vec3d vec3d2 = vec3d1.normalize();
 					vec3d = vec3d.add(vec3d2.x * 0.3D - vec3d.x * 0.6D, 0.0D, vec3d2.z * 0.3D - vec3d.z * 0.6D);
 				}
@@ -151,6 +158,16 @@ public class AirBossEntity extends MonsterEntity {
 		}
 
 		super.livingTick();
+	}
+	
+	private double adjustSpeed(double speedIn) {
+		if(speedIn >= 0.5) {
+			return 0.5;
+		} else if(speedIn <= -0.5) {
+			return -0.5;
+		} else {
+			return speedIn;
+		}
 	}
 
 	@Override
@@ -195,22 +212,31 @@ public class AirBossEntity extends MonsterEntity {
 		@Override
 		public void tick() {
 			Entity entity = this.airBoss.getAttackTarget();
-			if(shootTimer >= 100) {
+			if(shootTimer >= 200) {
 				shootTimer = 0;
-				double y = entity.posY - this.airBoss.posY;
-				for(int i = 2; i >= -2; i -= 2) {
-					for(int j = 2; j >= -2; j -= 2) {
-						if(!(i == 0 && j == 0)) {
-							ChargedFireballEntity fireBall = new ChargedFireballEntity(this.airBoss.world, this.airBoss, i, y, j);
-							fireBall.setPosition(this.airBoss.posX + i, this.airBoss.posY, this.airBoss.posZ + j);
-							this.airBoss.world.addEntity(fireBall);
-						}
-					}
-				}
+				double x = entity.posX - this.airBoss.posX;
+				double y = adjustSpeed(entity.posY - this.airBoss.posY, 0.5);
+				double z = entity.posZ - this.airBoss.posZ;
+				double mag = adjustSpeed(Math.sqrt(Entity.horizontalMag(new Vec3d(x, 0, z))), Math.sqrt(2) / 2);
+				double theta = x > 0 ? Math.atan(z / x) : Math.atan(z / x) * (Math.PI);
+				x = mag * Math.cos(theta);
+				z = mag * Math.sin(theta);	
+							
+				WindSeekerEntity windSeeker = new WindSeekerEntity(this.airBoss.world, this.airBoss, x, y, z);
+				windSeeker.posY = this.airBoss.posY + (double)(this.airBoss.getHeight() / 2.0F) + 0.5D;
+				this.airBoss.world.addEntity(windSeeker);
 			} else {
 				shootTimer++;
 			}
 			super.tick();
+		}
+		
+		private double adjustSpeed(double speedIn, double max) {
+			if(speedIn >= max) {
+				return adjustSpeed(speedIn / 2, max);
+			} else {
+				return speedIn;
+			}
 		}
 	}
 

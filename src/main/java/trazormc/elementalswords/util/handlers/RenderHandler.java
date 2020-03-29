@@ -8,6 +8,7 @@ import trazormc.elementalswords.entities.EarthBossEntity;
 import trazormc.elementalswords.entities.FireBossEntity;
 import trazormc.elementalswords.entities.LightningBossEntity;
 import trazormc.elementalswords.entities.WaterBossEntity;
+import trazormc.elementalswords.entities.WindSeekerEntity;
 import trazormc.elementalswords.entities.render.AirBossRenderer;
 import trazormc.elementalswords.entities.render.AmethystMinerRenderer;
 import trazormc.elementalswords.entities.render.ChargedFireballRenderer;
@@ -15,6 +16,7 @@ import trazormc.elementalswords.entities.render.EarthBossRenderer;
 import trazormc.elementalswords.entities.render.FireBossRenderer;
 import trazormc.elementalswords.entities.render.LightningBossRenderer;
 import trazormc.elementalswords.entities.render.WaterBossRenderer;
+import trazormc.elementalswords.entities.render.WindSeekerRenderer;
 
 public class RenderHandler {
 
@@ -26,5 +28,6 @@ public class RenderHandler {
 		RenderingRegistry.registerEntityRenderingHandler(FireBossEntity.class, new FireBossRenderer.Factory());
 		RenderingRegistry.registerEntityRenderingHandler(LightningBossEntity.class, new LightningBossRenderer.Factory());
 		RenderingRegistry.registerEntityRenderingHandler(WaterBossEntity.class, new WaterBossRenderer.Factory());
+		RenderingRegistry.registerEntityRenderingHandler(WindSeekerEntity.class, new WindSeekerRenderer.Factory());
 	}
 }

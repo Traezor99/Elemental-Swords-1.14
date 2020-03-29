@@ -23,7 +23,7 @@ public class LightningShardItem extends Item {
 	public ActionResultType onItemUse(ItemUseContext context) {
 		World world = context.getWorld();
 		if(!world.isRemote && world.isThundering()) {
-			LightningBossEntity lightningBoss = new LightningBossEntity(ModEntityTypes.ENTITY_LIGHTNING_BOSS, world);
+			LightningBossEntity lightningBoss = new LightningBossEntity(ModEntityTypes.LIGHTNING_BOSS, world);
 			lightningBoss.setPosition(context.getPos().getX() + 0.5, context.getPos().getY() + 1, context.getPos().getZ() + 0.5);
 			world.addEntity(lightningBoss);
 		}

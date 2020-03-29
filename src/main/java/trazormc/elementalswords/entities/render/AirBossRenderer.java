@@ -4,11 +4,14 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 import trazormc.elementalswords.ElementalSwords;
 import trazormc.elementalswords.entities.AirBossEntity;
 import trazormc.elementalswords.entities.modals.AirBossModel;
 
+@OnlyIn(Dist.CLIENT)
 public class AirBossRenderer extends MobRenderer<AirBossEntity, AirBossModel> {
 
 	protected ResourceLocation texture;

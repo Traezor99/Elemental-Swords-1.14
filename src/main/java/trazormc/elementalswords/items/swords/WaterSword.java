@@ -27,21 +27,21 @@ public class WaterSword extends SwordItem {
 	public WaterSword(IItemTier tier, int attackDamage, float attackSpeed, Properties properties) {
 		super(tier, attackDamage, attackSpeed, properties);
 	}
-	
+
 	@Override
 	public void onCreated(ItemStack stack, World worldIn, PlayerEntity playerIn) {
 		super.onCreated(stack, worldIn, playerIn);
 		if(!worldIn.isRemote) {
-			AmethystMinerEntity miner = new AmethystMinerEntity(ModEntityTypes.ENTITY_AMETHYST_MINER, worldIn);
+			AmethystMinerEntity miner = new AmethystMinerEntity(ModEntityTypes.AMETHYST_MINER, worldIn);
 			double x = playerIn.posX + 5;
 			double z = playerIn.posZ + 5;
 			double y = ModUtils.calculateGenerationHeight(worldIn, (int)x, (int)z);
-			
+
 			miner.setPosition(x, y +1, z);
 			worldIn.addEntity(miner);
 		}
 	}
-	
+
 	//Add drowned	
 	@Override
 	public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
@@ -49,14 +49,14 @@ public class WaterSword extends SwordItem {
 		if(target instanceof GuardianEntity || target instanceof DrownedEntity) {
 			if(attacker instanceof PlayerEntity) {
 				target.hurtResistantTime = 0;
-			target.attackEntityFrom(DamageSource.causePlayerDamage((PlayerEntity)attacker), 4);
+				target.attackEntityFrom(DamageSource.causePlayerDamage((PlayerEntity)attacker), 4);
 			} else {
 				target.attackEntityFrom(DamageSource.causeMobDamage(attacker), 4);
 			}
 		}
 		return true;
 	}
-	
+
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {

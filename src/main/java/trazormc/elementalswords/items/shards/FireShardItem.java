@@ -23,7 +23,7 @@ public class FireShardItem extends Item {
 	public ActionResultType onItemUse(ItemUseContext context) {
 		World world = context.getWorld();
 		if(!world.isRemote && world.getDimension().isNether()) {
-			FireBossEntity fireBoss = new FireBossEntity(ModEntityTypes.ENTITY_FIRE_BOSS, world);
+			FireBossEntity fireBoss = new FireBossEntity(ModEntityTypes.FIRE_BOSS, world);
 			fireBoss.setPosition(context.getPos().getX() + 0.5, context.getPos().getY() + 1, context.getPos().getZ() + 0.5);
 			world.addEntity(fireBoss);
 		}

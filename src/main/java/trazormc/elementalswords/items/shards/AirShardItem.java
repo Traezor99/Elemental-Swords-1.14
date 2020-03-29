@@ -21,7 +21,7 @@ public class AirShardItem extends Item {
 	@Override
 	public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entity) {
 		if(!entity.world.isRemote && entity.posY >= 250) {
-			AirBossEntity airBoss = new AirBossEntity(ModEntityTypes.ENTITY_AIR_BOSS, entity.world);
+			AirBossEntity airBoss = new AirBossEntity(ModEntityTypes.AIR_BOSS, entity.world);
 			airBoss.setPosition(entity.posX, entity.posY, entity.posZ);
 			entity.world.addEntity(airBoss);
 			entity.remove();

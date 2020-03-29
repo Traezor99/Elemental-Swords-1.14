@@ -29,7 +29,7 @@ public class WaterShardItem extends Item {
 	public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entity) {
 		if(entity.isInWater()) {
 			if(!entity.world.isRemote && isOcean(entity.world.getBiome(entity.getPosition()))) {
-				WaterBossEntity waterBoss = new WaterBossEntity(ModEntityTypes.ENTITY_WATER_BOSS, entity.world);
+				WaterBossEntity waterBoss = new WaterBossEntity(ModEntityTypes.WATER_BOSS, entity.world);
 				waterBoss.setPosition(entity.posX, entity.posY, entity.posZ);
 				entity.world.addEntity(waterBoss);
 				entity.remove();

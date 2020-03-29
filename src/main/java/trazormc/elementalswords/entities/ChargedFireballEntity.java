@@ -24,11 +24,11 @@ public class ChargedFireballEntity extends AbstractFireballEntity {
 	}
 
 	public ChargedFireballEntity(World worldIn, LivingEntity shooter, double accelX, double accelY, double accelZ) {
-		super(ModEntityTypes.ENTITY_CHARGED_FIREBALL, shooter, accelX, accelY, accelZ, worldIn);
+		super(ModEntityTypes.CHARGED_FIREBALL, shooter, accelX, accelY, accelZ, worldIn);
 	}
 
 	public ChargedFireballEntity(World worldIn) {
-		super(ModEntityTypes.ENTITY_CHARGED_FIREBALL, worldIn);
+		super(ModEntityTypes.CHARGED_FIREBALL, worldIn);
 	}
 
 	@Override

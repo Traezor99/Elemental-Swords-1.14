@@ -47,7 +47,7 @@ public class AirSword extends SwordItem {
 	public void onCreated(ItemStack stack, World worldIn, PlayerEntity playerIn) {
 		super.onCreated(stack, worldIn, playerIn);
 		if(!worldIn.isRemote) {
-			AmethystMinerEntity miner = new AmethystMinerEntity(ModEntityTypes.ENTITY_AMETHYST_MINER, worldIn);
+			AmethystMinerEntity miner = new AmethystMinerEntity(ModEntityTypes.AMETHYST_MINER, worldIn);
 			double x = playerIn.posX + 5;
 			double z = playerIn.posZ + 5;
 			double y = ModUtils.calculateGenerationHeight(worldIn, (int)x, (int)z);
