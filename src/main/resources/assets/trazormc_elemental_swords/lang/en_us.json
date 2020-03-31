@@ -66,6 +66,8 @@
     "entity.trazormc_elemental_swords.charged_fireball": "Charged Fireball",
 
     "container.trazormc_elemental_swords.imbuement_table": "Imbuement Table",
+    
+    "effect.trazormc_elemental_swords.water_boss_effect": "Water Boss Effect",
 
     "itemGroup.tab_swords": "Elemental Swords"
 }

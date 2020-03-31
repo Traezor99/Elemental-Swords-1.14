@@ -159,16 +159,6 @@ public class AirBossEntity extends MonsterEntity {
 
 		super.livingTick();
 	}
-	
-	private double adjustSpeed(double speedIn) {
-		if(speedIn >= 0.5) {
-			return 0.5;
-		} else if(speedIn <= -0.5) {
-			return -0.5;
-		} else {
-			return speedIn;
-		}
-	}
 
 	@Override
 	public boolean canPickUpLoot() {
@@ -212,13 +202,13 @@ public class AirBossEntity extends MonsterEntity {
 		@Override
 		public void tick() {
 			Entity entity = this.airBoss.getAttackTarget();
-			if(shootTimer >= 200) {
+			if(shootTimer >= 200 && !this.airBoss.world.isRemote) {
 				shootTimer = 0;
 				double x = entity.posX - this.airBoss.posX;
 				double y = adjustSpeed(entity.posY - this.airBoss.posY, 0.5);
 				double z = entity.posZ - this.airBoss.posZ;
 				double mag = adjustSpeed(Math.sqrt(Entity.horizontalMag(new Vec3d(x, 0, z))), Math.sqrt(2) / 2);
-				double theta = x > 0 ? Math.atan(z / x) : Math.atan(z / x) * (Math.PI);
+				double theta = Math.atan2(z, x);
 				x = mag * Math.cos(theta);
 				z = mag * Math.sin(theta);	
 							

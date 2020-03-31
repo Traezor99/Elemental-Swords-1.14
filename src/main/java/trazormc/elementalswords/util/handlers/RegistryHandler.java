@@ -16,6 +16,8 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.SpawnEggItem;
 import net.minecraft.item.SwordItem;
 import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.potion.Effect;
+import net.minecraft.potion.EffectType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.surfacebuilders.SurfaceBuilderConfig;
@@ -44,6 +46,7 @@ import trazormc.elementalswords.init.ModBlocks;
 import trazormc.elementalswords.init.ModContainerTypes;
 import trazormc.elementalswords.init.ModRecipeSerializers;
 import trazormc.elementalswords.init.ModDimensions;
+import trazormc.elementalswords.init.ModEffects;
 import trazormc.elementalswords.init.ModEntityTypes;
 import trazormc.elementalswords.init.ModItems;
 import trazormc.elementalswords.items.armor.EarthArmor;
@@ -59,6 +62,7 @@ import trazormc.elementalswords.items.swords.EarthSword;
 import trazormc.elementalswords.items.swords.FireSword;
 import trazormc.elementalswords.items.swords.LightningSword;
 import trazormc.elementalswords.items.swords.WaterSword;
+import trazormc.elementalswords.potions.WaterBossEffect;
 import trazormc.elementalswords.util.ArmorMaterialTypes;
 import trazormc.elementalswords.util.ItemTiers;
 import trazormc.elementalswords.world.biomes.DimensionBiome;
@@ -137,7 +141,6 @@ public class RegistryHandler {
 				setupBlockItems(new BlockItem(ModBlocks.IMBUEMENT_TABLE, new Item.Properties().group(ElementalSwords.tabSwords))),
 				setupBlockItems(new BlockItem(ModBlocks.TELEPORTER_BLOCK, new Item.Properties().group(ElementalSwords.tabSwords)))			
 				);
-		ElementalSwords.logger.info("Items registered");
 	}
 	
 	@SubscribeEvent
@@ -149,14 +152,17 @@ public class RegistryHandler {
 				ModBlocks.IMBUEMENT_TABLE = new ImbuementTableBlock(Properties.create(Material.IRON).hardnessAndResistance(4.0f, 15.0f).lightValue(0).sound(SoundType.METAL)).setRegistryName(ElementalSwords.MOD_ID, "imbuement_table"),
 				ModBlocks.TELEPORTER_BLOCK = new TeleporterBlock(Properties.create(Material.IRON).hardnessAndResistance(5.0f,  15.0f).lightValue(0).sound(SoundType.METAL)).setRegistryName(ElementalSwords.MOD_ID, "teleporter_block")			
 				);
-		ElementalSwords.logger.info("Blocks registered");
+	}
+	
+	@SubscribeEvent 
+	public static void onPotionRegistry(RegistryEvent.Register<Effect> event) {
+		event.getRegistry().register(ModEffects.WATER_BOSS_EFFECT = setup(new WaterBossEffect(EffectType.HARMFUL, 8181462), "water_boss_effect"));
 	}
 	
 	@SuppressWarnings("unchecked")
 	@SubscribeEvent
 	public static void onRecipeSerializerRegistry(RegistryEvent.Register<IRecipeSerializer<?>> event) {
 		event.getRegistry().register(ModRecipeSerializers.IMBUEMENT_SHAPELESS = (IRecipeSerializer<ImbuementShapelessRecipes>) new ImbuementShapelessRecipes.Serializer().setRegistryName(new ResourceLocation(ElementalSwords.MOD_ID, "imbuement")));
-		ElementalSwords.logger.info("RecipeSerializers Registered");
 	}
 	
 	@SubscribeEvent
@@ -165,7 +171,6 @@ public class RegistryHandler {
 				ModBiomes.AMETHYST_DIMENSION_BIOME = new DimensionBiome(new SurfaceBuilderConfig(ModBlocks.AMETHYST_STONE.getDefaultState(), ModBlocks.AMETHYST_STONE.getDefaultState(), ModBlocks.AMETHYST_STONE.getDefaultState())).setRegistryName(ElementalSwords.MOD_ID, "amethyst_dimension_biome"),
 				ModBiomes.FIRE_DIMENSION_BIOME = new DimensionBiome(new SurfaceBuilderConfig(Blocks.NETHER_BRICKS.getDefaultState(), Blocks.NETHERRACK.getDefaultState(), Blocks.QUARTZ_BLOCK.getDefaultState())).setRegistryName(ElementalSwords.MOD_ID, "fire_dimension_biome")
 				);
-		ElementalSwords.logger.info("Biomes Registered");
 	}
 	
 	@SubscribeEvent
@@ -174,14 +179,12 @@ public class RegistryHandler {
 				ModDimensions.AMETHYST_DIMENSION = new AmethystModDimension("amethyst_dimension"),
 				ModDimensions.FIRE_DIMENSION = new FireModDimension("fire_dimension")
 				);
-		ElementalSwords.logger.info("Dimensions Registered");
 	}
 	
 	@SuppressWarnings("unchecked")
 	@SubscribeEvent 
 	public static void onContainerTypeRegistry(RegistryEvent.Register<ContainerType<?>> event) {
 		event.getRegistry().register(ModContainerTypes.IMBUEMENT_TABLE = (ContainerType<ImbuementTableContainer>) IForgeContainerType.create(ImbuementTableContainer::new).setRegistryName(ElementalSwords.MOD_ID, "imbuement_table"));
-		ElementalSwords.logger.info("ContainerTypes Registered");
 	}
 
 	@SubscribeEvent
@@ -196,7 +199,6 @@ public class RegistryHandler {
 				ModEntityTypes.CHARGED_FIREBALL,
 				ModEntityTypes.WIND_SEEKER
 				);
-		ElementalSwords.logger.info("Entities Registered");
 	}
 	
 	private static Item setupEggs(String name, EntityType<?> entityType, int primary, int secondary) {

@@ -14,16 +14,18 @@ import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.world.BossInfo;
 import net.minecraft.world.ServerBossInfo;
 import net.minecraft.world.World;
+import trazormc.elementalswords.init.ModEffects;
 
-public class WaterBossEntity extends MonsterEntity {
-	
+public class WaterBossEntity extends MonsterEntity {	
 	private final ServerBossInfo bossInfo;
+	private boolean effectApplied = false;
 
 	public WaterBossEntity(EntityType<? extends WaterBossEntity> type, World worldIn) {
 		super(type, worldIn);
@@ -54,9 +56,23 @@ public class WaterBossEntity extends MonsterEntity {
 	}
 	
 	@Override
+	public void onDeath(DamageSource cause) {
+		super.onDeath(cause);
+		if(this.attackingPlayer != null) {
+			if(this.attackingPlayer.getActivePotionEffect(ModEffects.WATER_BOSS_EFFECT) != null) {
+				this.attackingPlayer.removeActivePotionEffect(ModEffects.WATER_BOSS_EFFECT);
+			}
+		}
+	}
+	
+	@Override
 	public void tick() {
 		super.tick();
 		bossInfo.setPercent(this.getHealth() / this.getMaxHealth());
+		if(!this.effectApplied && this.attackingPlayer != null) {
+			this.attackingPlayer.addPotionEffect(new EffectInstance(ModEffects.WATER_BOSS_EFFECT, 2000));
+			this.effectApplied = true;
+		}
 	}
 	
 	@Override
@@ -74,10 +90,10 @@ public class WaterBossEntity extends MonsterEntity {
 	@Override
 	protected void registerAttributes() {
 		super.registerAttributes();
-		this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(60.0d);
+		this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(300.0d);
 		this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.25d);
-		this.getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(16.0D);
-		this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(4.0D);
+		this.getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(50.0D);
+		this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(20.0D);
 		this.getAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(4.0D);
 	}
 	
