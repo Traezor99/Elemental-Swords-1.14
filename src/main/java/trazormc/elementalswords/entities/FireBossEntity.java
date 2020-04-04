@@ -1,8 +1,8 @@
 package trazormc.elementalswords.entities;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntitySize;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.Pose;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
@@ -134,20 +134,20 @@ public class FireBossEntity extends BlazeEntity {
 		@Override
 		public void tick() {
 			--this.attackTime;
-			LivingEntity entitylivingbase = this.fireBoss.getAttackTarget();
-			double distance = this.fireBoss.getDistance(entitylivingbase);
+			Entity target = this.fireBoss.getAttackTarget();
+			double distance = this.fireBoss.getDistance(target);
 
 			if (distance < 3.0) {
 				if (this.attackTime <= 0) {
 					this.attackTime = 10;
-					this.fireBoss.attackEntityAsMob(entitylivingbase);
+					this.fireBoss.attackEntityAsMob(target);
 				}         
 
-				this.fireBoss.getMoveHelper().setMoveTo(entitylivingbase.posX, entitylivingbase.posY, entitylivingbase.posZ, 1.0D);  
+				this.fireBoss.getMoveHelper().setMoveTo(target.posX, target.posY, target.posZ, 1.0D);  
 			} else if (distance < this.getFollowDistance()) {          	
-				double d1 = entitylivingbase.posX - this.fireBoss.posX;
-				double d2 = entitylivingbase.getBoundingBox().minY + (double)(entitylivingbase.getHeight() / 2.0F) - (this.fireBoss.posY + (double)(this.fireBoss.getHeight() / 2.0F));
-				double d3 = entitylivingbase.posZ - this.fireBoss.posZ;
+				double d1 = target.posX - this.fireBoss.posX;
+				double d2 = target.getBoundingBox().minY + (double)(target.getHeight() / 2.0F) - (this.fireBoss.posY + (double)(this.fireBoss.getHeight() / 2.0F));
+				double d3 = target.posZ - this.fireBoss.posZ;
 
 				if (this.attackTime <= 0) {
 					++this.attackStep;
@@ -173,10 +173,10 @@ public class FireBossEntity extends BlazeEntity {
 					}
 				}
 
-				this.fireBoss.getLookController().setLookPositionWithEntity(entitylivingbase, 10.0F, 10.0F);
+				this.fireBoss.getLookController().setLookPositionWithEntity(target, 10.0F, 10.0F);
 			} else {
 				this.fireBoss.getNavigator().clearPath();
-				this.fireBoss.getMoveHelper().setMoveTo(entitylivingbase.posX, entitylivingbase.posY, entitylivingbase.posZ, 1.0D);
+				this.fireBoss.getMoveHelper().setMoveTo(target.posX, target.posY, target.posZ, 1.0D);
 			}
 
 			super.tick();

@@ -201,12 +201,12 @@ public class AirBossEntity extends MonsterEntity {
 
 		@Override
 		public void tick() {
-			Entity entity = this.airBoss.getAttackTarget();
+			Entity target = this.airBoss.getAttackTarget();
 			if(shootTimer >= 200 && !this.airBoss.world.isRemote) {
 				shootTimer = 0;
-				double x = entity.posX - this.airBoss.posX;
-				double y = adjustSpeed(entity.posY - this.airBoss.posY, 0.5);
-				double z = entity.posZ - this.airBoss.posZ;
+				double x = target.posX - this.airBoss.posX;
+				double y = adjustSpeed(target.posY - this.airBoss.posY, 0.5);
+				double z = target.posZ - this.airBoss.posZ;
 				double mag = adjustSpeed(Math.sqrt(Entity.horizontalMag(new Vec3d(x, 0, z))), Math.sqrt(2) / 2);
 				double theta = Math.atan2(z, x);
 				x = mag * Math.cos(theta);
@@ -258,7 +258,7 @@ public class AirBossEntity extends MonsterEntity {
 					int y = ModUtils.calculateGenerationHeight(this.airBoss.world, x, z);
 					phantom.setPosition(x, y, z);
 					this.airBoss.world.addEntity(phantom);
-					phantom.setAttackTarget(this.airBoss.attackingPlayer);
+					phantom.setAttackTarget(this.airBoss.getAttackTarget());
 				}
 
 				phantomSpawnTimer = 0;

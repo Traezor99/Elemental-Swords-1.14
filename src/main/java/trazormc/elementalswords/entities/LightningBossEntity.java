@@ -1,5 +1,6 @@
 package trazormc.elementalswords.entities;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntitySize;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Pose;
@@ -137,10 +138,10 @@ public class LightningBossEntity extends MonsterEntity {
 
 		@Override
 		public void tick() {
-			if(lightningTimer >= 100 && !this.lightningBoss.world.isRemote && this.lightningBoss.getAttackTarget() instanceof PlayerEntity) {
-				LightningBoltEntity lightning = new LightningBoltEntity(this.lightningBoss.world, this.lightningBoss.getAttackTarget().posX, 
-						this.lightningBoss.getAttackTarget().posY, this.lightningBoss.getAttackTarget().posZ, false);
-				lightning.setPosition(this.lightningBoss.getAttackTarget().posX, this.lightningBoss.getAttackTarget().posY, this.lightningBoss.getAttackTarget().posZ);
+			Entity target = this.lightningBoss.getAttackTarget();
+			if(lightningTimer >= 100 && !this.lightningBoss.world.isRemote) {
+				LightningBoltEntity lightning = new LightningBoltEntity(this.lightningBoss.world, target.posX, target.posY, target.posZ, false);
+				lightning.setPosition(target.posX, target.posY, target.posZ);
 				if(!this.lightningBoss.world.isRemote) {
 					this.lightningBoss.getServer().func_71218_a(this.lightningBoss.dimension).addLightningBolt(lightning);
 				}

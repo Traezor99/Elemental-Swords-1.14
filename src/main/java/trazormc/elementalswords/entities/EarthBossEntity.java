@@ -1,6 +1,5 @@
 package trazormc.elementalswords.entities;
 
-
 import java.util.List;
 
 import net.minecraft.entity.Entity;
@@ -172,7 +171,7 @@ public class EarthBossEntity extends MonsterEntity {
 					}
 				}
 
-				ModUtils.playSound(this.earthBoss.world, this.earthBoss.attackingPlayer, this.earthBoss.getPosition());			
+				ModUtils.playSound(this.earthBoss.world, (PlayerEntity)this.earthBoss.getAttackTarget(), this.earthBoss.getPosition());			
 				poundTimer = 0;
 			} else {
 				poundTimer++;

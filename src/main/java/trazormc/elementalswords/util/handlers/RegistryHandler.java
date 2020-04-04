@@ -62,7 +62,7 @@ import trazormc.elementalswords.items.swords.EarthSword;
 import trazormc.elementalswords.items.swords.FireSword;
 import trazormc.elementalswords.items.swords.LightningSword;
 import trazormc.elementalswords.items.swords.WaterSword;
-import trazormc.elementalswords.potions.WaterBossEffect;
+import trazormc.elementalswords.potions.ForcedDrownEffect;
 import trazormc.elementalswords.util.ArmorMaterialTypes;
 import trazormc.elementalswords.util.ItemTiers;
 import trazormc.elementalswords.world.biomes.DimensionBiome;
@@ -155,8 +155,8 @@ public class RegistryHandler {
 	}
 	
 	@SubscribeEvent 
-	public static void onPotionRegistry(RegistryEvent.Register<Effect> event) {
-		event.getRegistry().register(ModEffects.WATER_BOSS_EFFECT = setup(new WaterBossEffect(EffectType.HARMFUL, 8181462), "water_boss_effect"));
+	public static void onEffectRegistry(RegistryEvent.Register<Effect> event) {
+		event.getRegistry().register(ModEffects.FORCED_DROWN = setup(new ForcedDrownEffect(EffectType.HARMFUL, 8181462), "forced_drown_effect"));
 	}
 	
 	@SuppressWarnings("unchecked")
