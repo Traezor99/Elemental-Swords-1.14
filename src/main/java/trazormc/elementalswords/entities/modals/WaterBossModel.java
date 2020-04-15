@@ -5,8 +5,11 @@ import net.minecraft.client.renderer.entity.model.RendererModel;
 import net.minecraft.util.math.MathHelper;
 import trazormc.elementalswords.entities.WaterBossEntity;
 
+/**
+ * WaterBossModel - TrazorMC
+ * Created using Tabula 6.0.0
+ */
 public class WaterBossModel extends BipedModel<WaterBossEntity> {
-	
 	public RendererModel right_arm;
     public RendererModel right_leg;
     public RendererModel head;

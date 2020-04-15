@@ -115,7 +115,7 @@ public class EarthBossEntity extends MonsterEntity {
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
 		return SoundEvents.BLOCK_STONE_HIT;
 	}
-	
+
 	static class PoundGoal extends Goal {
 		private final EarthBossEntity earthBoss;
 		private int poundTimer = 0;
@@ -128,12 +128,12 @@ public class EarthBossEntity extends MonsterEntity {
 		public boolean shouldExecute() {
 			return this.earthBoss.getAttackTarget() instanceof PlayerEntity;
 		}
-		
+
 		@Override
 		public void startExecuting() {
 			poundTimer = 0;
 		}
-		
+
 		@Override
 		public void tick() {
 			if(poundTimer >= 300) {
@@ -176,29 +176,29 @@ public class EarthBossEntity extends MonsterEntity {
 			} else {
 				poundTimer++;
 			}
-			
+
 			super.tick();
 		}
 	}
-	
+
 	static class SpawnMobsGoal extends Goal {
 		private final EarthBossEntity earthBoss;
 		private int spawnTimer = 0;
-		
+
 		public SpawnMobsGoal(EarthBossEntity entity) {
 			this.earthBoss = entity;
 		}
-		
+
 		@Override
 		public boolean shouldExecute() {
 			return this.earthBoss != null && this.earthBoss.isAlive();
 		}
-		
+
 		@Override
 		public void startExecuting() {
 			spawnTimer = 0;
 		}
-		
+
 		@Override
 		public void tick() {
 			if(spawnTimer >= 200) {
@@ -221,7 +221,7 @@ public class EarthBossEntity extends MonsterEntity {
 			} else {
 				spawnTimer++;
 			}
-			
+
 			super.tick();
 		}
 	}

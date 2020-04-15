@@ -38,7 +38,6 @@ public class ForcedDrownEffect extends Effect {
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void renderHUDEffect(EffectInstance effect, AbstractGui gui, int x, int y, float z, float alpha) {
-		//super.renderHUDEffect(effect, gui, x, y, z, alpha);
 		Minecraft.getInstance().textureManager.bindTexture(texture);
 		AbstractGui.blit(x + 3, y + 3, 0, 0, 18, 18, 18, 18);
 		
@@ -47,7 +46,6 @@ public class ForcedDrownEffect extends Effect {
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void renderInventoryEffect(EffectInstance effect, DisplayEffectsScreen<?> gui, int x, int y, float z) {
-		//super.renderInventoryEffect(effect, gui, x, y, z);
 		Minecraft.getInstance().textureManager.bindTexture(texture);
 		AbstractGui.blit(x + 6, y + 7, 0, 0, 18, 18, 18, 18);
 	}

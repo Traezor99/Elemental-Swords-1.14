@@ -66,8 +66,8 @@ public class FireBossEntity extends BlazeEntity {
 
 	@Override
 	protected void registerGoals() {
-		this.goalSelector.addGoal(1, new FireBossEntity.FireballAttackGoal(this));
-		this.goalSelector.addGoal(1, new FireBossEntity.SpawnBlazeGoal(this));
+		this.goalSelector.addGoal(1, new FireballAttackGoal(this));
+		this.goalSelector.addGoal(1, new SpawnBlazeGoal(this));
 		this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.5f, false));
 		this.goalSelector.addGoal(5, new MoveTowardsRestrictionGoal(this, 1.0D));
 		this.goalSelector.addGoal(7, new WaterAvoidingRandomWalkingGoal(this, 1.0D, 0.0F));

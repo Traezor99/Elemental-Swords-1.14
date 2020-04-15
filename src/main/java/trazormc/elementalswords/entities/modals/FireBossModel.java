@@ -6,7 +6,7 @@ import net.minecraft.util.math.MathHelper;
 import trazormc.elementalswords.entities.FireBossEntity;
 
 /**
- * ModelAmethystMiner - Either Mojang or a mod author
+ * FireBossModel - TrazorMC
  * Created using Tabula 6.0.0
  */
 public class FireBossModel extends BipedModel<FireBossEntity> {

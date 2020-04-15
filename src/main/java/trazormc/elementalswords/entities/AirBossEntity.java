@@ -9,12 +9,9 @@ import net.minecraft.entity.Pose;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.HurtByTargetGoal;
-import net.minecraft.entity.ai.goal.LookAtGoal;
 import net.minecraft.entity.ai.goal.LookRandomlyGoal;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
-import net.minecraft.entity.ai.goal.MoveTowardsRestrictionGoal;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
-import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.monster.PhantomEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -45,13 +42,10 @@ public class AirBossEntity extends MonsterEntity {
 
 	@Override
 	protected void registerGoals() {
-		this.goalSelector.addGoal(0, new SwimGoal(this));
 		this.goalSelector.addGoal(0, new MeleeAttackGoal(this, 1.5f, false));
 		//this.goalSelector.addGoal(1, new WhirlWindGoal(this));
-		this.goalSelector.addGoal(1, new ShootStuffGoal(this));
-		this.goalSelector.addGoal(5, new MoveTowardsRestrictionGoal(this, 1.0));
+		this.goalSelector.addGoal(1, new ShootWindSeekerGoal(this));
 		this.goalSelector.addGoal(6, new SpawnPhantomsGoal(this));
-		this.goalSelector.addGoal(8, new LookAtGoal(this, PlayerEntity.class, 7.0f));
 		this.goalSelector.addGoal(8, new LookRandomlyGoal(this));
 
 		this.targetSelector.addGoal(0, new HurtByTargetGoal(this, new Class[] {}));
@@ -88,7 +82,7 @@ public class AirBossEntity extends MonsterEntity {
 		if(!this.world.isRemote)
 			bossInfo.addPlayer(player);
 	}
-
+	
 	@Override
 	public void removeTrackingPlayer(ServerPlayerEntity player) {
 		super.removeTrackingPlayer(player);
@@ -124,37 +118,35 @@ public class AirBossEntity extends MonsterEntity {
 
 	@Override
 	public void livingTick() {
-		Vec3d vec3d = this.getMotion().mul(1.0D, 0.6D, 1.0D);
 		if(!this.world.isRemote) {
-			Entity entity = this.getAttackTarget();
-			if(entity != null) {
-				double d0 = vec3d.y;
-				if(this.posY < entity.posY) {
-					d0 = Math.max(0.0D, d0);
-					d0 = d0 + (0.3D - d0 * (double)0.6F);
-				} else if(this.posY > entity.posY) {
-					d0 = Math.min(0.0D, d0);
-					d0 = -d0 - (0.3D - d0 * (double)0.6F);
+			Entity target = this.getAttackTarget();
+			if(target != null) {
+				double x = target.posX - this.posX;
+				double y = target.posY - this.posY;
+				double z = target.posZ - this.posZ;
+				double mag = Math.sqrt(Entity.horizontalMag(new Vec3d(x, 0, z)));
+				double theta = Math.atan2(z, x);
+				this.rotationYaw = (float)(theta * (180 / Math.PI)) + 90;
+				
+				if(Math.abs(y) <= 1 || ((int)this.posY == 150 && y < 0)) {
+					y = 0;
+				} else if((int)this.posY < 150) {
+					y = Math.abs(y);
+				} 
+				
+				y = MathHelper.clamp(y, -0.5, 0.5);
+				
+				if(mag <= 15) {
+					this.setMotion(0, y, 0);
+				} else {
+					mag = Math.sqrt(2) / 2;
+					x = mag * Math.cos(theta);
+					z = mag * Math.sin(theta);
+					this.setMotion(x, y, z);
 				}
-
-				if(this.posY <= 150 && d0 < 0) {
-					d0 *= -1;
-				}
-
-				vec3d = new Vec3d(vec3d.x, d0, vec3d.z);
-				Vec3d vec3d1 = new Vec3d(entity.posX - this.posX, 0.0D, entity.posZ - this.posZ);
-				if(Math.abs(entity.posX - this.posX) <= 20 || Math.abs(entity.posZ - this.posZ) <= 20) {
-					vec3d = new Vec3d(0, d0, 0);
-				} else if(horizontalMag(vec3d1) > 9.0D) {
-					Vec3d vec3d2 = vec3d1.normalize();
-					vec3d = vec3d.add(vec3d2.x * 0.3D - vec3d.x * 0.6D, 0.0D, vec3d2.z * 0.3D - vec3d.z * 0.6D);
-				}
+			} else {
+				this.setMotion(0, 0, 0);
 			}
-		}
-
-		this.setMotion(vec3d);
-		if(horizontalMag(vec3d) > 0.05D) {
-			this.rotationYaw = (float)MathHelper.atan2(vec3d.z, vec3d.x) * (180F / (float)Math.PI) - 90.0F;
 		}
 
 		super.livingTick();
@@ -181,11 +173,11 @@ public class AirBossEntity extends MonsterEntity {
 		return SoundEvents.ENTITY_PUFFER_FISH_HURT;
 	}
 
-	static class ShootStuffGoal extends Goal {
+	static class ShootWindSeekerGoal extends Goal {
 		private final AirBossEntity airBoss;
 		private int shootTimer = 0;
 
-		public ShootStuffGoal(AirBossEntity entity) {
+		public ShootWindSeekerGoal(AirBossEntity entity) {
 			this.airBoss = entity;
 		}
 
@@ -205,13 +197,8 @@ public class AirBossEntity extends MonsterEntity {
 			if(shootTimer >= 200 && !this.airBoss.world.isRemote) {
 				shootTimer = 0;
 				double x = target.posX - this.airBoss.posX;
-				double y = adjustSpeed(target.posY - this.airBoss.posY, 0.5);
-				double z = target.posZ - this.airBoss.posZ;
-				double mag = adjustSpeed(Math.sqrt(Entity.horizontalMag(new Vec3d(x, 0, z))), Math.sqrt(2) / 2);
-				double theta = Math.atan2(z, x);
-				x = mag * Math.cos(theta);
-				z = mag * Math.sin(theta);	
-							
+				double y = target.posY - this.airBoss.posY;
+				double z = target.posZ - this.airBoss.posZ;	
 				WindSeekerEntity windSeeker = new WindSeekerEntity(this.airBoss.world, this.airBoss, x, y, z);
 				windSeeker.posY = this.airBoss.posY + (double)(this.airBoss.getHeight() / 2.0F) + 0.5D;
 				this.airBoss.world.addEntity(windSeeker);
@@ -219,14 +206,6 @@ public class AirBossEntity extends MonsterEntity {
 				shootTimer++;
 			}
 			super.tick();
-		}
-		
-		private double adjustSpeed(double speedIn, double max) {
-			if(speedIn >= max) {
-				return adjustSpeed(speedIn / 2, max);
-			} else {
-				return speedIn;
-			}
 		}
 	}
 
@@ -255,8 +234,7 @@ public class AirBossEntity extends MonsterEntity {
 					PhantomEntity phantom = new PhantomEntity(EntityType.PHANTOM, this.airBoss.world);
 					int x = ModUtils.getPos(this.airBoss.rand, 10, (int)this.airBoss.posX);
 					int z = ModUtils.getPos(this.airBoss.rand, 10, (int)this.airBoss.posZ);
-					int y = ModUtils.calculateGenerationHeight(this.airBoss.world, x, z);
-					phantom.setPosition(x, y, z);
+					phantom.setPosition(x, this.airBoss.posY, z);
 					this.airBoss.world.addEntity(phantom);
 					phantom.setAttackTarget(this.airBoss.getAttackTarget());
 				}
@@ -273,7 +251,7 @@ public class AirBossEntity extends MonsterEntity {
 		private final AirBossEntity airBoss;
 		private int whirlWindTimer = 0;
 
-		public WhirlWindGoal(AirBossEntity entity) {
+		private WhirlWindGoal(AirBossEntity entity) {
 			this.airBoss = entity;
 		}
 

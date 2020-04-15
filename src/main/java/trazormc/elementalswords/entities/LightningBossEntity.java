@@ -29,7 +29,7 @@ import trazormc.elementalswords.util.ModUtils;
 
 public class LightningBossEntity extends MonsterEntity {
 	private final ServerBossInfo bossInfo;
-	
+
 	public LightningBossEntity(EntityType<? extends LightningBossEntity> type, World worldIn) {
 		super(type, worldIn);
 		this.experienceValue = 100;
