@@ -51,14 +51,14 @@ public class WindSeekerEntity extends DamagingProjectileEntity {
 			if(this.shootingEntity instanceof AirBossEntity) {
 				Entity target = ((AirBossEntity)this.shootingEntity).getAttackTarget();
 				if(target != null) {
+					double maxSpeed = 0.707;
 					double x = target.posX - this.posX;
-					double y = MathHelper.clamp(target.posY - this.posY, -0.5, 0.5);
+					double y = MathHelper.clamp(target.posY - this.posY, -maxSpeed, maxSpeed);
 					double z = target.posZ - this.posZ;
 					double mag = Math.sqrt(Entity.horizontalMag(new Vec3d(x, 0, z)));
-					if(mag <= 50) {
-						mag = 1.06;
+					if(mag <= 100) {
 						double theta = Math.atan2(z, x);
-						this.rotationYaw = (float)(theta * (180 / Math.PI)) + 90;
+						mag = maxSpeed;
 						x = mag * Math.cos(theta);
 						z = mag * Math.sin(theta);	
 						this.setMotion(x, y, z);

@@ -5,6 +5,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
@@ -26,6 +27,20 @@ public class WindSeekerRenderer extends EntityRenderer<WindSeekerEntity> {
 		return texture;
 	}
 	
+	//Maybe remove this method
+	private float getRenderYaw(float prevYaw, float yaw, float partialTicks) {
+	      float f;
+	      for(f = yaw - prevYaw; f < -180.0F; f += 360.0F) {
+	         ;
+	      }
+
+	      while(f >= 180.0F) {
+	         f -= 360.0F;
+	      }
+
+	      return prevYaw + partialTicks * f;
+	   }
+
 	@Override
 	public void doRender(WindSeekerEntity entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		GlStateManager.pushMatrix();
@@ -37,7 +52,9 @@ public class WindSeekerRenderer extends EntityRenderer<WindSeekerEntity> {
 			GlStateManager.setupSolidRenderingTextureCombine(this.getTeamColor(entity));
 		}
 
-		this.model.render(entity, 0f, 0f, 0f, 0f, 0f, 1.0f);
+		this.model.render(MathHelper.lerp(partialTicks, entity.prevRotationPitch, entity.rotationPitch), 
+				getRenderYaw(entity.prevRotationYaw, entity.rotationYaw, partialTicks), 180.0f, 1.0f);
+		
 		if(this.renderOutlines) {
 			GlStateManager.tearDownSolidRenderingTextureCombine();
 			GlStateManager.disableColorMaterial();
@@ -46,12 +63,11 @@ public class WindSeekerRenderer extends EntityRenderer<WindSeekerEntity> {
 		GlStateManager.popMatrix();
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
 	}
-	
+
 	public static class Factory implements IRenderFactory<WindSeekerEntity> {
 		@Override
 		public EntityRenderer<? super WindSeekerEntity> createRenderFor(EntityRendererManager manager) {
 			return new WindSeekerRenderer(manager);
 		}
 	}
-
 }

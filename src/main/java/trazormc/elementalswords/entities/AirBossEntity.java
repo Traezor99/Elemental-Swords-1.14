@@ -9,6 +9,7 @@ import net.minecraft.entity.Pose;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.HurtByTargetGoal;
+import net.minecraft.entity.ai.goal.LookAtGoal;
 import net.minecraft.entity.ai.goal.LookRandomlyGoal;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
@@ -45,7 +46,8 @@ public class AirBossEntity extends MonsterEntity {
 		this.goalSelector.addGoal(0, new MeleeAttackGoal(this, 1.5f, false));
 		//this.goalSelector.addGoal(1, new WhirlWindGoal(this));
 		this.goalSelector.addGoal(1, new ShootWindSeekerGoal(this));
-		this.goalSelector.addGoal(6, new SpawnPhantomsGoal(this));
+		//this.goalSelector.addGoal(6, new SpawnPhantomsGoal(this));
+		this.goalSelector.addGoal(5, new LookAtGoal(this, PlayerEntity.class, 100));
 		this.goalSelector.addGoal(8, new LookRandomlyGoal(this));
 
 		this.targetSelector.addGoal(0, new HurtByTargetGoal(this, new Class[] {}));
@@ -126,7 +128,7 @@ public class AirBossEntity extends MonsterEntity {
 				double z = target.posZ - this.posZ;
 				double mag = Math.sqrt(Entity.horizontalMag(new Vec3d(x, 0, z)));
 				double theta = Math.atan2(z, x);
-				this.rotationYaw = (float)(theta * (180 / Math.PI)) + 90;
+				this.rotationYaw = (float)(theta * (180 / Math.PI)) - 90;
 				
 				if(Math.abs(y) <= 1 || ((int)this.posY == 150 && y < 0)) {
 					y = 0;
