@@ -130,18 +130,18 @@ public class AirBossEntity extends MonsterEntity {
 				double theta = Math.atan2(z, x);
 				this.rotationYaw = (float)(theta * (180 / Math.PI)) - 90;
 				
-				if(Math.abs(y) <= 1 || ((int)this.posY == 150 && y < 0)) {
+				if(Math.abs(y) <= 5 || ((int)this.posY == 150 && y < 0)) {
 					y = 0;
 				} else if((int)this.posY < 150) {
 					y = Math.abs(y);
 				} 
 				
-				y = MathHelper.clamp(y, -0.5, 0.5);
+				y = MathHelper.clamp(y, -0.25, 0.25);
 				
 				if(mag <= 15) {
 					this.setMotion(0, y, 0);
 				} else {
-					mag = Math.sqrt(2) / 2;
+					mag = Math.sqrt(2) / 4;
 					x = mag * Math.cos(theta);
 					z = mag * Math.sin(theta);
 					this.setMotion(x, y, z);

@@ -41,7 +41,7 @@ public class WindSeekerRenderer extends EntityRenderer<WindSeekerEntity> {
 	      return prevYaw + partialTicks * f;
 	   }
 
-	@Override
+	@Override //Still does weird stuff with rotation vertically
 	public void doRender(WindSeekerEntity entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		GlStateManager.pushMatrix();
 		GlStateManager.disableCull();
@@ -52,8 +52,7 @@ public class WindSeekerRenderer extends EntityRenderer<WindSeekerEntity> {
 			GlStateManager.setupSolidRenderingTextureCombine(this.getTeamColor(entity));
 		}
 
-		this.model.render(MathHelper.lerp(partialTicks, entity.prevRotationPitch, entity.rotationPitch), 
-				getRenderYaw(entity.prevRotationYaw, entity.rotationYaw, partialTicks), 180.0f, 1.0f);
+		this.model.render(MathHelper.lerp(partialTicks, entity.prevRotationPitch, entity.rotationPitch), getRenderYaw(entity.prevRotationYaw, entity.rotationYaw, partialTicks), 180.0f, 1.0f);
 		
 		if(this.renderOutlines) {
 			GlStateManager.tearDownSolidRenderingTextureCombine();

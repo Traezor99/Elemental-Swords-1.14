@@ -10,7 +10,6 @@ import net.minecraft.particles.IParticleData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -51,17 +50,22 @@ public class WindSeekerEntity extends DamagingProjectileEntity {
 			if(this.shootingEntity instanceof AirBossEntity) {
 				Entity target = ((AirBossEntity)this.shootingEntity).getAttackTarget();
 				if(target != null) {
-					double maxSpeed = 0.707;
+					double maxSpeed = Math.sqrt(2) / 2;
 					double x = target.posX - this.posX;
-					double y = MathHelper.clamp(target.posY - this.posY, -maxSpeed, maxSpeed);
+					double y = target.posY - this.posY;
 					double z = target.posZ - this.posZ;
-					double mag = Math.sqrt(Entity.horizontalMag(new Vec3d(x, 0, z)));
+					double mag = Math.sqrt(x * x + z * z);
 					if(mag <= 100) {
-						double theta = Math.atan2(z, x);
-						mag = maxSpeed;
-						x = mag * Math.cos(theta);
-						z = mag * Math.sin(theta);	
-						this.setMotion(x, y, z);
+						double pitch = Math.atan2(y, mag);
+						double yaw = Math.atan2(z, x);
+						if(mag <= 0.333 && Math.abs(y) >= 2) { //Helps a bit, but isn't the right solution for the weird rotation when directly above or below
+							this.setMotion(0, maxSpeed * Math.sin(pitch), 0);
+						} else {
+							x = maxSpeed * Math.cos(yaw);
+							y = maxSpeed * Math.sin(pitch);
+							z = maxSpeed * Math.sin(yaw);	
+							this.setMotion(x, y, z);
+						}
 					} else {
 						this.remove();
 					}
