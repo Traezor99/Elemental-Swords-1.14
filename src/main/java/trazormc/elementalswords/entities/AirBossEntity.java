@@ -44,9 +44,8 @@ public class AirBossEntity extends MonsterEntity {
 	@Override
 	protected void registerGoals() {
 		this.goalSelector.addGoal(0, new MeleeAttackGoal(this, 1.5f, false));
-		//this.goalSelector.addGoal(1, new WhirlWindGoal(this));
 		this.goalSelector.addGoal(1, new ShootWindSeekerGoal(this));
-		//this.goalSelector.addGoal(6, new SpawnPhantomsGoal(this));
+		this.goalSelector.addGoal(2, new ShootHailGoal(this));
 		this.goalSelector.addGoal(5, new LookAtGoal(this, PlayerEntity.class, 100));
 		this.goalSelector.addGoal(8, new LookRandomlyGoal(this));
 
@@ -84,7 +83,7 @@ public class AirBossEntity extends MonsterEntity {
 		if(!this.world.isRemote)
 			bossInfo.addPlayer(player);
 	}
-	
+
 	@Override
 	public void removeTrackingPlayer(ServerPlayerEntity player) {
 		super.removeTrackingPlayer(player);
@@ -129,15 +128,15 @@ public class AirBossEntity extends MonsterEntity {
 				double mag = Math.sqrt(Entity.horizontalMag(new Vec3d(x, 0, z)));
 				double theta = Math.atan2(z, x);
 				this.rotationYaw = (float)(theta * (180 / Math.PI)) - 90;
-				
+
 				if(Math.abs(y) <= 5 || ((int)this.posY == 150 && y < 0)) {
 					y = 0;
 				} else if((int)this.posY < 150) {
 					y = Math.abs(y);
 				} 
-				
+
 				y = MathHelper.clamp(y, -0.25, 0.25);
-				
+
 				if(mag <= 15) {
 					this.setMotion(0, y, 0);
 				} else {
@@ -195,8 +194,8 @@ public class AirBossEntity extends MonsterEntity {
 
 		@Override
 		public void tick() {
-			Entity target = this.airBoss.getAttackTarget();
 			if(shootTimer >= 200 && !this.airBoss.world.isRemote) {
+				Entity target = this.airBoss.getAttackTarget();
 				shootTimer = 0;
 				double x = target.posX - this.airBoss.posX;
 				double y = target.posY - this.airBoss.posY;
@@ -208,6 +207,61 @@ public class AirBossEntity extends MonsterEntity {
 				shootTimer++;
 			}
 			super.tick();
+		}
+	}
+
+	static class ShootHailGoal extends Goal {
+		private AirBossEntity airBoss;
+		private int timer = 0;
+
+		public ShootHailGoal(AirBossEntity entity) {
+			this.airBoss = entity;
+		}
+
+		@Override
+		public boolean shouldExecute() {
+			return this.airBoss.isAlive() && this.airBoss.getAttackTarget() instanceof PlayerEntity;
+		}
+
+		@Override
+		public void startExecuting() {
+			timer = 0;
+		}
+
+		@Override
+		public void tick() {
+			if(!this.airBoss.world.isRemote && timer >= 60) {
+				timer = 0;
+				Entity target = this.airBoss.getAttackTarget();
+				double x = target.posX - this.airBoss.posX;
+				double y = target.posY - this.airBoss.posY;
+				double z = target.posZ - this.airBoss.posZ;
+				double mag = Math.sqrt(x * x + z * z);
+				double yaw = Math.atan2(z, x);
+				double pitch = Math.atan2(y, mag);	
+				//Doesn't spawn them very well, only gets one or two of the five
+				spawnHail(x, y, z);
+				for(double i = -1; i < 2; i += 2) { //Shoots at pitch +/- pi/8
+					spawnHail(x, Math.sqrt(y * y + mag * mag) * Math.sin(pitch + (Math.PI / 16) * i), z);
+				}				
+				for(double i = -1; i < 2; i += 2) { //Shoots at yaw +/- pi/8
+					x = mag * Math.cos(yaw + (Math.PI / 16) * i);
+					z = mag * Math.sin(yaw + (Math.PI / 16) * i);
+					spawnHail(x, y, z);
+				}
+			} else {
+				timer++;
+			}
+
+			super.tick();
+		}
+		
+		private void spawnHail(double x, double y, double z) {
+			HailEntity hail = new HailEntity(this.airBoss.world, this.airBoss, x, y, z);
+			hail.posX = this.airBoss.posX + MathHelper.clamp(x, -0.1, 0.1);
+			hail.posY = this.airBoss.posY + (this.airBoss.getHeight() / 2) + 0.5 + MathHelper.clamp(y, -0.1, 0.1);
+			hail.posZ = this.airBoss.posZ + MathHelper.clamp(z, -0.1, 0.1);
+			this.airBoss.world.addEntity(hail);
 		}
 	}
 

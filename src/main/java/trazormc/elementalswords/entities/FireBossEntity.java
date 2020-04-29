@@ -137,35 +137,35 @@ public class FireBossEntity extends BlazeEntity {
 			Entity target = this.fireBoss.getAttackTarget();
 			double distance = this.fireBoss.getDistance(target);
 
-			if (distance < 3.0) {
-				if (this.attackTime <= 0) {
+			if(distance < 3.0) {
+				if(this.attackTime <= 0) {
 					this.attackTime = 10;
 					this.fireBoss.attackEntityAsMob(target);
 				}         
 
 				this.fireBoss.getMoveHelper().setMoveTo(target.posX, target.posY, target.posZ, 1.0D);  
-			} else if (distance < this.getFollowDistance()) {          	
+			} else if(distance < this.getFollowDistance()) {          	
 				double d1 = target.posX - this.fireBoss.posX;
 				double d2 = target.getBoundingBox().minY + (double)(target.getHeight() / 2.0F) - (this.fireBoss.posY + (double)(this.fireBoss.getHeight() / 2.0F));
 				double d3 = target.posZ - this.fireBoss.posZ;
 
-				if (this.attackTime <= 0) {
+				if(this.attackTime <= 0) {
 					++this.attackStep;
 
-					if (this.attackStep == 1) {
+					if(this.attackStep == 1) {
 						this.attackTime = 60;                 
-					} else if (this.attackStep <= 11) {
+					} else if(this.attackStep <= 11) {
 						this.attackTime = 5;
 					} else {
 						this.attackTime = 10;
 						this.attackStep = 0;
 					}
 
-					if (this.attackStep > 1) {
+					if(this.attackStep > 1) {
 						float f = MathHelper.sqrt(MathHelper.sqrt(distance)) * 0.5F;
 						this.fireBoss.world.playEvent(1018, new BlockPos((int)this.fireBoss.posX, (int)this.fireBoss.posY, (int)this.fireBoss.posZ), 0);
 
-						for (int i = 0; i < 1; ++i)  {
+						for(int i = 0; i < 1; ++i)  {
 							ChargedFireballEntity chargedfireball = new ChargedFireballEntity(this.fireBoss.world, this.fireBoss, d1 + this.fireBoss.getRNG().nextGaussian() * (double)f, d2, d3 + this.fireBoss.getRNG().nextGaussian() * (double)f);
 							chargedfireball.posY = this.fireBoss.posY + (double)(this.fireBoss.getHeight() / 2.0F) + 0.5D;
 							this.fireBoss.world.addEntity(chargedfireball);   
