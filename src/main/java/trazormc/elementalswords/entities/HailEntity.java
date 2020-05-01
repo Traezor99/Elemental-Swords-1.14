@@ -47,7 +47,7 @@ public class HailEntity extends DamagingProjectileEntity {
 	public void tick() {
 		super.tick();
 		if(!this.world.isRemote) {
-			if(flightTime >= 100)
+			if(flightTime >= 200)
 				this.remove();
 			else
 				flightTime++;
@@ -73,5 +73,4 @@ public class HailEntity extends DamagingProjectileEntity {
 	public IPacket<?> createSpawnPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
-
 }

@@ -1,7 +1,5 @@
 package trazormc.elementalswords.entities;
 
-import java.util.List;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntitySize;
 import net.minecraft.entity.EntityType;
@@ -17,13 +15,10 @@ import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.monster.PhantomEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.BossInfo;
 import net.minecraft.world.ServerBossInfo;
 import net.minecraft.world.World;
@@ -31,6 +26,7 @@ import trazormc.elementalswords.util.ModUtils;
 
 public class AirBossEntity extends MonsterEntity {
 	private final ServerBossInfo bossInfo;
+	private boolean shouldMove = false;
 
 	public AirBossEntity(EntityType<? extends AirBossEntity> type, World worldIn) {
 		super(type, worldIn);
@@ -125,8 +121,9 @@ public class AirBossEntity extends MonsterEntity {
 				double x = target.posX - this.posX;
 				double y = target.posY - this.posY;
 				double z = target.posZ - this.posZ;
-				double mag = Math.sqrt(Entity.horizontalMag(new Vec3d(x, 0, z)));
+				double mag = Math.sqrt(x * x + z * z);
 				double theta = Math.atan2(z, x);
+				shouldMove = mag >= 25 || (shouldMove && mag >= 15);
 				this.rotationYaw = (float)(theta * (180 / Math.PI)) - 90;
 
 				if(Math.abs(y) <= 5 || ((int)this.posY == 150 && y < 0)) {
@@ -137,13 +134,13 @@ public class AirBossEntity extends MonsterEntity {
 
 				y = MathHelper.clamp(y, -0.25, 0.25);
 
-				if(mag <= 15) {
-					this.setMotion(0, y, 0);
-				} else {
-					mag = Math.sqrt(2) / 4;
+				if(shouldMove){
+					mag = 0.35355339; //sqrt(2) / 4
 					x = mag * Math.cos(theta);
 					z = mag * Math.sin(theta);
 					this.setMotion(x, y, z);
+				} else {
+					this.setMotion(0, y, 0);
 				}
 			} else {
 				this.setMotion(0, 0, 0);
@@ -213,6 +210,7 @@ public class AirBossEntity extends MonsterEntity {
 	static class ShootHailGoal extends Goal {
 		private AirBossEntity airBoss;
 		private int timer = 0;
+		private int attackStep = 0;
 
 		public ShootHailGoal(AirBossEntity entity) {
 			this.airBoss = entity;
@@ -226,42 +224,38 @@ public class AirBossEntity extends MonsterEntity {
 		@Override
 		public void startExecuting() {
 			timer = 0;
+			attackStep = 0;
 		}
 
 		@Override
 		public void tick() {
-			if(!this.airBoss.world.isRemote && timer >= 60) {
-				timer = 0;
-				Entity target = this.airBoss.getAttackTarget();
-				double x = target.posX - this.airBoss.posX;
-				double y = target.posY - this.airBoss.posY;
-				double z = target.posZ - this.airBoss.posZ;
-				double mag = Math.sqrt(x * x + z * z);
-				double yaw = Math.atan2(z, x);
-				double pitch = Math.atan2(y, mag);	
-				//Doesn't spawn them very well, only gets one or two of the five
-				spawnHail(x, y, z);
-				for(double i = -1; i < 2; i += 2) { //Shoots at pitch +/- pi/8
-					spawnHail(x, Math.sqrt(y * y + mag * mag) * Math.sin(pitch + (Math.PI / 16) * i), z);
-				}				
-				for(double i = -1; i < 2; i += 2) { //Shoots at yaw +/- pi/8
-					x = mag * Math.cos(yaw + (Math.PI / 16) * i);
-					z = mag * Math.sin(yaw + (Math.PI / 16) * i);
-					spawnHail(x, y, z);
+			if(!this.airBoss.world.isRemote) {
+				if(timer >= 60) {
+					if(attackStep < 10) {
+						attackStep++;
+						timer = 55;
+						Entity target = this.airBoss.getAttackTarget();
+						double x = target.posX - this.airBoss.posX;
+						double y = target.posY - this.airBoss.posY;
+						double z = target.posZ - this.airBoss.posZ;
+						double yaw = Math.atan2(z, x);
+						double pitch = Math.atan2(y, Math.sqrt(x * x + z * z));
+						HailEntity hail = new HailEntity(this.airBoss.world, this.airBoss, x, y, z);
+						hail.posX = this.airBoss.posX + MathHelper.clamp(x, -0.3, 0.3);
+						hail.posY = this.airBoss.posY + (this.airBoss.getHeight() / 2) + 0.5;
+						hail.posZ = this.airBoss.posZ + MathHelper.clamp(z, -0.3, 0.3);
+						this.airBoss.world.addEntity(hail);
+						hail.setMotion(0.707 * Math.cos(yaw), 0.707 * Math.sin(pitch), 0.707 * Math.sin(yaw));
+					} else {
+						timer = 0;
+						attackStep = 0;
+					}	
+				} else {
+					timer++;
 				}
-			} else {
-				timer++;
-			}
+			} 
 
 			super.tick();
-		}
-		
-		private void spawnHail(double x, double y, double z) {
-			HailEntity hail = new HailEntity(this.airBoss.world, this.airBoss, x, y, z);
-			hail.posX = this.airBoss.posX + MathHelper.clamp(x, -0.1, 0.1);
-			hail.posY = this.airBoss.posY + (this.airBoss.getHeight() / 2) + 0.5 + MathHelper.clamp(y, -0.1, 0.1);
-			hail.posZ = this.airBoss.posZ + MathHelper.clamp(z, -0.1, 0.1);
-			this.airBoss.world.addEntity(hail);
 		}
 	}
 
@@ -298,64 +292,6 @@ public class AirBossEntity extends MonsterEntity {
 				phantomSpawnTimer = 0;
 			} else {
 				phantomSpawnTimer++;
-			}
-			super.tick();
-		}
-	}
-
-	static class WhirlWindGoal extends Goal {
-		private final AirBossEntity airBoss;
-		private int whirlWindTimer = 0;
-
-		private WhirlWindGoal(AirBossEntity entity) {
-			this.airBoss = entity;
-		}
-
-		@Override
-		public boolean shouldExecute() {
-			return this.airBoss.getAttackTarget() instanceof PlayerEntity;
-		}
-
-		@Override
-		public void startExecuting() {
-			whirlWindTimer = 0;
-		}
-
-		@Override
-		public void tick() {
-			if(whirlWindTimer >= 100) {//Set to 300, or make better change
-				AxisAlignedBB aoe = new AxisAlignedBB(this.airBoss.posX - 20, this.airBoss.posY - 5, this.airBoss.posZ - 20, this.airBoss.posX + 20, 
-						this.airBoss.posY + 5, this.airBoss.posZ + 20);
-				List<Entity> entities = this.airBoss.world.getEntitiesWithinAABBExcludingEntity(this.airBoss, aoe);	
-				for(Entity e : entities) {
-					double x = (this.airBoss.posX - e.posX) * 2; 
-					double y = this.airBoss.posY - e.posY;
-					double z = (this.airBoss.posZ - e.posZ) * 2;
-					//Something does not work when player is straight in the x or z direction from the entity
-					/*if(Math.abs(x) < 1)
-						x = 2;
-					else if(Math.abs(z) < 1)
-						z = 2;*/
-
-					if(e instanceof PlayerEntity) {
-						e.addVelocity(x, y, z); 
-						e.attackEntityFrom(DamageSource.causeMobDamage(this.airBoss), 8);
-					} else {
-						e.addVelocity(x, y, z);
-						e.attackEntityFrom(DamageSource.causeMobDamage(this.airBoss), 4);
-					}
-				}
-
-				if(this.airBoss.world.isRemote) {
-					for(int i = 0; i < 20; i++) {
-						this.airBoss.world.addParticle(ParticleTypes.EXPLOSION, ModUtils.getPos(this.airBoss.rand, 5, (int)this.airBoss.posX), 
-								this.airBoss.posY + 1, ModUtils.getPos(this.airBoss.rand, 5, (int)this.airBoss.posZ), 0.0d, 0.0d, 0.0d);
-					}
-				}
-
-				whirlWindTimer = 0;
-			} else {
-				whirlWindTimer++;
 			}
 			super.tick();
 		}

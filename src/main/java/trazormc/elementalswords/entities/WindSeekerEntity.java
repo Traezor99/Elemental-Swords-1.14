@@ -50,7 +50,7 @@ public class WindSeekerEntity extends DamagingProjectileEntity {
 			if(this.shootingEntity instanceof AirBossEntity) {
 				Entity target = ((AirBossEntity)this.shootingEntity).getAttackTarget();
 				if(target != null) {
-					double maxSpeed = Math.sqrt(2) / 2;
+					double maxSpeed = 0.70710678; //sqrt(2) / 2
 					double x = target.posX - this.posX;
 					double y = target.posY - this.posY;
 					double z = target.posZ - this.posZ;
