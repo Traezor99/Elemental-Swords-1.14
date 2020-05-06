@@ -6,7 +6,6 @@ import net.minecraft.block.AirBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
@@ -36,22 +35,29 @@ public class ModUtils {
 		return y;
 	}
 	
+	public static void attemptSpawnEntity(Entity spawnerEntity, Entity spawnedEntity, int attempts) {
+		ModUtils.attemptSpawnEntity((int)spawnerEntity.posX + 0.5, (int)spawnerEntity.posY, (int)spawnerEntity.posZ + 0.5, spawnerEntity.world, spawnedEntity, attempts);
+	}
+	
 	/**
-	 * Attempts to spawn the given entity in a safe location up to the specified number of times.
-	 * @param bossIn the Boss spawning the entity
-	 * @param spawnEntity the entity to be spawned
-	 * @param attempts the number of attempts allowed to find a safe location.
+	 * Attempts to spawn the given entity in a safe location within 5 blocks of the starting coordinates up to the specified number of times
+	 * @param xIn  the center x coordinate
+	 * @param yIn  the center y coordinate
+	 * @param zIn  the center z coordinate
+	 * @param world  the world to spawn the entity in
+	 * @param spawnEntity  the entity to be spawned
+	 * @param attempts  the number of attempts allowed to find a safe location
 	 */
-	public static void attemptSpawnBossAdd(MonsterEntity bossIn, Entity spawnEntity, int attempts) {
+	public static void attemptSpawnEntity(double xStart, int yStart, double zStart, World world, Entity spawnedEntity, int attempts) {
 		boolean repeat = false;
 		int attemptsTried = 0;
 		do {
-			int x = ModUtils.getPos(new Random(), 5, (int)bossIn.posX);
-			int z = ModUtils.getPos(new Random(), 5, (int)bossIn.posZ);
-			int y = calculateMobSpawnHeight(bossIn.world, (int)bossIn.posY, x, z);  
+			double x = ModUtils.getPos(new Random(), 5, xStart);
+			double z = ModUtils.getPos(new Random(), 5, zStart);
+			int y = calculateMobSpawnHeight(world, yStart, x, z);  
 			if(y != 0) {
-				spawnEntity.setPosition(x, y, z);
-				bossIn.world.addEntity(spawnEntity);
+				spawnedEntity.setPosition(x, y, z);
+				world.addEntity(spawnedEntity);
 				repeat = false;
 			}
 			else {
@@ -62,7 +68,8 @@ public class ModUtils {
 	}
 	
 	/**
-	 * Used to find a safe height for spawning entities near a boss. Checks 10 blocks above and below the entity for a safe y height
+	 * Used to find a safe height for spawning entities near a boss. Checks 10 blocks above and below the entity for a safe y height.
+	 * Only checks for safety at the specified x and z, not any surrounding blocks.
 	 * @param world the world to spawn the entity in
 	 * @param yEntity the y height of the boss
 	 * @param x the x coordinate to spawn the mob at
@@ -77,7 +84,7 @@ public class ModUtils {
 			Block block = world.getBlockState(new BlockPos(x, y, z)).getBlock();
 			Block block1 = world.getBlockState(new BlockPos(x, y - 1, z)).getBlock();
 			if(isSafe) {
-				if(!block.equals(Blocks.AIR)) {
+				if(!(block instanceof AirBlock)) {
 					return y + 1;
 				} else {
 					y--;
@@ -106,18 +113,18 @@ public class ModUtils {
 	}
 	
 	/**
-	 * Randomly generates a number within the specified radius of the player
+	 * Randomly generates a number within the specified radius of the start value
 	 * @param rand
 	 * @param radius the radius for generation
-	 * @param xzPos the player's x or z coordinate (method must be called once for each) 
-	 * @return the x or z coordinate of the spawnpoint
+	 * @param start the center value of the range of possible outputs 
+	 * @return the randomly generated value 
 	 */
-	public static int getPos(Random rand, int radius, int xzPos) {	
-		if(xzPos >= 0) {
-			return rand.nextInt(radius * 2 + 1) + xzPos - radius;
+	public static double getPos(Random rand, int radius, double start) {	
+		if(start >= 0) {
+			return rand.nextInt(radius * 2 + 1) + start - radius;
 		} else { 
-			xzPos = xzPos * -1;
-			return (rand.nextInt(radius * 2 + 1) + xzPos - radius) * -1;
+			start = start * -1;
+			return (rand.nextInt(radius * 2 + 1) + start - radius) * -1;
 		} 	
 	}
 	

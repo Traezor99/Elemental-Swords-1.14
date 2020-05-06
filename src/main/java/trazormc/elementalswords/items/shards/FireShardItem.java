@@ -7,11 +7,13 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.util.ActionResultType;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import trazormc.elementalswords.entities.FireBossEntity;
 import trazormc.elementalswords.init.ModEntityTypes;
+import trazormc.elementalswords.util.ModUtils;
 
 public class FireShardItem extends Item {
 
@@ -23,9 +25,8 @@ public class FireShardItem extends Item {
 	public ActionResultType onItemUse(ItemUseContext context) {
 		World world = context.getWorld();
 		if(!world.isRemote && world.getDimension().isNether()) {
-			FireBossEntity fireBoss = new FireBossEntity(ModEntityTypes.FIRE_BOSS, world);
-			fireBoss.setPosition(context.getPos().getX() + 0.5, context.getPos().getY() + 1, context.getPos().getZ() + 0.5);
-			world.addEntity(fireBoss);
+			BlockPos pos = context.getPos();
+			ModUtils.attemptSpawnEntity(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, world, new FireBossEntity(ModEntityTypes.FIRE_BOSS, world), 10);
 		}
 		return ActionResultType.SUCCESS;
 	}

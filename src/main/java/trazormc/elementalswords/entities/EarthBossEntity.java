@@ -206,12 +206,12 @@ public class EarthBossEntity extends MonsterEntity {
 					switch(this.earthBoss.rand.nextInt(2)) {
 					case 0:
 						ZombieEntity zombie = new ZombieEntity(this.earthBoss.world);
-						ModUtils.attemptSpawnBossAdd(this.earthBoss, zombie, 7);
+						ModUtils.attemptSpawnEntity(this.earthBoss, zombie, 7);
 						zombie.setAttackTarget(this.earthBoss.getAttackTarget());
 						break;
 					case 1:
 						SkeletonEntity skeleton = new SkeletonEntity(EntityType.SKELETON, this.earthBoss.world);
-						ModUtils.attemptSpawnBossAdd(this.earthBoss, skeleton, 7);
+						ModUtils.attemptSpawnEntity(this.earthBoss, skeleton, 7);
 						skeleton.setAttackTarget(this.earthBoss.getAttackTarget());
 						break;
 					}

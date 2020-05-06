@@ -282,8 +282,8 @@ public class AirBossEntity extends MonsterEntity {
 			if(phantomSpawnTimer >= 200) {
 				for(int i = 0; i < 5; i++) {
 					PhantomEntity phantom = new PhantomEntity(EntityType.PHANTOM, this.airBoss.world);
-					int x = ModUtils.getPos(this.airBoss.rand, 10, (int)this.airBoss.posX);
-					int z = ModUtils.getPos(this.airBoss.rand, 10, (int)this.airBoss.posZ);
+					double x = ModUtils.getPos(this.airBoss.rand, 10, this.airBoss.posX);
+					double z = ModUtils.getPos(this.airBoss.rand, 10, this.airBoss.posZ);
 					phantom.setPosition(x, this.airBoss.posY, z);
 					this.airBoss.world.addEntity(phantom);
 					phantom.setAttackTarget(this.airBoss.getAttackTarget());

@@ -2,7 +2,6 @@ package trazormc.elementalswords.items.shards;
 
 import java.util.List;
 
-import net.minecraft.block.AirBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.util.ITooltipFlag;
@@ -17,6 +16,7 @@ import net.minecraft.world.LightType;
 import net.minecraft.world.World;
 import trazormc.elementalswords.entities.EarthBossEntity;
 import trazormc.elementalswords.init.ModEntityTypes;
+import trazormc.elementalswords.util.ModUtils;
 
 public class EarthShardItem extends Item {
 
@@ -31,11 +31,8 @@ public class EarthShardItem extends Item {
 		if(!world.isRemote && pos.getY() <= 62) {
 			Block block = world.getBlockState(pos).getBlock();
 			if(block.equals(Blocks.STONE) || block.equals(Blocks.ANDESITE) || block.equals(Blocks.DIORITE) || block.equals(Blocks.GRANITE)) {
-				if(world.getLightFor(LightType.SKY, pos.up(1)) == 0 &&  world.getBlockState(pos.up(1)).getBlock() instanceof AirBlock && 
-						world.getBlockState(pos.up(2)).getBlock() instanceof AirBlock) {
-					EarthBossEntity earthBoss = new EarthBossEntity(ModEntityTypes.EARTH_BOSS, world);
-					earthBoss.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
-					world.addEntity(earthBoss);
+				if(world.getLightFor(LightType.SKY, pos.up(1)) == 0) {
+					ModUtils.attemptSpawnEntity(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, world, new EarthBossEntity(ModEntityTypes.EARTH_BOSS, world), 10);
 				}
 			}
 		}

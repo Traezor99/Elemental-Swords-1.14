@@ -11,6 +11,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import trazormc.elementalswords.entities.AirBossEntity;
 import trazormc.elementalswords.init.ModEntityTypes;
+import trazormc.elementalswords.util.ModUtils;
 
 public class AirShardItem extends Item {
 
@@ -22,8 +23,8 @@ public class AirShardItem extends Item {
 	public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entity) {
 		if(!entity.world.isRemote && entity.posY >= 250) {
 			AirBossEntity airBoss = new AirBossEntity(ModEntityTypes.AIR_BOSS, entity.world);
-			airBoss.setPosition(entity.posX, entity.posY, entity.posZ);
-			entity.world.addEntity(airBoss);
+			//Not going to work for this one
+			ModUtils.attemptSpawnEntity(entity, airBoss, 10);
 			entity.remove();
 		}
 		return super.onEntityItemUpdate(stack, entity);

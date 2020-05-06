@@ -20,8 +20,8 @@ public class WindSeekerModel extends Model {
     public RendererModel left;
 
     public WindSeekerModel() {
-        this.textureWidth = 800;
-        this.textureHeight = 100;
+        this.textureWidth = 400;
+        this.textureHeight = 50;
         this.back = new RendererModel(this, 252, 0);
         this.back.setRotationPoint(0.0F, 0.0F, 10.5F);
         this.back.addBox(-9.5F, -9.5F, -0.5F, 19, 19, 1, 0.0F);

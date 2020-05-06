@@ -13,13 +13,14 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biomes;
 import trazormc.elementalswords.entities.WaterBossEntity;
 import trazormc.elementalswords.init.ModEntityTypes;
+import trazormc.elementalswords.util.ModUtils;
 
 public class WaterShardItem extends Item {
 
 	public WaterShardItem(Properties properties) {
 		super(properties);
 	}
-	
+
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
 		tooltip.add(new TranslationTextComponent("In the depths of the sea lies a hidden foe."));
@@ -27,13 +28,10 @@ public class WaterShardItem extends Item {
 
 	@Override
 	public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entity) {
-		if(entity.isInWater()) {
-			if(!entity.world.isRemote && isOcean(entity.world.getBiome(entity.getPosition()))) {
-				WaterBossEntity waterBoss = new WaterBossEntity(ModEntityTypes.WATER_BOSS, entity.world);
-				waterBoss.setPosition(entity.posX, entity.posY, entity.posZ);
-				entity.world.addEntity(waterBoss);
-				entity.remove();
-			}
+		if(!entity.world.isRemote && isOcean(entity.world.getBiome(entity.getPosition())) && entity.isInWater()) {
+			//Doesn't work quite right
+			ModUtils.attemptSpawnEntity(entity, new WaterBossEntity(ModEntityTypes.WATER_BOSS, entity.world), 10);
+			entity.remove();
 		}
 		return super.onEntityItemUpdate(stack, entity);
 	}
