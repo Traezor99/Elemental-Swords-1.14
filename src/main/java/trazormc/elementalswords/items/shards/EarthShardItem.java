@@ -32,7 +32,8 @@ public class EarthShardItem extends Item {
 			Block block = world.getBlockState(pos).getBlock();
 			if(block.equals(Blocks.STONE) || block.equals(Blocks.ANDESITE) || block.equals(Blocks.DIORITE) || block.equals(Blocks.GRANITE)) {
 				if(world.getLightFor(LightType.SKY, pos.up(1)) == 0) {
-					ModUtils.attemptSpawnEntity(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, world, new EarthBossEntity(ModEntityTypes.EARTH_BOSS, world), 10);
+					if(ModUtils.attemptSpawnEntity(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, world, new EarthBossEntity(ModEntityTypes.EARTH_BOSS, world), 20, 10))
+						context.getItem().grow(-1);
 				}
 			}
 		}

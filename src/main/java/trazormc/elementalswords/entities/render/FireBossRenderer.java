@@ -4,14 +4,11 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 import trazormc.elementalswords.ElementalSwords;
 import trazormc.elementalswords.entities.FireBossEntity;
 import trazormc.elementalswords.entities.modals.FireBossModel;
 
-@OnlyIn(Dist.CLIENT)
 public class FireBossRenderer extends MobRenderer<FireBossEntity, FireBossModel> {
 	
 	protected ResourceLocation texture;

@@ -1,11 +1,10 @@
 package trazormc.elementalswords.items.swords;
 
-import java.util.Random;
-
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.LightningBoltEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
@@ -40,14 +39,17 @@ public class LightningSword extends SwordItem {
 
 	@Override
 	public ActionResultType onItemUse(ItemUseContext ctx) {
+		PlayerEntity player = ctx.getPlayer();
 		if(!ctx.getWorld().isRemote) {
 			BlockPos pos = ctx.getPos();
 			LightningBoltEntity lightning = new LightningBoltEntity(ctx.getWorld(), pos.getX(), pos.getY(), pos.getZ(), false);
-			ItemStack item = ctx.getPlayer().getHeldItem(ctx.getHand());
-			
+			ItemStack item = player.getHeldItem(ctx.getHand());
+
 			lightning.setPosition(pos.getX(), pos.getY(), pos.getZ());
-			ctx.getPlayer().getServer().func_71218_a(ctx.getPlayer().dimension).addLightningBolt(lightning);
-			item.attemptDamageItem(1, new Random(), (ServerPlayerEntity)ctx.getPlayer());		
+			player.getServer().func_71218_a(ctx.getPlayer().dimension).addLightningBolt(lightning);
+			item.damageItem(1, (ServerPlayerEntity)player, (serverPlayer) -> {
+				serverPlayer.sendBreakAnimation(EquipmentSlotType.MAINHAND);
+			});		
 		}
 		return super.onItemUse(ctx);
 	}
@@ -56,10 +58,13 @@ public class LightningSword extends SwordItem {
 	public boolean itemInteractionForEntity(ItemStack stack, PlayerEntity playerIn, LivingEntity target, Hand hand) {
 		if(!playerIn.world.isRemote) {
 			LightningBoltEntity lightning = new LightningBoltEntity(playerIn.world, target.posX, target.posY, target.posZ, false);
+			ItemStack item = playerIn.getHeldItem(hand);
 
 			lightning.setPosition(target.posX, target.posY, target.posZ);
 			playerIn.getServer().func_71218_a(playerIn.dimension).addLightningBolt(lightning);
-			stack.attemptDamageItem(1, new Random(), (ServerPlayerEntity)playerIn);
+			item.damageItem(1, (ServerPlayerEntity)playerIn, (serverPlayer) -> {
+				serverPlayer.sendBreakAnimation(EquipmentSlotType.MAINHAND);
+			});
 		}
 		return true;		
 	}

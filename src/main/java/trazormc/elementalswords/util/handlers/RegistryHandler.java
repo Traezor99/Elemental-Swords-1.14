@@ -75,26 +75,27 @@ public class RegistryHandler {
 	public static void onItemRegistry(RegistryEvent.Register<Item> event) {
 		event.getRegistry().registerAll(
 				ModItems.AMETHYST = new Item(new Item.Properties().group(ElementalSwords.tabSwords)).setRegistryName(ElementalSwords.MOD_ID, "amethyst"),
-				ModItems.SUMMONING_SHARD = new Item(new Item.Properties().group(ElementalSwords.tabSwords)).setRegistryName(ElementalSwords.MOD_ID, "summoning_shard"),
+				ModItems.SUMMONING_SHARD = new Item(new Item.Properties().maxStackSize(1).group(ElementalSwords.tabSwords)).setRegistryName(ElementalSwords.MOD_ID, "summoning_shard"),
 
-				ModItems.AIR_SHARD = setup(new AirShardItem(new Item.Properties().group(ElementalSwords.tabSwords)), "air_shard"),
-				ModItems.EARTH_SHARD = setup(new EarthShardItem(new Item.Properties().group(ElementalSwords.tabSwords)), "earth_shard"),
-				ModItems.FIRE_SHARD = setup(new FireShardItem(new Item.Properties().group(ElementalSwords.tabSwords)), "fire_shard"),
-				ModItems.LIGHTNING_SHARD = setup(new LightningShardItem(new Item.Properties().group(ElementalSwords.tabSwords)), "lightning_shard"),
-				ModItems.WATER_SHARD = setup(new WaterShardItem(new Item.Properties().group(ElementalSwords.tabSwords)), "water_shard"),
+				ModItems.AIR_SHARD = setup(new AirShardItem(new Item.Properties().maxStackSize(1).group(ElementalSwords.tabSwords)), "air_shard"),
+				ModItems.EARTH_SHARD = setup(new EarthShardItem(new Item.Properties().maxStackSize(1).group(ElementalSwords.tabSwords)), "earth_shard"),
+				ModItems.FIRE_SHARD = setup(new FireShardItem(new Item.Properties().maxStackSize(1).group(ElementalSwords.tabSwords)), "fire_shard"),
+				ModItems.LIGHTNING_SHARD = setup(new LightningShardItem(new Item.Properties().maxStackSize(1).group(ElementalSwords.tabSwords)), "lightning_shard"),
+				ModItems.WATER_SHARD = setup(new WaterShardItem(new Item.Properties().maxStackSize(1).group(ElementalSwords.tabSwords)), "water_shard"),
 
 				ModItems.GUST_OF_WIND = new Item(new Item.Properties().group(ElementalSwords.tabSwords)).setRegistryName(ElementalSwords.MOD_ID, "gust_of_wind"),
 				ModItems.EARTH_STONE = new Item(new Item.Properties().group(ElementalSwords.tabSwords)).setRegistryName(ElementalSwords.MOD_ID, "earth_stone"),
 				ModItems.FLAMING_EMBER = new Item(new Item.Properties().group(ElementalSwords.tabSwords)).setRegistryName(ElementalSwords.MOD_ID, "flaming_ember"),
 				ModItems.SPARK_OF_ENERGY = new Item(new Item.Properties().group(ElementalSwords.tabSwords)).setRegistryName(ElementalSwords.MOD_ID, "spark_of_energy"),
 				ModItems.SHIMMERING_WATER = new Item(new Item.Properties().group(ElementalSwords.tabSwords)).setRegistryName(ElementalSwords.MOD_ID, "shimmering_water"),
-
-				ModItems.AMETHYST_SWORD = setup(new SwordItem(ItemTiers.AMETHYST, (int)ItemTiers.AMETHYST.getAttackDamage(), 0, new Item.Properties().group(ElementalSwords.tabSwords)), "amethyst_sword"),
-				ModItems.AIR_SWORD = setup(new AirSword(ItemTiers.STANDARD, (int)ItemTiers.STANDARD.getAttackDamage(), 0, new Item.Properties().group(ElementalSwords.tabSwords)), "air_sword"),
-				ModItems.EARTH_SWORD = setup(new EarthSword(ItemTiers.STANDARD, (int)ItemTiers.STANDARD.getAttackDamage(), 0, new Item.Properties().group(ElementalSwords.tabSwords)), "earth_sword"),
-				ModItems.FIRE_SWORD = setup(new FireSword(ItemTiers.STANDARD, (int)ItemTiers.STANDARD.getAttackDamage(), 0, new Item.Properties().group(ElementalSwords.tabSwords)), "fire_sword"),
-				ModItems.LIGHTNING_SWORD = setup(new LightningSword(ItemTiers.LIGHTNING, (int)ItemTiers.LIGHTNING.getAttackDamage(), 0, new Item.Properties().group(ElementalSwords.tabSwords)), "lightning_sword"),
-				ModItems.WATER_SWORD = setup(new WaterSword(ItemTiers.STANDARD, (int)ItemTiers.STANDARD.getAttackDamage(), 0, new Item.Properties().group(ElementalSwords.tabSwords)), "water_sword"),
+				
+				//For attack damage, it adds whatever value is passed to the constructor with the IItemTier value
+				ModItems.AMETHYST_SWORD = setup(new SwordItem(ItemTiers.AMETHYST, (int)ItemTiers.AMETHYST.getAttackDamage(), -2.2f, new Item.Properties().group(ElementalSwords.tabSwords)), "amethyst_sword"),
+				ModItems.AIR_SWORD = setup(new AirSword(ItemTiers.STANDARD, (int)ItemTiers.STANDARD.getAttackDamage(), -2.2f, new Item.Properties().group(ElementalSwords.tabSwords)), "air_sword"),
+				ModItems.EARTH_SWORD = setup(new EarthSword(ItemTiers.STANDARD, (int)ItemTiers.STANDARD.getAttackDamage(), -2.2f, new Item.Properties().group(ElementalSwords.tabSwords)), "earth_sword"),
+				ModItems.FIRE_SWORD = setup(new FireSword(ItemTiers.STANDARD, (int)ItemTiers.STANDARD.getAttackDamage(), -2.2f, new Item.Properties().group(ElementalSwords.tabSwords)), "fire_sword"),
+				ModItems.LIGHTNING_SWORD = setup(new LightningSword(ItemTiers.LIGHTNING, (int)ItemTiers.LIGHTNING.getAttackDamage(), -2.2f, new Item.Properties().group(ElementalSwords.tabSwords)), "lightning_sword"),
+				ModItems.WATER_SWORD = setup(new WaterSword(ItemTiers.STANDARD, (int)ItemTiers.STANDARD.getAttackDamage(), -2.2f, new Item.Properties().group(ElementalSwords.tabSwords)), "water_sword"),
 
 				ModItems.AMETHSYT_HELMET = setup(new ArmorItem(ArmorMaterials.AMETHYST, EquipmentSlotType.HEAD, new Item.Properties().group(ElementalSwords.tabSwords)), "amethyst_helmet"),
 				ModItems.AMETHYST_CHESTPLATE = setup(new ArmorItem(ArmorMaterials.AMETHYST, EquipmentSlotType.CHEST, new Item.Properties().group(ElementalSwords.tabSwords)), "amethyst_chestplate"),

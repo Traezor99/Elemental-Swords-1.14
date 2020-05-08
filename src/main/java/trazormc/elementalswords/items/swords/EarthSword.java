@@ -18,6 +18,7 @@ import net.minecraft.entity.monster.ZombieEntity;
 import net.minecraft.entity.monster.ZombiePigmanEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
@@ -30,8 +31,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import trazormc.elementalswords.entities.AmethystMinerEntity;
 import trazormc.elementalswords.init.ModEntityTypes;
 import trazormc.elementalswords.util.ModUtils;
@@ -86,7 +85,7 @@ public class EarthSword extends SwordItem {
 			} else if(z < -1) {
 				z = -1;
 			}
-			e.setVelocity(x, 1.1, z);
+			e.setMotion(x, 1.1, z);
 			e.attackEntityFrom(DamageSource.GENERIC, 4);
 		}
 		
@@ -98,7 +97,9 @@ public class EarthSword extends SwordItem {
 		
 		ModUtils.playSound(ctx.getWorld(), player, pos);
 		if(!ctx.getWorld().isRemote) {
-			item.attemptDamageItem(1, new Random(), (ServerPlayerEntity)ctx.getPlayer());
+			item.damageItem(1, (ServerPlayerEntity)player, (serverPlayer) -> {
+				serverPlayer.sendBreakAnimation(EquipmentSlotType.MAINHAND);
+			});
 		}
 		return super.onItemUse(ctx);
 	}
@@ -118,7 +119,6 @@ public class EarthSword extends SwordItem {
 	}
 	
 	@Override
-	@OnlyIn(Dist.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
 		tooltip.add(new TranslationTextComponent("Does 4 extra damage to Zombies, Zombie Villagers, Husks, Skeletons, Strays, Spiders, Cave Spiders, Creepers, and Witches."));
 	}

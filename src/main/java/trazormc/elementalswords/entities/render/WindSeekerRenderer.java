@@ -6,14 +6,11 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 import trazormc.elementalswords.ElementalSwords;
 import trazormc.elementalswords.entities.WindSeekerEntity;
 import trazormc.elementalswords.entities.modals.WindSeekerModel;
 
-@OnlyIn(Dist.CLIENT)
 public class WindSeekerRenderer extends EntityRenderer<WindSeekerEntity> {
 	private ResourceLocation texture = new ResourceLocation(ElementalSwords.MOD_ID, "textures/entity/wind_seeker.png");
 	private WindSeekerModel model = new WindSeekerModel();

@@ -35,8 +35,8 @@ public class ModUtils {
 		return y;
 	}
 	
-	public static void attemptSpawnEntity(Entity spawnerEntity, Entity spawnedEntity, int attempts) {
-		ModUtils.attemptSpawnEntity((int)spawnerEntity.posX + 0.5, (int)spawnerEntity.posY, (int)spawnerEntity.posZ + 0.5, spawnerEntity.world, spawnedEntity, attempts);
+	public static boolean attemptSpawnEntity(Entity spawnerEntity, Entity spawnedEntity, int attempts, int radius) {
+		return ModUtils.attemptSpawnEntity((int)spawnerEntity.posX + 0.5, (int)spawnerEntity.posY, (int)spawnerEntity.posZ + 0.5, spawnerEntity.world, spawnedEntity, attempts, radius);
 	}
 	
 	/**
@@ -47,24 +47,27 @@ public class ModUtils {
 	 * @param world  the world to spawn the entity in
 	 * @param spawnEntity  the entity to be spawned
 	 * @param attempts  the number of attempts allowed to find a safe location
+	 * @return true if an entity is spawned, false if not
 	 */
-	public static void attemptSpawnEntity(double xStart, int yStart, double zStart, World world, Entity spawnedEntity, int attempts) {
+	public static boolean attemptSpawnEntity(double xStart, int yStart, double zStart, World world, Entity spawnedEntity, int attempts, int radius) {
 		boolean repeat = false;
 		int attemptsTried = 0;
 		do {
-			double x = ModUtils.getPos(new Random(), 5, xStart);
-			double z = ModUtils.getPos(new Random(), 5, zStart);
+			double x = ModUtils.getPos(new Random(), radius, xStart);
+			double z = ModUtils.getPos(new Random(), radius, zStart);
 			int y = calculateMobSpawnHeight(world, yStart, x, z);  
 			if(y != 0) {
 				spawnedEntity.setPosition(x, y, z);
 				world.addEntity(spawnedEntity);
-				repeat = false;
+				return true;
 			}
 			else {
 				repeat = true;
 				attemptsTried++;
 			}
 		} while(repeat && attemptsTried < attempts);
+		
+		return false;
 	}
 	
 	/**

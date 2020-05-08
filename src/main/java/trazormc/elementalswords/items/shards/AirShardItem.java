@@ -24,7 +24,7 @@ public class AirShardItem extends Item {
 		if(!entity.world.isRemote && entity.posY >= 250) {
 			AirBossEntity airBoss = new AirBossEntity(ModEntityTypes.AIR_BOSS, entity.world);
 			//Not going to work for this one
-			ModUtils.attemptSpawnEntity(entity, airBoss, 10);
+			ModUtils.attemptSpawnEntity(entity, airBoss, 10, 10);
 			entity.remove();
 		}
 		return super.onEntityItemUpdate(stack, entity);

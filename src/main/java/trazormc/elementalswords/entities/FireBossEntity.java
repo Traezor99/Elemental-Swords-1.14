@@ -205,7 +205,7 @@ public class FireBossEntity extends BlazeEntity {
 		public void startExecuting() {
 			this.spawnTime = 0;
 			for(int i = 0; i < 5; i++) {
-				ModUtils.attemptSpawnEntity(this.fireBoss, new BlazeEntity(EntityType.BLAZE, this.fireBoss.world), 10);
+				ModUtils.attemptSpawnEntity(this.fireBoss, new BlazeEntity(EntityType.BLAZE, this.fireBoss.world), 10, 5);
 			}
 		}
 
@@ -214,7 +214,7 @@ public class FireBossEntity extends BlazeEntity {
 			super.tick();
 			if(this.spawnTime >= 200 && !this.fireBoss.world.isRemote) {
 				this.spawnTime = 0;
-				ModUtils.attemptSpawnEntity(this.fireBoss, new BlazeEntity(EntityType.BLAZE, this.fireBoss.world), 10);
+				ModUtils.attemptSpawnEntity(this.fireBoss, new BlazeEntity(EntityType.BLAZE, this.fireBoss.world), 10, 5);
 			} else {
 				this.spawnTime++;
 			}

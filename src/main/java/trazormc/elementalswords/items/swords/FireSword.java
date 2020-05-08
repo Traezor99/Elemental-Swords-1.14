@@ -2,7 +2,6 @@ package trazormc.elementalswords.items.swords;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 import javax.annotation.Nullable;
 
@@ -17,6 +16,7 @@ import net.minecraft.entity.monster.ShulkerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.FireballEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
@@ -29,8 +29,6 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import trazormc.elementalswords.entities.AmethystMinerEntity;
 import trazormc.elementalswords.init.ModEntityTypes;
 import trazormc.elementalswords.util.ModUtils;
@@ -70,7 +68,9 @@ public class FireSword extends SwordItem {
 			fireball.playSound(SoundEvents.ENTITY_BLAZE_SHOOT, 1.0f, 1.0f);
 
 
-			item.attemptDamageItem(1, new Random(), (ServerPlayerEntity)playerIn);		
+			item.damageItem(1, (ServerPlayerEntity)playerIn, (serverPlayer) -> {
+				serverPlayer.sendBreakAnimation(EquipmentSlotType.MAINHAND);
+			});		
 			return new ActionResult<ItemStack>(ActionResultType.SUCCESS, item);
 		} else {
 			return new ActionResult<ItemStack>(ActionResultType.FAIL, item);
@@ -87,7 +87,6 @@ public class FireSword extends SwordItem {
 	}
 
 	@Override
-	@OnlyIn(Dist.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
 		tooltip.add(new TranslationTextComponent("Does 4 extra damage to Blaze, Wither Skeletons, Magma Cubes, Zombie Pigmen, Ghasts, and the Wither."));
 	}

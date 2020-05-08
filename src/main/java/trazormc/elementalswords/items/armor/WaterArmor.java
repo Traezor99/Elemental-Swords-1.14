@@ -44,8 +44,7 @@ public class WaterArmor extends ArmorItem {
 			if(map.get(Enchantments.AQUA_AFFINITY) == null) {
 				stack.addEnchantment(Enchantments.AQUA_AFFINITY, 1);
 			}
-		}
-		if(stack.getItem() == ModItems.WATER_BOOTS) {
+		} else if(stack.getItem() == ModItems.WATER_BOOTS) {
 			Map<Enchantment, Integer> map = EnchantmentHelper.getEnchantments(stack);
 			if(map.get(Enchantments.DEPTH_STRIDER) == null) {
 				stack.addEnchantment(Enchantments.DEPTH_STRIDER, 3);

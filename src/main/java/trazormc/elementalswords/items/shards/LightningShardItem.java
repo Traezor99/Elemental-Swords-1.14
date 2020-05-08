@@ -26,7 +26,8 @@ public class LightningShardItem extends Item {
 		World world = context.getWorld();
 		if(!world.isRemote && world.isThundering()) {
 			BlockPos pos = context.getPos();
-			ModUtils.attemptSpawnEntity(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, world, new LightningBossEntity(ModEntityTypes.LIGHTNING_BOSS, world), 10);
+			if(ModUtils.attemptSpawnEntity(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, world, new LightningBossEntity(ModEntityTypes.LIGHTNING_BOSS, world), 20, 10))
+				context.getItem().grow(-1);
 		}
 		return ActionResultType.SUCCESS;
 	}

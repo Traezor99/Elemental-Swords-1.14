@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.BubbleColumnBlock;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.monster.DrownedEntity;
@@ -12,12 +13,15 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.Hand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import trazormc.elementalswords.entities.AmethystMinerEntity;
 import trazormc.elementalswords.init.ModEntityTypes;
 import trazormc.elementalswords.util.ModUtils;
@@ -33,16 +37,22 @@ public class WaterSword extends SwordItem {
 		super.onCreated(stack, worldIn, playerIn);
 		if(!worldIn.isRemote) {
 			AmethystMinerEntity miner = new AmethystMinerEntity(ModEntityTypes.AMETHYST_MINER, worldIn);
-			double x = playerIn.posX + 5;
-			double z = playerIn.posZ + 5;
-			double y = ModUtils.calculateGenerationHeight(worldIn, (int)x, (int)z);
+			int x = (int)playerIn.posX + 5;
+			int z = (int)playerIn.posZ + 5;
+			double y = ModUtils.calculateGenerationHeight(worldIn, x, z);
 
 			miner.setPosition(x, y +1, z);
 			worldIn.addEntity(miner);
 		}
 	}
-
-	//Add drowned	
+	
+	@Override//definitely doesn't work yet...
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
+		Vec3d aim = playerIn.getLookVec();
+		BubbleColumnBlock.placeBubbleColumn(worldIn, new BlockPos(playerIn.posX + aim.x * 1.5d, playerIn.posY + 0.5d + aim.y * 1.5d, playerIn.posZ + aim.z * 1.5d), true);
+		return new ActionResult<ItemStack>(ActionResultType.SUCCESS, playerIn.getHeldItem(handIn));
+	}
+	
 	@Override
 	public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
 		super.hitEntity(stack, target, attacker);
@@ -58,7 +68,6 @@ public class WaterSword extends SwordItem {
 	}
 
 	@Override
-	@OnlyIn(Dist.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
 		tooltip.add(new TranslationTextComponent("Does 4 extra damage to Guardians and Drowned."));
 	}
