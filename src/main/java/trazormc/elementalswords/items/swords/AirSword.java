@@ -30,29 +30,12 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import trazormc.elementalswords.entities.AmethystMinerEntity;
-import trazormc.elementalswords.init.ModEntityTypes;
-import trazormc.elementalswords.util.ModUtils;
 
 public class AirSword extends SwordItem {
 	private final int reach = 21;
 
 	public AirSword(IItemTier tier, int attackDamage, float attackSpeed, Properties properties) {
 		super(tier, attackDamage, attackSpeed, properties);
-	}
-
-	@Override
-	public void onCreated(ItemStack stack, World worldIn, PlayerEntity playerIn) {
-		super.onCreated(stack, worldIn, playerIn);
-		if(!worldIn.isRemote) {
-			AmethystMinerEntity miner = new AmethystMinerEntity(ModEntityTypes.AMETHYST_MINER, worldIn);
-			double x = playerIn.posX + 5;
-			double z = playerIn.posZ + 5;
-			double y = ModUtils.calculateGenerationHeight(worldIn, (int)x, (int)z);
-
-			miner.setPosition(x, y +1, z);
-			worldIn.addEntity(miner);
-		}
 	}
 
 	@Override
@@ -87,14 +70,13 @@ public class AirSword extends SwordItem {
 	 */
 	private static Entity entityLookedAt(double reach, PlayerEntity player, World worldIn) {
 		Vec3d vec = player.getLookVec();
-
 		for(int i = 1; i < reach; i++) {
-			AxisAlignedBB aabb = new AxisAlignedBB(player.posX + vec.x * i + 0.5d, player.posY + vec.y * i + 2, player.posZ + vec.z * i + 0.5d, player.posX + vec.x * i - 0.5d, player.posY + vec.y * i + 1, player.posZ + vec.z * i - 0.5d);
+			AxisAlignedBB aabb = new AxisAlignedBB(player.posX + vec.x * i + 0.5, player.posY + vec.y * i + 2, player.posZ + vec.z * i + 0.5, player.posX + vec.x * i - 0.5, player.posY + vec.y * i + 1, player.posZ + vec.z * i - 0.5);
 			List<Entity> list = worldIn.getEntitiesWithinAABBExcludingEntity(player, aabb);
 			if(!list.isEmpty()) {
 				return list.get(0);
 			}
-			worldIn.addParticle(ParticleTypes.CLOUD, player.posX + vec.x * i, player.posY + vec.y * i + 1, player.posZ + vec.z * i, 0.0d, 0.0d, 0.0d);
+			worldIn.addParticle(ParticleTypes.CLOUD, player.posX + vec.x * i, player.posY + vec.y * i + 1.5, player.posZ + vec.z * i, 0, 0, 0);
 		}
 		return null;
 	}

@@ -12,29 +12,11 @@ import net.minecraft.item.SwordItem;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import trazormc.elementalswords.entities.AmethystMinerEntity;
-import trazormc.elementalswords.init.ModEntityTypes;
-import trazormc.elementalswords.util.ModUtils;
 
 public class LightningSword extends SwordItem {
 
 	public LightningSword(IItemTier tier, int attackDamage, float attackSpeed, Properties properties) {
 		super(tier, attackDamage, attackSpeed, properties);
-	}
-
-	@Override
-	public void onCreated(ItemStack stack, World worldIn, PlayerEntity playerIn) {
-		super.onCreated(stack, worldIn, playerIn);
-		if(!worldIn.isRemote) {
-			AmethystMinerEntity miner = new AmethystMinerEntity(ModEntityTypes.AMETHYST_MINER, worldIn);
-			double x = playerIn.posX + 5;
-			double z = playerIn.posZ + 5;
-			double y = ModUtils.calculateGenerationHeight(worldIn, (int)x, (int)z);
-
-			miner.setPosition(x, y +1, z);
-			worldIn.addEntity(miner);
-		}
 	}
 
 	@Override
