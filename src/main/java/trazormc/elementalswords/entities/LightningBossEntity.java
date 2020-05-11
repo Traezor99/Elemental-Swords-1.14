@@ -1,5 +1,7 @@
 package trazormc.elementalswords.entities;
 
+import java.util.List;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntitySize;
 import net.minecraft.entity.EntityType;
@@ -16,12 +18,13 @@ import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.effect.LightningBoltEntity;
 import net.minecraft.entity.monster.CreeperEntity;
 import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.entity.monster.ZombiePigmanEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.BossInfo;
 import net.minecraft.world.ServerBossInfo;
 import net.minecraft.world.World;
@@ -41,7 +44,7 @@ public class LightningBossEntity extends MonsterEntity {
 		this.goalSelector.addGoal(0, new SwimGoal(this));
 		this.goalSelector.addGoal(0, new MeleeAttackGoal(this, 1.5f, false));
 		this.goalSelector.addGoal(1, new LightningStrikeGoal(this));
-		this.goalSelector.addGoal(1, new SummonMobsGoal(this));
+		this.goalSelector.addGoal(1, new SpawnCreeperGoal(this));
 		this.goalSelector.addGoal(5, new MoveTowardsRestrictionGoal(this, 1.0));
 		this.goalSelector.addGoal(8, new LookAtGoal(this, PlayerEntity.class, 7.0f));
 		this.goalSelector.addGoal(8, new LookRandomlyGoal(this));
@@ -54,7 +57,7 @@ public class LightningBossEntity extends MonsterEntity {
 	protected void registerAttributes() {
 		super.registerAttributes();
 		this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(300.0);
-		this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.23);
+		this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.20);
 		this.getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(50.0);
 		this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(25.0);
 		this.getAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(4.0);
@@ -90,7 +93,8 @@ public class LightningBossEntity extends MonsterEntity {
 	@Override
 	public void tick() {
 		super.tick();
-		bossInfo.setPercent(this.getHealth() / this.getMaxHealth());
+		if(!this.world.isRemote) 
+			bossInfo.setPercent(this.getHealth() / this.getMaxHealth());
 	}
 
 	@Override
@@ -116,6 +120,65 @@ public class LightningBossEntity extends MonsterEntity {
 	@Override
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
 		return SoundEvents.ENTITY_ENDER_DRAGON_HURT;
+	}
+	
+	static class AngryGoal extends Goal {
+		private final LightningBossEntity lightningBoss;
+		private int angerDuration = 0; 
+		private int step = 0; 
+		private int timer = 0; 
+
+		public AngryGoal(LightningBossEntity entity) {
+			this.lightningBoss = entity;
+		}
+		
+		@Override
+		public boolean shouldExecute() {
+			return this.lightningBoss.getAttackTarget() instanceof PlayerEntity;
+		}
+		
+		@Override
+		public void startExecuting() {
+			angerDuration = 0;
+			timer = 0;
+			step = 0;
+		}
+		
+		@Override
+		public void tick() {
+			if(timer >= 1200) {
+				if(angerDuration <= 300) {
+					angerDuration++;
+					
+					if(step >= 7) {
+						step = 0;
+						AxisAlignedBB aoe = new AxisAlignedBB(this.lightningBoss.posX - 10, this.lightningBoss.posY - 5, this.lightningBoss.posX - 10, this.lightningBoss.posX + 10, this.lightningBoss.posY + 5, this.lightningBoss.posZ + 10);
+						List<Entity> entities = this.lightningBoss.world.getEntitiesWithinAABBExcludingEntity(this.lightningBoss, aoe);
+		
+						for(Entity e : entities) {
+							double x = e.posX - this.lightningBoss.posX; 
+							double z = e.posZ - this.lightningBoss.posZ;
+							float distance = (float) Math.sqrt(x * x + z * z);
+							if(Math.abs(distance) <= 0.1)
+								distance = 0.1f;
+							e.attackEntityFrom(DamageSource.GENERIC, MathHelper.clamp(4 / (distance / 2), 2, 10));
+							e.hurtResistantTime = 0;
+						}
+					} else {
+						step++;
+					}
+				} else {
+					angerDuration = 0;
+					timer = 0;
+					step = 0;
+				}
+			} else {
+				timer++;
+			}
+			
+			super.tick();
+		}
+		
 	}
 
 	static class LightningStrikeGoal extends Goal {
@@ -153,11 +216,11 @@ public class LightningBossEntity extends MonsterEntity {
 		}
 	}
 
-	static class SummonMobsGoal extends Goal {
+	static class SpawnCreeperGoal extends Goal {
 		private final LightningBossEntity lightningBoss;
 		private int summonMobsTimer = 300;
 
-		public SummonMobsGoal(LightningBossEntity entity) {
+		public SpawnCreeperGoal(LightningBossEntity entity) {
 			this.lightningBoss = entity;
 		}
 
@@ -173,23 +236,14 @@ public class LightningBossEntity extends MonsterEntity {
 
 		@Override
 		public void tick() {
-			if(summonMobsTimer >= 300 && !this.lightningBoss.world.isRemote) {   		
-				if(this.lightningBoss.rand.nextInt(2) == 0) {
-					CreeperEntity creeper = new CreeperEntity(EntityType.CREEPER, this.lightningBoss.world);
-					ModUtils.attemptSpawnEntity(this.lightningBoss, creeper, 10, 5);
+			if(summonMobsTimer >= 300 && !this.lightningBoss.world.isRemote) {   
+				summonMobsTimer = 0;
+				CreeperEntity creeper = new CreeperEntity(EntityType.CREEPER, this.lightningBoss.world);
+				ModUtils.attemptSpawnEntity(this.lightningBoss, creeper, 10, 5);
 
-					LightningBoltEntity lightning = new LightningBoltEntity(this.lightningBoss.world, creeper.posX, creeper.posY, creeper.posZ, false);
-					lightning.setPosition(creeper.posX, creeper.posY, creeper.posZ);
-					this.lightningBoss.world.addEntity(lightning);
-				} 
-
-				for(int i = 0; i <= 4; i++) {
-					ZombiePigmanEntity pigman = new ZombiePigmanEntity(EntityType.ZOMBIE_PIGMAN, this.lightningBoss.world);
-					ModUtils.attemptSpawnEntity(this.lightningBoss, pigman, 10, 5);  
-					pigman.setAttackTarget(this.lightningBoss.getAttackTarget());
-				}
-
-				summonMobsTimer = 0;    		
+				LightningBoltEntity lightning = new LightningBoltEntity(this.lightningBoss.world, creeper.posX, creeper.posY, creeper.posZ, true);
+				lightning.setPosition(creeper.posX, creeper.posY, creeper.posZ);
+				this.lightningBoss.world.addEntity(lightning);    		
 			} else {
 				summonMobsTimer++;
 			}

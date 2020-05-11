@@ -46,30 +46,11 @@ public class EarthSword extends SwordItem {
 		AxisAlignedBB aoe = new AxisAlignedBB(pos.getX() - 5, pos.getY() - 5, pos.getZ() - 5, pos.getX() + 5, pos.getY() + 5, pos.getZ() + 5);
 		List<Entity> entities = ctx.getWorld().getEntitiesWithinAABBExcludingEntity(player, aoe);
 		Random rand = new Random();
-		ItemStack item;
+		ItemStack item = player.getHeldItem(ctx.getHand());
 		
-		if(player.getHeldItemMainhand().getItem() == this) {
-			item = player.getHeldItemMainhand();
-		} else {
-			item = player.getHeldItemOffhand();
-		}
-		
-		for (Entity e : entities) {
-			double x = e.posX - player.posX; 
-			double z = e.posZ - player.posZ; 
-			
-			if(x > 1) {
-				x = 1;
-			} else if(x < -1) {
-				x = -1;
-			}
-			
-			if(z > 1) {
-				z = 1;
-			} else if(z < -1) {
-				z = -1;
-			}
-			e.setMotion(x, 1.1, z);
+		for(Entity e : entities) {
+			double theta = Math.atan2(e.posZ - player.posZ, e.posX - player.posX); 
+			e.setMotion(Math.cos(theta), 1.1, Math.sin(theta));
 			e.attackEntityFrom(DamageSource.GENERIC, 4);
 		}
 		

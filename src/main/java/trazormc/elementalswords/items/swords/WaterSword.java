@@ -29,7 +29,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 public class WaterSword extends SwordItem {
-	private final int reach = 21;
+	private final int reach = 20;
 
 	public WaterSword(IItemTier tier, int attackDamage, float attackSpeed, Properties properties) {
 		super(tier, attackDamage, attackSpeed, properties);
@@ -41,9 +41,8 @@ public class WaterSword extends SwordItem {
 		ItemStack item = playerIn.getHeldItem(handIn);
 		
 		if(!worldIn.isRemote) {
-			if(entity != null && entity != playerIn && playerIn.getDistance(entity) <= reach) {
+			if(entity != null && entity != playerIn && playerIn.getDistance(entity) <= reach) 
 				entity.attackEntityFrom(DamageSource.GENERIC, 4);
-			}
 			
 			item.damageItem(1, (ServerPlayerEntity)playerIn, (serverPlayer) -> {
 				serverPlayer.sendBreakAnimation(EquipmentSlotType.MAINHAND);
@@ -63,20 +62,28 @@ public class WaterSword extends SwordItem {
 	 */
 	private static Entity entityLookedAt(double reach, PlayerEntity player, World worldIn) {
 		Vec3d vec = player.getLookVec();
-		for(int i = 1; i < reach; i++) {
-			BlockPos pos = new BlockPos(player.posX + vec.x * i, player.posY + vec.y * i + 1.5, player.posZ + vec.z * i);
-			if(worldIn.getBlockState(pos).getBlock() == Blocks.WATER) {
-				AxisAlignedBB aabb = new AxisAlignedBB(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, pos.getX() - 0.5, pos.getY() - 0.5, pos.getZ() - 0.5);
+		double adjustY = 1.5;
+		if(player.isActualySwimming() || player.isElytraFlying())
+			adjustY = 0.5;
+		
+		for(int i = 1; i <= reach; i++) {
+			double x = player.posX + vec.x * i;
+			double y = player.posY + vec.y * i + adjustY;
+			double z = player.posZ + vec.z * i;
+			if(worldIn.getBlockState(new BlockPos(x, y, z)).getBlock() == Blocks.WATER) {
+				AxisAlignedBB aabb = new AxisAlignedBB(x + 0.5, y + 0.5, z + 0.5, x - 0.5, y - 0.5, z - 0.5);
 				List<Entity> list = worldIn.getEntitiesWithinAABBExcludingEntity(player, aabb);
 				if(!list.isEmpty()) {
 					return list.get(0);
 				}
+				
 				for(int j = 0; j < 3; j++)
-					worldIn.addParticle(ParticleTypes.BUBBLE, pos.getX(), pos.getY(), pos.getZ(), 0, 0, 0);//Particles need work
+					worldIn.addParticle(ParticleTypes.BUBBLE, x, y, z, 0, 0, 0);
 			} else {
 				break;
 			}
 		}
+		
 		return null;
 	}
 	

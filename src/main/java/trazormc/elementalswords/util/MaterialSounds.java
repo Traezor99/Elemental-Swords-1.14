@@ -4,7 +4,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 
-
 public enum MaterialSounds {	
 	ORGANIC(Material.ORGANIC, SoundEvents.BLOCK_GRAVEL_BREAK),
 	TALL_PLANTS(Material.TALL_PLANTS, SoundEvents.BLOCK_GRAVEL_BREAK), //check if dead bush

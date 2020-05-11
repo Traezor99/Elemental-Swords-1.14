@@ -3,6 +3,7 @@ package trazormc.elementalswords.items.swords;
 import java.util.List;
 import javax.annotation.Nullable;
 
+import net.minecraft.block.Blocks;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -32,7 +33,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 public class AirSword extends SwordItem {
-	private final int reach = 21;
+	private final int reach = 30;
 
 	public AirSword(IItemTier tier, int attackDamage, float attackSpeed, Properties properties) {
 		super(tier, attackDamage, attackSpeed, properties);
@@ -50,7 +51,8 @@ public class AirSword extends SwordItem {
 		worldIn.playSound(playerIn, new BlockPos(playerIn.posX, playerIn.posY, playerIn.posZ), SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, SoundCategory.PLAYERS, 5.0f, 0.8f);
 		if(!worldIn.isRemote) {
 			if(entity != null && entity != playerIn && playerIn.getDistance(entity) <= reach) {
-				entity.setVelocity(0, 3, 0);
+				double theta = Math.atan2(entity.posZ - playerIn.posZ, entity.posX - playerIn.posX);
+				entity.setMotion(3 * Math.cos(theta), 1.5, 3 * Math.sin(theta));
 			}
 
 			item.damageItem(1, (ServerPlayerEntity)playerIn, (serverPlayer) -> {
@@ -70,13 +72,24 @@ public class AirSword extends SwordItem {
 	 */
 	private static Entity entityLookedAt(double reach, PlayerEntity player, World worldIn) {
 		Vec3d vec = player.getLookVec();
-		for(int i = 1; i < reach; i++) {
-			AxisAlignedBB aabb = new AxisAlignedBB(player.posX + vec.x * i + 0.5, player.posY + vec.y * i + 2, player.posZ + vec.z * i + 0.5, player.posX + vec.x * i - 0.5, player.posY + vec.y * i + 1, player.posZ + vec.z * i - 0.5);
-			List<Entity> list = worldIn.getEntitiesWithinAABBExcludingEntity(player, aabb);
-			if(!list.isEmpty()) {
-				return list.get(0);
+		double adjustY = 1.5;
+		if(player.isElytraFlying() || player.isActualySwimming())
+			adjustY = 0.5;
+		
+		for(int i = 1; i <= reach; i++) {
+			double x = player.posX + vec.x * i;
+			double y = player.posY + vec.y * i + adjustY;
+			double z = player.posZ + vec.z * i;
+			if(worldIn.getBlockState(new BlockPos(x, y, z)).getBlock() == Blocks.AIR) {
+				AxisAlignedBB aabb = new AxisAlignedBB(x + 0.5, y + 0.5, z + 0.5, x - 0.5, y - 0.5, z - 0.5);
+				List<Entity> list = worldIn.getEntitiesWithinAABBExcludingEntity(player, aabb);
+				if(!list.isEmpty()) {
+					return list.get(0);
+				}
+				worldIn.addParticle(ParticleTypes.CLOUD, x, y, z, 0, 0, 0);
+			} else {
+				break;
 			}
-			worldIn.addParticle(ParticleTypes.CLOUD, player.posX + vec.x * i, player.posY + vec.y * i + 1.5, player.posZ + vec.z * i, 0, 0, 0);
 		}
 		return null;
 	}

@@ -45,7 +45,7 @@ public class LightningSword extends SwordItem {
 			lightning.setPosition(target.posX, target.posY, target.posZ);
 			playerIn.getServer().func_71218_a(playerIn.dimension).addLightningBolt(lightning);
 			item.damageItem(1, (ServerPlayerEntity)playerIn, (serverPlayer) -> {
-				serverPlayer.sendBreakAnimation(EquipmentSlotType.MAINHAND);
+				serverPlayer.sendBreakAnimation(EquipmentSlotType.MAINHAND); 
 			});
 		}
 		return true;		

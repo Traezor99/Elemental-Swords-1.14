@@ -28,28 +28,28 @@ public class ImbuementShapelessRecipes implements ICraftingRecipe {
 	private final ResourceLocation id;
 	private final String group;
 	private final ItemStack recipeOutput;
-    private final NonNullList<Ingredient> recipeItems;
-    private final boolean isSimple;
-    
+	private final NonNullList<Ingredient> recipeItems;
+	private final boolean isSimple;
+
 	public ImbuementShapelessRecipes(ResourceLocation id, String group, ItemStack output, NonNullList<Ingredient> ingredients) {
 		this.id = id;
-	    this.group = group;
-	    this.recipeOutput = output;
-	    this.recipeItems = ingredients;
-	    this.isSimple = ingredients.stream().allMatch(Ingredient::isSimple);
-    }
+		this.group = group;
+		this.recipeOutput = output;
+		this.recipeItems = ingredients;
+		this.isSimple = ingredients.stream().allMatch(Ingredient::isSimple);
+	}
 
 	@Override
 	public IRecipeSerializer<?> getSerializer() {
 		return ModRecipeSerializers.IMBUEMENT_SHAPELESS;
 	}
-	 
+
 	@Override
 	public boolean matches(CraftingInventory inv, World worldIn) {
 		RecipeItemHelper helper = new RecipeItemHelper();
 		List<ItemStack> inputs = new ArrayList<>();
 		int i = 0;
-		
+
 		if(inv.getWidth() == 3 && inv.getHeight() == 1) { 
 			for(int j = 0; j < inv.getSizeInventory(); ++j) {
 				ItemStack stack = inv.getStackInSlot(j);
@@ -63,10 +63,10 @@ public class ImbuementShapelessRecipes implements ICraftingRecipe {
 				}
 			}
 		}
-		
+
 		return i == recipeItems.size() && (isSimple ? helper.canCraft(this, (IntList)null) : RecipeMatcher.findMatches(inputs, recipeItems) != null);
 	}
-	
+
 	@Override
 	public NonNullList<Ingredient> getIngredients() {
 		return recipeItems;
@@ -91,62 +91,62 @@ public class ImbuementShapelessRecipes implements ICraftingRecipe {
 	public ResourceLocation getId() {
 		return id;
 	}
-	
+
 	@Override
 	public String getGroup() {
 		return group;
 	}
-	
+
 	public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<ImbuementShapelessRecipes> {
-	      
-	      public ImbuementShapelessRecipes read(ResourceLocation recipeId, JsonObject json) {
-	         String group = JSONUtils.getString(json, "group", "");
-	         NonNullList<Ingredient> nonnulllist = readIngredients(JSONUtils.getJsonArray(json, "ingredients"));	         
-	         if (nonnulllist.isEmpty()) {
-	             throw new JsonParseException("No ingredients for shapeless recipe");
-	          } else if (nonnulllist.size() > 2) {
-	             throw new JsonParseException("Too many ingredients for shapeless recipe the max is " + 2);
-	          } else {
-	        	  ItemStack result = ShapedRecipe.deserializeItem(JSONUtils.getJsonObject(json, "result")); 
-	        	  return new ImbuementShapelessRecipes(recipeId, group, result, nonnulllist);	  
-	          }
-	      }
-	      
-	      private static NonNullList<Ingredient> readIngredients(JsonArray array) {
-	          NonNullList<Ingredient> nonnulllist = NonNullList.create();
 
-	          for(int i = 0; i < array.size(); ++i) {
-	             Ingredient ingredient = Ingredient.deserialize(array.get(i));
-	             if (!ingredient.hasNoMatchingItems()) {
-	                nonnulllist.add(ingredient);
-	             }
-	          }
+		public ImbuementShapelessRecipes read(ResourceLocation recipeId, JsonObject json) {
+			String group = JSONUtils.getString(json, "group", "");
+			NonNullList<Ingredient> nonnulllist = readIngredients(JSONUtils.getJsonArray(json, "ingredients"));	         
+			if (nonnulllist.isEmpty()) {
+				throw new JsonParseException("No ingredients for shapeless recipe");
+			} else if (nonnulllist.size() > 2) {
+				throw new JsonParseException("Too many ingredients for shapeless recipe the max is " + 2);
+			} else {
+				ItemStack result = ShapedRecipe.deserializeItem(JSONUtils.getJsonObject(json, "result")); 
+				return new ImbuementShapelessRecipes(recipeId, group, result, nonnulllist);	  
+			}
+		}
 
-	          return nonnulllist;
-	       }
+		private static NonNullList<Ingredient> readIngredients(JsonArray array) {
+			NonNullList<Ingredient> nonnulllist = NonNullList.create();
 
-	      public ImbuementShapelessRecipes read(ResourceLocation recipeId, PacketBuffer buffer) {
-	         String group = buffer.readString(Short.MAX_VALUE);
-	         int numIngredients = buffer.readVarInt();
-	         NonNullList<Ingredient> ingredients = NonNullList.withSize(numIngredients, Ingredient.EMPTY);
+			for(int i = 0; i < array.size(); ++i) {
+				Ingredient ingredient = Ingredient.deserialize(array.get(i));
+				if (!ingredient.hasNoMatchingItems()) {
+					nonnulllist.add(ingredient);
+				}
+			}
 
-	         for(int j = 0; j < ingredients.size(); ++j) {
-	        	 ingredients.set(j, Ingredient.read(buffer));
-	         }
+			return nonnulllist;
+		}
 
-	         ItemStack result = buffer.readItemStack();
-	         return new ImbuementShapelessRecipes(recipeId, group, result, ingredients);
-	      }
+		public ImbuementShapelessRecipes read(ResourceLocation recipeId, PacketBuffer buffer) {
+			String group = buffer.readString(Short.MAX_VALUE);
+			int numIngredients = buffer.readVarInt();
+			NonNullList<Ingredient> ingredients = NonNullList.withSize(numIngredients, Ingredient.EMPTY);
 
-	      public void write(PacketBuffer buffer, ImbuementShapelessRecipes recipe) {
-	         buffer.writeString(recipe.group);
-	         buffer.writeVarInt(recipe.recipeItems.size());
+			for(int j = 0; j < ingredients.size(); ++j) {
+				ingredients.set(j, Ingredient.read(buffer));
+			}
 
-	         for(Ingredient ingredient : recipe.recipeItems) {
-	            ingredient.write(buffer);
-	         }
+			ItemStack result = buffer.readItemStack();
+			return new ImbuementShapelessRecipes(recipeId, group, result, ingredients);
+		}
 
-	         buffer.writeItemStack(recipe.recipeOutput);
-	      }
-	 }
+		public void write(PacketBuffer buffer, ImbuementShapelessRecipes recipe) {
+			buffer.writeString(recipe.group);
+			buffer.writeVarInt(recipe.recipeItems.size());
+
+			for(Ingredient ingredient : recipe.recipeItems) {
+				ingredient.write(buffer);
+			}
+
+			buffer.writeItemStack(recipe.recipeOutput);
+		}
+	}
 }
