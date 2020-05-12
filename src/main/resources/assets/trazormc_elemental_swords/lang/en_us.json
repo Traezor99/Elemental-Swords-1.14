@@ -57,13 +57,14 @@
     "block.trazormc_elemental_swords.imbuement_table": "Imbuement Table",
     "block.trazormc_elemental_swords.teleporter_block": "Teleporter Block",
 
-    "entity.trazormc_elemental_swords.amethyst_miner": "Amethyst Miner",
     "entity.trazormc_elemental_swords.air_boss": "Air Boss",
     "entity.trazormc_elemental_swords.earth_boss": "Earth Boss",
     "entity.trazormc_elemental_swords.fire_boss": "Fire Boss",
     "entity.trazormc_elemental_swords.lightning_boss": "Lightning Boss",
     "entity.trazormc_elemental_swords.water_boss": "Water Boss",
     "entity.trazormc_elemental_swords.charged_fireball": "Charged Fireball",
+    "entity.trazormc_elemental_swords.hail": "Hail",
+    "entity.trazormc_elemental_swords.wind_seeker": "Wind Seeker",
 
     "container.trazormc_elemental_swords.imbuement_table": "Imbuement Table",
     

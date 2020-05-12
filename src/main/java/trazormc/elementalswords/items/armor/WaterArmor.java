@@ -14,7 +14,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Effects;
 import net.minecraft.world.World;
-import trazormc.elementalswords.init.ModItems;
+import trazormc.elementalswords.holders.ModItems;
 import trazormc.elementalswords.util.ModUtils;
 
 public class WaterArmor extends ArmorItem {
@@ -31,8 +31,8 @@ public class WaterArmor extends ArmorItem {
 				&& player.inventory.armorInventory.get(2).getItem() == ModItems.WATER_CHESTPLATE
 				&& player.inventory.armorInventory.get(1).getItem() == ModItems.WATER_LEGGINGS
 				&& player.inventory.armorInventory.get(0).getItem() == ModItems.WATER_BOOTS) {
-			ModUtils.effectPlayer(player, Effects.NIGHT_VISION, 0);
-			ModUtils.effectPlayer(player, Effects.WATER_BREATHING, 0);
+			ModUtils.effectPlayer(player, Effects.NIGHT_VISION, 200, 0);
+			ModUtils.effectPlayer(player, Effects.WATER_BREATHING, 200, 0);
 		}
 	}
 	

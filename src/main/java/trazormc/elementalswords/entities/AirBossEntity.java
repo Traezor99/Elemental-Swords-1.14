@@ -55,7 +55,7 @@ public class AirBossEntity extends MonsterEntity {
 		this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(300.0);
 		this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.23);
 		this.getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(100.0);
-		this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(25.0);
+		this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(26.0);
 		this.getAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(4.0);
 	}
 
@@ -198,7 +198,9 @@ public class AirBossEntity extends MonsterEntity {
 				double y = target.posY - this.airBoss.posY;
 				double z = target.posZ - this.airBoss.posZ;	
 				WindSeekerEntity windSeeker = new WindSeekerEntity(this.airBoss.world, this.airBoss, x, y, z);
+				windSeeker.posX = this.airBoss.posX + MathHelper.clamp(x, -0.3, 0.3);
 				windSeeker.posY = this.airBoss.posY + (double)(this.airBoss.getHeight() / 2.0F) + 0.5D;
+				windSeeker.posZ = this.airBoss.posZ + MathHelper.clamp(z, -0.3, 0.3);
 				this.airBoss.world.addEntity(windSeeker);
 			} else {
 				shootTimer++;

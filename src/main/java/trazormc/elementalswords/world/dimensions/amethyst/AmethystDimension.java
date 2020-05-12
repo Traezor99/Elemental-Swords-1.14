@@ -16,7 +16,7 @@ import net.minecraft.world.gen.ChunkGeneratorType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import trazormc.elementalswords.ElementalSwords;
-import trazormc.elementalswords.init.ModBlocks;
+import trazormc.elementalswords.holders.ModBlocks;
 import trazormc.elementalswords.world.biomes.DimensionBiomeProviderSettings;
 import trazormc.elementalswords.world.biomes.providers.AmethystBiomeProvider;
 import trazormc.elementalswords.world.dimensions.DimensionChunkGenerator;

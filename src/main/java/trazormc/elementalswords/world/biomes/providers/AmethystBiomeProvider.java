@@ -18,7 +18,7 @@ import net.minecraft.world.biome.Biomes;
 import net.minecraft.world.biome.provider.BiomeProvider;
 import net.minecraft.world.gen.SimplexNoiseGenerator;
 import net.minecraft.world.gen.feature.structure.Structure;
-import trazormc.elementalswords.init.ModBiomes;
+import trazormc.elementalswords.holders.ModBiomes;
 import trazormc.elementalswords.world.biomes.DimensionBiomeProviderSettings;
 
 public  class AmethystBiomeProvider extends BiomeProvider {	

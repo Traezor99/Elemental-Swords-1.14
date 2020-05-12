@@ -10,7 +10,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import trazormc.elementalswords.entities.AirBossEntity;
-import trazormc.elementalswords.init.ModEntityTypes;
+import trazormc.elementalswords.holders.ModEntityTypes;
 import trazormc.elementalswords.util.ModUtils;
 
 public class AirShardItem extends Item {

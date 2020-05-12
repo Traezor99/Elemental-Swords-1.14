@@ -4,7 +4,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import trazormc.elementalswords.init.ModItems;
+import trazormc.elementalswords.holders.ModItems;
 
 public class SwordInputSlot extends Slot {
 

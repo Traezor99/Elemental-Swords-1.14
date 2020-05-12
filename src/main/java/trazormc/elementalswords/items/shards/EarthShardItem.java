@@ -15,7 +15,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.LightType;
 import net.minecraft.world.World;
 import trazormc.elementalswords.entities.EarthBossEntity;
-import trazormc.elementalswords.init.ModEntityTypes;
+import trazormc.elementalswords.holders.ModEntityTypes;
 import trazormc.elementalswords.util.ModUtils;
 
 public class EarthShardItem extends Item {

@@ -3,7 +3,7 @@ package trazormc.elementalswords.util;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.Ingredient;
-import trazormc.elementalswords.init.ModItems;
+import trazormc.elementalswords.holders.ModItems;
 
 public enum ItemTiers implements IItemTier {
 	AMETHYST(3, 2500, 10.0F, 4.0F, 15, ModItems.AMETHYST),

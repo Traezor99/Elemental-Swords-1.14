@@ -21,6 +21,7 @@ import net.minecraft.entity.monster.ZombieEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
@@ -59,7 +60,7 @@ public class EarthBossEntity extends MonsterEntity {
 		this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(300.0);
 		this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.23);
 		this.getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(50.0);
-		this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(25.0);
+		this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(26.0);
 		this.getAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(4.0);
 	}
 
@@ -141,27 +142,14 @@ public class EarthBossEntity extends MonsterEntity {
 						this.earthBoss.posX + 10, this.earthBoss.posY + 5, this.earthBoss.posZ + 10);
 				List<Entity> entities = this.earthBoss.world.getEntitiesWithinAABBExcludingEntity(this.earthBoss, aoe);		
 				for(Entity e : entities) {
-					double x = e.posX - this.earthBoss.posX; 
-					double z = e.posZ - this.earthBoss.posZ; 
-
-					if(x > 1) {
-						x = 1;
-					} else if(x < -1) {
-						x = -1;
-					}
-
-					if(z > 1) {
-						z = 1;
-					} else if(z < -1) {
-						z = -1;
-					}
-
+					double theta = Math.atan2(e.posZ - this.earthBoss.posZ, e.posX - this.earthBoss.posX);
+					
 					if(e instanceof PlayerEntity) {
-						e.setVelocity(x, 1.5, z);
-						e.attackEntityFrom(DamageSource.GENERIC, 8);
+						e.setMotion(Math.cos(theta), 1.3, Math.sin(theta));
+						e.attackEntityFrom(DamageSource.causeMobDamage(this.earthBoss), 8);
 					} else {
-						e.setVelocity(x, 1, z);
-						e.attackEntityFrom(DamageSource.GENERIC, 4);
+						e.setMotion(Math.cos(theta), 1, Math.sin(theta));
+						e.attackEntityFrom(DamageSource.causeMobDamage(this.earthBoss), 4);
 					}
 				}
 
@@ -171,7 +159,8 @@ public class EarthBossEntity extends MonsterEntity {
 					}
 				}
 
-				ModUtils.playSound(this.earthBoss.world, (PlayerEntity)this.earthBoss.getAttackTarget(), this.earthBoss.getPosition());			
+				ModUtils.playSound(this.earthBoss.world, (PlayerEntity)this.earthBoss.getAttackTarget(), this.earthBoss.getPosition());	
+				ModUtils.effectPlayer((PlayerEntity)this.earthBoss.getAttackTarget(), Effects.SLOWNESS, 100, 2);
 				poundTimer = 0;
 			} else {
 				poundTimer++;

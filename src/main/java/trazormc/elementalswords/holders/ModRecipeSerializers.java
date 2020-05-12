@@ -1,4 +1,4 @@
-package trazormc.elementalswords.init;
+package trazormc.elementalswords.holders;
 
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraftforge.registries.ObjectHolder;

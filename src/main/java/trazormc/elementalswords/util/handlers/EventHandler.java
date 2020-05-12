@@ -16,7 +16,7 @@ import net.minecraftforge.event.TickEvent;
 import trazormc.elementalswords.entities.AirBossEntity;
 import trazormc.elementalswords.entities.FireBossEntity;
 import trazormc.elementalswords.entities.LightningBossEntity;
-import trazormc.elementalswords.init.ModItems;
+import trazormc.elementalswords.holders.ModItems;
 
 @EventBusSubscriber
 public class EventHandler {
@@ -45,7 +45,15 @@ public class EventHandler {
 					&& player.inventory.armorInventory.get(1).getItem() == ModItems.LIGHTNING_LEGGINGS
 					&& player.inventory.armorInventory.get(0).getItem() == ModItems.LIGHTNING_BOOTS) {
 				event.setCanceled(true);
-			} 
+			} else {
+				AxisAlignedBB aoe = new AxisAlignedBB(player.posX - 40, player.posY - 40, player.posZ - 40, player.posX + 40, player.posY + 40, player.posZ + 40);
+				List<Entity> entities = player.getEntityWorld().getEntitiesWithinAABBExcludingEntity(player, aoe);
+				for(Entity e : entities) {
+					if(e instanceof LightningBossEntity) {
+						player.attackEntityFrom(DamageSource.LIGHTNING_BOLT, 10);
+					}
+				}
+			}
 		} else if(event.getEntity() instanceof LightningBossEntity) {
 			event.setCanceled(true);
 		}

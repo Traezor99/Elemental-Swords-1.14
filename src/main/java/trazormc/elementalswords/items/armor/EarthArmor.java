@@ -8,7 +8,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Effects;
 import net.minecraft.world.World;
-import trazormc.elementalswords.init.ModItems;
+import trazormc.elementalswords.holders.ModItems;
 import trazormc.elementalswords.util.ModUtils;
 
 public class EarthArmor extends ArmorItem {
@@ -25,6 +25,6 @@ public class EarthArmor extends ArmorItem {
 				&& player.inventory.armorInventory.get(2).getItem() == ModItems.EARTH_CHESTPLATE
 				&& player.inventory.armorInventory.get(1).getItem() == ModItems.EARTH_LEGGINGS
 				&& player.inventory.armorInventory.get(0).getItem() == ModItems.EARTH_BOOTS)
-			ModUtils.effectPlayer(player, Effects.HASTE, 1);
+			ModUtils.effectPlayer(player, Effects.HASTE, 200, 1);
 	}
 }

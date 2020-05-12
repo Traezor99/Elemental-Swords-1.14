@@ -3,7 +3,6 @@ package trazormc.elementalswords.util.handlers;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.Block.Properties;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
@@ -31,7 +30,6 @@ import trazormc.elementalswords.blocks.ImbuementTableBlock;
 import trazormc.elementalswords.blocks.TeleporterBlock;
 import trazormc.elementalswords.containers.ImbuementTableContainer;
 import trazormc.elementalswords.crafting.ImbuementShapelessRecipes;
-import trazormc.elementalswords.entities.AmethystMinerEntity;
 import trazormc.elementalswords.entities.AirBossEntity;
 import trazormc.elementalswords.entities.ChargedFireballEntity;
 import trazormc.elementalswords.entities.EarthBossEntity;
@@ -40,14 +38,14 @@ import trazormc.elementalswords.entities.HailEntity;
 import trazormc.elementalswords.entities.LightningBossEntity;
 import trazormc.elementalswords.entities.WaterBossEntity;
 import trazormc.elementalswords.entities.WindSeekerEntity;
-import trazormc.elementalswords.init.ModBiomes;
-import trazormc.elementalswords.init.ModBlocks;
-import trazormc.elementalswords.init.ModContainerTypes;
-import trazormc.elementalswords.init.ModRecipeSerializers;
-import trazormc.elementalswords.init.ModDimensions;
-import trazormc.elementalswords.init.ModEffects;
-import trazormc.elementalswords.init.ModEntityTypes;
-import trazormc.elementalswords.init.ModItems;
+import trazormc.elementalswords.holders.ModBiomes;
+import trazormc.elementalswords.holders.ModBlocks;
+import trazormc.elementalswords.holders.ModContainerTypes;
+import trazormc.elementalswords.holders.ModDimensions;
+import trazormc.elementalswords.holders.ModEffects;
+import trazormc.elementalswords.holders.ModEntityTypes;
+import trazormc.elementalswords.holders.ModItems;
+import trazormc.elementalswords.holders.ModRecipeSerializers;
 import trazormc.elementalswords.items.armor.EarthArmor;
 import trazormc.elementalswords.items.armor.FireArmor;
 import trazormc.elementalswords.items.armor.WaterArmor;
@@ -66,7 +64,6 @@ import trazormc.elementalswords.util.ArmorMaterials;
 import trazormc.elementalswords.util.ItemTiers;
 import trazormc.elementalswords.world.biomes.DimensionBiome;
 import trazormc.elementalswords.world.dimensions.amethyst.AmethystModDimension;
-import trazormc.elementalswords.world.dimensions.fire.FireModDimension;
 
 @Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
 public class RegistryHandler {
@@ -158,18 +155,12 @@ public class RegistryHandler {
 
 	@SubscribeEvent
 	public static void onBiomeRegistry(RegistryEvent.Register<Biome> event) {	
-		event.getRegistry().registerAll(
-				ModBiomes.AMETHYST_DIMENSION_BIOME = new DimensionBiome(new SurfaceBuilderConfig(ModBlocks.AMETHYST_STONE.getDefaultState(), ModBlocks.AMETHYST_STONE.getDefaultState(), ModBlocks.AMETHYST_STONE.getDefaultState())).setRegistryName(ElementalSwords.MOD_ID, "amethyst_dimension_biome"),
-				ModBiomes.FIRE_DIMENSION_BIOME = new DimensionBiome(new SurfaceBuilderConfig(Blocks.NETHER_BRICKS.getDefaultState(), Blocks.NETHERRACK.getDefaultState(), Blocks.QUARTZ_BLOCK.getDefaultState())).setRegistryName(ElementalSwords.MOD_ID, "fire_dimension_biome")
-				);
+		event.getRegistry().register(ModBiomes.AMETHYST_DIMENSION_BIOME = new DimensionBiome(new SurfaceBuilderConfig(ModBlocks.AMETHYST_STONE.getDefaultState(), ModBlocks.AMETHYST_STONE.getDefaultState(), ModBlocks.AMETHYST_STONE.getDefaultState())).setRegistryName(ElementalSwords.MOD_ID, "amethyst_dimension_biome"));
 	}
 
 	@SubscribeEvent
 	public static void onDimensionRegistry(RegistryEvent.Register<ModDimension> event) {
-		event.getRegistry().registerAll(
-				ModDimensions.AMETHYST_DIMENSION = new AmethystModDimension("amethyst_dimension"),
-				ModDimensions.FIRE_DIMENSION = new FireModDimension("fire_dimension")
-				);
+		event.getRegistry().register(ModDimensions.AMETHYST_DIMENSION = new AmethystModDimension("amethyst_dimension"));
 	}
 
 	@SubscribeEvent 
@@ -181,7 +172,6 @@ public class RegistryHandler {
 	public static void onEntityRegistry(RegistryEvent.Register<EntityType<?>> event) {
 		event.getRegistry().registerAll(
 				ModEntityTypes.AIR_BOSS = setup(EntityType.Builder.create(AirBossEntity::new, EntityClassification.MONSTER).setTrackingRange(85).size(0.6F, 1.95F).build(ElementalSwords.MOD_ID + ":air_boss"), "air_boss"),
-				ModEntityTypes.AMETHYST_MINER = setup(EntityType.Builder.create(AmethystMinerEntity::new, EntityClassification.MONSTER).setTrackingRange(85).size(0.6F, 1.95F).build(ElementalSwords.MOD_ID + ":amethyst_miner"), "amethyst_miner"),
 				ModEntityTypes.EARTH_BOSS = setup(EntityType.Builder.create(EarthBossEntity::new, EntityClassification.MONSTER).setTrackingRange(85).size(0.6F, 1.95F).build(ElementalSwords.MOD_ID + ":earth_boss"), "earth_boss"),
 				ModEntityTypes.FIRE_BOSS = setup(EntityType.Builder.create(FireBossEntity::new, EntityClassification.MONSTER).setTrackingRange(85).size(0.6F, 1.95F).immuneToFire().build(ElementalSwords.MOD_ID + ":fire_boss"), "fire_boss"),
 				ModEntityTypes.LIGHTNING_BOSS = setup(EntityType.Builder.create(LightningBossEntity::new, EntityClassification.MONSTER).setTrackingRange(85).size(0.6F, 1.95F).build(ElementalSwords.MOD_ID + ":lightning_boss"), "lightning_boss"),

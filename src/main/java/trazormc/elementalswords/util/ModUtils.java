@@ -107,11 +107,12 @@ public class ModUtils {
 	 * or is just about to end before doing so.
 	 * @param player the player to receive the potion effect
 	 * @param effect the effect to be applied
+	 * @param duration the duration of the effect
 	 * @param amplifier the strength of the effect
 	 */
-	public static void effectPlayer(PlayerEntity player, Effect effect, int amplifier) {
+	public static void effectPlayer(PlayerEntity player, Effect effect, int duration, int amplifier) {
 		if(!player.isPotionActive(effect) || player.getActivePotionEffect(effect).getDuration() <= 1) {
-			player.addPotionEffect(new EffectInstance(effect, 200, amplifier));
+			player.addPotionEffect(new EffectInstance(effect, duration, amplifier));
 		}
 	}
 	

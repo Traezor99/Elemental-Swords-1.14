@@ -1,4 +1,4 @@
-package trazormc.elementalswords.init;
+package trazormc.elementalswords.holders;
 
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.Item;
@@ -13,7 +13,6 @@ import trazormc.elementalswords.items.shards.WaterShardItem;
 
 @ObjectHolder(ElementalSwords.MOD_ID)
 public class ModItems {
-	
 	//Items
 	public static Item AMETHYST = null;
 	public static Item GUST_OF_WIND = null;
@@ -74,13 +73,4 @@ public class ModItems {
 	public static ArmorItem WATER_CHESTPLATE = null;
 	public static ArmorItem WATER_LEGGINGS = null;
 	public static ArmorItem WATER_BOOTS = null;
-
-	//Spawn Eggs
-	public static Item AMETHYST_KING_SPAWN_EGG = null;
-	public static Item AMETHYST_MINER_SPAWN_EGG = null;
-	public static Item AIR_BOSS_SPAWN_EGG = null;
-	public static Item EARTH_BOSS_SPAWN_EGG = null;
-	public static Item FIRE_BOSS_SPAWN_EGG = null;
-	public static Item LIGHTNING_BOSS_SPAWN_EGG = null;
-	public static Item WATER_BOSS_SPAWN_EGG  = null;
 }

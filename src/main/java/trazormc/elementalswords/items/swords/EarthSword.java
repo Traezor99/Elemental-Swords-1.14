@@ -51,7 +51,7 @@ public class EarthSword extends SwordItem {
 		for(Entity e : entities) {
 			double theta = Math.atan2(e.posZ - player.posZ, e.posX - player.posX); 
 			e.setMotion(Math.cos(theta), 1.1, Math.sin(theta));
-			e.attackEntityFrom(DamageSource.GENERIC, 4);
+			e.attackEntityFrom(DamageSource.causePlayerDamage(player), 4);
 		}
 		
 		if(ctx.getWorld().isRemote) {

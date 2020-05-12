@@ -83,7 +83,7 @@ public class FireBossEntity extends BlazeEntity {
 		this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(300.0d);
 		this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.25d);
 		this.getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(50.0D);
-		this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(20.0D);
+		this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(26.0D);
 		this.getAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(4.0D);
 	}
 

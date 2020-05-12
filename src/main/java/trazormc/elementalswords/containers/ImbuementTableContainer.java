@@ -24,8 +24,8 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.play.server.SSetSlotPacket;
 import net.minecraft.world.World;
 import trazormc.elementalswords.containers.slots.SwordInputSlot;
-import trazormc.elementalswords.init.ModContainerTypes;
-import trazormc.elementalswords.init.ModRecipeSerializers;
+import trazormc.elementalswords.holders.ModContainerTypes;
+import trazormc.elementalswords.holders.ModRecipeSerializers;
 import trazormc.elementalswords.items.swords.FireSword;
 
 public class ImbuementTableContainer extends Container  {

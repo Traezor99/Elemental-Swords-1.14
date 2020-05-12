@@ -15,6 +15,7 @@ import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.entity.ai.goal.MoveTowardsRestrictionGoal;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.ai.goal.SwimGoal;
+import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
 import net.minecraft.entity.effect.LightningBoltEntity;
 import net.minecraft.entity.monster.CreeperEntity;
 import net.minecraft.entity.monster.MonsterEntity;
@@ -46,6 +47,7 @@ public class LightningBossEntity extends MonsterEntity {
 		this.goalSelector.addGoal(1, new LightningStrikeGoal(this));
 		this.goalSelector.addGoal(1, new SpawnCreeperGoal(this));
 		this.goalSelector.addGoal(5, new MoveTowardsRestrictionGoal(this, 1.0));
+		this.goalSelector.addGoal(7, new WaterAvoidingRandomWalkingGoal(this, 1.0D, 0.0F));
 		this.goalSelector.addGoal(8, new LookAtGoal(this, PlayerEntity.class, 7.0f));
 		this.goalSelector.addGoal(8, new LookRandomlyGoal(this));
 
@@ -59,7 +61,7 @@ public class LightningBossEntity extends MonsterEntity {
 		this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(300.0);
 		this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.20);
 		this.getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(50.0);
-		this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(25.0);
+		this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(26.0);
 		this.getAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(4.0);
 	}
 
@@ -146,7 +148,7 @@ public class LightningBossEntity extends MonsterEntity {
 		
 		@Override
 		public void tick() {
-			if(timer >= 1200) {
+			if(timer >= 1000) {
 				if(angerDuration <= 300) {
 					angerDuration++;
 					

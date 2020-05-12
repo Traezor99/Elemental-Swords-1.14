@@ -37,7 +37,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.BossInfo;
 import net.minecraft.world.ServerBossInfo;
 import net.minecraft.world.World;
-import trazormc.elementalswords.init.ModEffects;
+import trazormc.elementalswords.holders.ModEffects;
 
 public class WaterBossEntity extends MonsterEntity {	
 	private final ServerBossInfo bossInfo;
@@ -75,7 +75,7 @@ public class WaterBossEntity extends MonsterEntity {
 		this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(300.0d);
 		this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.25d);
 		this.getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(50.0D);
-		this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(20.0D);
+		this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(26.0D);
 		this.getAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(4.0D);
 	}
 

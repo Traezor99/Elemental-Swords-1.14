@@ -14,7 +14,7 @@ import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fml.network.NetworkHooks;
-import trazormc.elementalswords.init.ModEntityTypes;
+import trazormc.elementalswords.holders.ModEntityTypes;
 
 public class ChargedFireballEntity extends AbstractFireballEntity {
 	private int flightTime = 0;

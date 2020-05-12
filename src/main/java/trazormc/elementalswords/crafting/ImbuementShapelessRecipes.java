@@ -22,7 +22,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.RecipeMatcher;
 import net.minecraftforge.registries.ForgeRegistryEntry;
-import trazormc.elementalswords.init.ModRecipeSerializers;
+import trazormc.elementalswords.holders.ModRecipeSerializers;
 
 public class ImbuementShapelessRecipes implements ICraftingRecipe {	
 	private final ResourceLocation id;

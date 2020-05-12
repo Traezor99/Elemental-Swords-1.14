@@ -12,7 +12,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biomes;
 import trazormc.elementalswords.entities.WaterBossEntity;
-import trazormc.elementalswords.init.ModEntityTypes;
+import trazormc.elementalswords.holders.ModEntityTypes;
 import trazormc.elementalswords.util.ModUtils;
 
 public class WaterShardItem extends Item {

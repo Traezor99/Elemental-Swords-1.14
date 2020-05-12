@@ -1,4 +1,4 @@
-package trazormc.elementalswords.init;
+package trazormc.elementalswords.holders;
 
 import net.minecraft.block.Block;
 import net.minecraftforge.registries.ObjectHolder;

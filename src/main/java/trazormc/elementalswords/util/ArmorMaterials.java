@@ -9,7 +9,7 @@ import net.minecraft.util.SoundEvent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import trazormc.elementalswords.ElementalSwords;
-import trazormc.elementalswords.init.ModItems;
+import trazormc.elementalswords.holders.ModItems;
 
 public enum ArmorMaterials implements IArmorMaterial {
 	AMETHYST("amethyst", 40, new int[] {4,6,8,4}, 15, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 3.0f, ModItems.AMETHYST),

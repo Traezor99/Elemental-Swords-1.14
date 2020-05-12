@@ -28,10 +28,10 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import trazormc.elementalswords.gui.ImbuementTableGui;
-import trazormc.elementalswords.init.ModBlocks;
-import trazormc.elementalswords.init.ModContainerTypes;
-import trazormc.elementalswords.init.ModDimensions;
-import trazormc.elementalswords.init.ModItems;
+import trazormc.elementalswords.holders.ModBlocks;
+import trazormc.elementalswords.holders.ModContainerTypes;
+import trazormc.elementalswords.holders.ModDimensions;
+import trazormc.elementalswords.holders.ModItems;
 import trazormc.elementalswords.proxy.ClientProxy;
 import trazormc.elementalswords.proxy.IProxy;
 import trazormc.elementalswords.proxy.ServerProxy;
@@ -58,7 +58,6 @@ public class ElementalSwords {
 	@SubscribeEvent
 	public static void setup(FMLCommonSetupEvent event) {	
 		AMETHYST_DIM_TYPE = DimensionManager.registerDimension(new ResourceLocation(ElementalSwords.MOD_ID, "amethyst_dimension"), ModDimensions.AMETHYST_DIMENSION, new PacketBuffer(Unpooled.buffer(16)), true);
-		FIRE_DIM_TYPE = DimensionManager.registerDimension(new ResourceLocation(ElementalSwords.MOD_ID, "fire_dimension"), ModDimensions.FIRE_DIMENSION, new PacketBuffer(Unpooled.buffer(16)), true);
 		
 		for(Biome biome : ForgeRegistries.BIOMES) {
 			if(biome != Biomes.THE_END && biome != Biomes.END_BARRENS && biome != Biomes.END_HIGHLANDS && biome != Biomes.END_MIDLANDS
@@ -83,8 +82,7 @@ public class ElementalSwords {
 	}
 
 	@SubscribeEvent
-	public static void serverInit(FMLServerStartingEvent event) {
-	}
+	public static void serverInit(FMLServerStartingEvent event) {}
 
 	public static ItemGroup tabSwords = new ItemGroup("tab_swords") {		
 		@Override

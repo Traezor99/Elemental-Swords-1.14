@@ -13,7 +13,7 @@ import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
-import trazormc.elementalswords.init.ModEntityTypes;
+import trazormc.elementalswords.holders.ModEntityTypes;
 
 public class HailEntity extends DamagingProjectileEntity {
 	private int flightTime = 0;
