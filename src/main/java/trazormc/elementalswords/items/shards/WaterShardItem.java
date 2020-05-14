@@ -2,6 +2,7 @@ package trazormc.elementalswords.items.shards;
 
 import java.util.List;
 
+import net.minecraft.block.Blocks;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.Item;
@@ -28,10 +29,17 @@ public class WaterShardItem extends Item {
 
 	@Override
 	public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entity) {
-		if(!entity.world.isRemote && isOcean(entity.world.getBiome(entity.getPosition())) && entity.isInWater()) {
-			//Doesn't work quite right
-			ModUtils.attemptSpawnEntity(entity, new WaterBossEntity(ModEntityTypes.WATER_BOSS, entity.world), 10, 10);
-			entity.remove();
+		World world = entity.world;
+		if(!world.isRemote && isOcean(world.getBiome(entity.getPosition())) && entity.isInWater() && world.getBlockState(entity.getPosition().up(5)).getBlock() == Blocks.WATER) {
+			WaterBossEntity waterBoss = new WaterBossEntity(ModEntityTypes.WATER_BOSS, world);
+			for(int i = 0; i < 10; i++) {
+				waterBoss.setPosition(ModUtils.getPos(random, 10, (int)entity.posX + 0.5), (int)entity.posY, ModUtils.getPos(random, 10, (int)entity.posZ + 0.5));
+				if(entity.world.getBlockState(waterBoss.getPosition()).getBlock() == Blocks.WATER && entity.world.getBlockState(waterBoss.getPosition().up()).getBlock() == Blocks.WATER) {
+					entity.world.addEntity(waterBoss);
+					entity.remove();
+					break;
+				}
+			} 
 		}
 		return super.onEntityItemUpdate(stack, entity);
 	}
@@ -42,11 +50,8 @@ public class WaterShardItem extends Item {
 	 * @return true if it is an ocean, false if it is not
 	 */
 	private boolean isOcean(Biome biome) {
-		if(biome.equals(Biomes.OCEAN) || biome.equals(Biomes.COLD_OCEAN) || biome.equals(Biomes.DEEP_COLD_OCEAN) || biome.equals(Biomes.DEEP_FROZEN_OCEAN)
+		return (biome.equals(Biomes.OCEAN) || biome.equals(Biomes.COLD_OCEAN) || biome.equals(Biomes.DEEP_COLD_OCEAN) || biome.equals(Biomes.DEEP_FROZEN_OCEAN)
 				|| biome.equals(Biomes.DEEP_LUKEWARM_OCEAN) || biome.equals(Biomes.DEEP_OCEAN) || biome.equals(Biomes.DEEP_WARM_OCEAN) 
-				|| biome.equals(Biomes.FROZEN_OCEAN) || biome.equals(Biomes.LUKEWARM_OCEAN) || biome.equals(Biomes.WARM_OCEAN))
-			return true;
-		else
-			return false;
+				|| biome.equals(Biomes.FROZEN_OCEAN) || biome.equals(Biomes.LUKEWARM_OCEAN) || biome.equals(Biomes.WARM_OCEAN));
 	}
 }

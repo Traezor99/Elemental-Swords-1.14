@@ -46,7 +46,6 @@ public class ElementalSwords {
 	public static final Logger logger = LogManager.getLogger(ElementalSwords.MOD_ID);
 
 	public static DimensionType AMETHYST_DIM_TYPE;
-	public static DimensionType FIRE_DIM_TYPE;
 
 	public static IProxy proxy = DistExecutor.runForDist(() -> () -> new ClientProxy(), () -> () -> new ServerProxy());
 

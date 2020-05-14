@@ -2,6 +2,7 @@ package trazormc.elementalswords.items.shards;
 
 import java.util.List;
 
+import net.minecraft.block.Blocks;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.Item;
@@ -23,9 +24,14 @@ public class AirShardItem extends Item {
 	public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entity) {
 		if(!entity.world.isRemote && entity.posY >= 250) {
 			AirBossEntity airBoss = new AirBossEntity(ModEntityTypes.AIR_BOSS, entity.world);
-			//Not going to work for this one
-			ModUtils.attemptSpawnEntity(entity, airBoss, 10, 10);
-			entity.remove();
+			for(int i = 0; i < 10; i++) {
+				airBoss.setPosition(ModUtils.getPos(random, 10, (int)entity.posX + 0.5), (int)entity.posY, ModUtils.getPos(random, 10, (int)entity.posZ + 0.5));
+				if(entity.world.getBlockState(airBoss.getPosition()).getBlock() == Blocks.AIR && entity.world.getBlockState(airBoss.getPosition().up()).getBlock() == Blocks.AIR) {
+					entity.world.addEntity(airBoss);
+					entity.remove();
+					break;
+				}
+			} 
 		}
 		return super.onEntityItemUpdate(stack, entity);
 	}
@@ -34,5 +40,4 @@ public class AirShardItem extends Item {
 	public void addInformation(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
 		tooltip.add(new TranslationTextComponent("A secret foe flies high in the sky."));
 	}
-
 }
