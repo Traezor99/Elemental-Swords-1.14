@@ -43,7 +43,6 @@ public class ChargedFireballEntity extends AbstractFireballEntity {
 				}
 			} else {
 				BlockPos pos = ((BlockRayTraceResult)result).getPos();  				
-
 				Explosion.Mode explosionMode = ForgeEventFactory.getMobGriefingEvent(this.world, this.shootingEntity) ? Explosion.Mode.DESTROY : Explosion.Mode.NONE;
 				this.world.createExplosion(this, pos.getX(), pos.getY(), pos.getZ(), 2.0f, true, explosionMode);                                                                                                     	
 			}

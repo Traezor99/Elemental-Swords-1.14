@@ -108,6 +108,11 @@ public class AirBossEntity extends MonsterEntity {
 	protected float getStandingEyeHeight(Pose poseIn, EntitySize sizeIn) {
 		return 1.74f;
 	}
+	
+	@Override
+	public boolean isImmuneToExplosions() {
+		return true;
+	}
 
 	@Override
 	public void fall(float distance, float damageMultiplier) {

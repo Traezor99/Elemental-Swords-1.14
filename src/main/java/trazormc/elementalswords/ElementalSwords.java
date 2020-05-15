@@ -3,12 +3,9 @@ package trazormc.elementalswords;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import io.netty.buffer.Unpooled;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biomes;
 import net.minecraft.world.dimension.DimensionType;
@@ -17,7 +14,6 @@ import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.OreFeatureConfig;
 import net.minecraft.world.gen.placement.CountRangeConfig;
 import net.minecraft.world.gen.placement.Placement;
-import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
@@ -30,7 +26,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 import trazormc.elementalswords.gui.ImbuementTableGui;
 import trazormc.elementalswords.holders.ModBlocks;
 import trazormc.elementalswords.holders.ModContainerTypes;
-import trazormc.elementalswords.holders.ModDimensions;
 import trazormc.elementalswords.holders.ModItems;
 import trazormc.elementalswords.proxy.ClientProxy;
 import trazormc.elementalswords.proxy.IProxy;
@@ -55,9 +50,7 @@ public class ElementalSwords {
 	}
 
 	@SubscribeEvent
-	public static void setup(FMLCommonSetupEvent event) {	
-		AMETHYST_DIM_TYPE = DimensionManager.registerDimension(new ResourceLocation(ElementalSwords.MOD_ID, "amethyst_dimension"), ModDimensions.AMETHYST_DIMENSION, new PacketBuffer(Unpooled.buffer(16)), true);
-		
+	public static void setup(FMLCommonSetupEvent event) {			
 		for(Biome biome : ForgeRegistries.BIOMES) {
 			if(biome != Biomes.THE_END && biome != Biomes.END_BARRENS && biome != Biomes.END_HIGHLANDS && biome != Biomes.END_MIDLANDS
 					&& biome != Biomes.SMALL_END_ISLANDS && biome != Biomes.NETHER) {

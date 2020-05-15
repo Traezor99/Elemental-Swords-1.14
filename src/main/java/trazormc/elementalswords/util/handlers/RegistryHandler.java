@@ -16,9 +16,6 @@ import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectType;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.surfacebuilders.SurfaceBuilderConfig;
-import net.minecraftforge.common.ModDimension;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -38,10 +35,8 @@ import trazormc.elementalswords.entities.HailEntity;
 import trazormc.elementalswords.entities.LightningBossEntity;
 import trazormc.elementalswords.entities.WaterBossEntity;
 import trazormc.elementalswords.entities.WindSeekerEntity;
-import trazormc.elementalswords.holders.ModBiomes;
 import trazormc.elementalswords.holders.ModBlocks;
 import trazormc.elementalswords.holders.ModContainerTypes;
-import trazormc.elementalswords.holders.ModDimensions;
 import trazormc.elementalswords.holders.ModEffects;
 import trazormc.elementalswords.holders.ModEntityTypes;
 import trazormc.elementalswords.holders.ModItems;
@@ -62,8 +57,6 @@ import trazormc.elementalswords.items.swords.WaterSword;
 import trazormc.elementalswords.potions.ForcedDrownEffect;
 import trazormc.elementalswords.util.ArmorMaterials;
 import trazormc.elementalswords.util.ItemTiers;
-import trazormc.elementalswords.world.biomes.DimensionBiome;
-import trazormc.elementalswords.world.dimensions.amethyst.AmethystModDimension;
 
 @Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
 public class RegistryHandler {
@@ -151,16 +144,6 @@ public class RegistryHandler {
 	@SubscribeEvent
 	public static void onRecipeSerializerRegistry(RegistryEvent.Register<IRecipeSerializer<?>> event) {
 		event.getRegistry().register(ModRecipeSerializers.IMBUEMENT_SHAPELESS = setup(new ImbuementShapelessRecipes.Serializer(), "imbuement"));
-	}
-
-	@SubscribeEvent
-	public static void onBiomeRegistry(RegistryEvent.Register<Biome> event) {	
-		event.getRegistry().register(ModBiomes.AMETHYST_DIMENSION_BIOME = new DimensionBiome(new SurfaceBuilderConfig(ModBlocks.AMETHYST_STONE.getDefaultState(), ModBlocks.AMETHYST_STONE.getDefaultState(), ModBlocks.AMETHYST_STONE.getDefaultState())).setRegistryName(ElementalSwords.MOD_ID, "amethyst_dimension_biome"));
-	}
-
-	@SubscribeEvent
-	public static void onDimensionRegistry(RegistryEvent.Register<ModDimension> event) {
-		event.getRegistry().register(ModDimensions.AMETHYST_DIMENSION = new AmethystModDimension("amethyst_dimension"));
 	}
 
 	@SubscribeEvent 

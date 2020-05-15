@@ -1,14 +1,10 @@
 package trazormc.elementalswords.entities;
 
-import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntitySize;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.Pose;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.RandomPositionGenerator;
-import net.minecraft.entity.ai.controller.LookController;
-import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.entity.ai.goal.FindWaterGoal;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.HurtByTargetGoal;
@@ -17,23 +13,14 @@ import net.minecraft.entity.ai.goal.LookRandomlyGoal;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.entity.ai.goal.MoveTowardsRestrictionGoal;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
-import net.minecraft.entity.monster.DrownedEntity;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.pathfinding.GroundPathNavigator;
-import net.minecraft.pathfinding.Path;
-import net.minecraft.pathfinding.PathNavigator;
-import net.minecraft.pathfinding.PathNodeType;
-import net.minecraft.pathfinding.SwimmerPathNavigator;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.BossInfo;
 import net.minecraft.world.ServerBossInfo;
 import net.minecraft.world.World;
@@ -41,25 +28,17 @@ import trazormc.elementalswords.holders.ModEffects;
 
 public class WaterBossEntity extends MonsterEntity {	
 	private final ServerBossInfo bossInfo;
-	private boolean swimmingUp;
-	protected final SwimmerPathNavigator waterNavigator;
-	protected final GroundPathNavigator groundNavigator;
 
 	public WaterBossEntity(EntityType<? extends WaterBossEntity> type, World worldIn) {
 		super(type, worldIn);
 		this.experienceValue = 100;	
-		this.stepHeight = 1.0F;
-		this.moveController = new MoveHelperController(this);
-		this.setPathPriority(PathNodeType.WATER, 0.0F);
-		this.waterNavigator = new SwimmerPathNavigator(this, worldIn);
-		this.groundNavigator = new GroundPathNavigator(this, worldIn);
 		bossInfo = (ServerBossInfo)(new ServerBossInfo(this.getDisplayName(), BossInfo.Color.PURPLE, BossInfo.Overlay.PROGRESS)).setDarkenSky(false);
 	}
 
 	@Override
 	protected void registerGoals() {
 		this.goalSelector.addGoal(0, new FindWaterGoal(this));
-		this.goalSelector.addGoal(0, new MeleeAttackGoal(this, 1.5f, false));
+		this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.5f, false));
 		this.goalSelector.addGoal(4, new WaterBossEntity.ForceDrownTargetGoal(this));
 		this.goalSelector.addGoal(5, new MoveTowardsRestrictionGoal(this, 1.0D));
 		this.goalSelector.addGoal(8, new LookAtGoal(this, PlayerEntity.class, 7.0F));
@@ -107,6 +86,25 @@ public class WaterBossEntity extends MonsterEntity {
 	}
 
 	@Override
+	public void livingTick() {
+		Entity target = this.getAttackTarget();
+		if(!this.world.isRemote && target != null && this.isInWaterOrBubbleColumn()) {
+			double maxSpeed = 0.3535533906; //sqrt(2) / 4
+			double x = target.posX - this.posX;
+			double y = target.posY - this.posY;
+			double z = target.posZ - this.posZ;
+			double mag = Math.sqrt(x * x + z * z);
+			double pitch = Math.atan2(y, mag);
+			double yaw = Math.atan2(z, x);
+			x = maxSpeed * Math.cos(yaw);
+			y = maxSpeed * Math.sin(pitch);
+			z = maxSpeed * Math.sin(yaw);	
+			this.setMotion(x, y, z);
+		}
+		super.livingTick();
+	}
+
+	@Override
 	public void tick() {
 		super.tick();
 		bossInfo.setPercent(this.getHealth() / this.getMaxHealth());
@@ -135,77 +133,6 @@ public class WaterBossEntity extends MonsterEntity {
 	@Override
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
 		return SoundEvents.ENTITY_DROWNED_HURT;
-	}
-
-	public void setSwimmingUp(boolean swimmingUp) {
-		this.swimmingUp = swimmingUp;
-	}
-
-	protected boolean isCloseToPathTarget() {
-		Path path = this.getNavigator().getPath();
-		if(path != null) {
-			BlockPos blockpos = path.func_224770_k();
-			if(blockpos != null) {
-				double d0 = this.getDistanceSq((double)blockpos.getX(), (double)blockpos.getY(), (double)blockpos.getZ());
-				if(d0 < 4.0D) {
-					return true;
-				}
-			}
-		}
-
-		return false;
-	}
-
-	private boolean doSwimming() {
-		if(this.swimmingUp) {
-			return true;
-		} else {
-			LivingEntity livingentity = this.getAttackTarget();
-			return livingentity != null && livingentity.isInWater();
-		}
-	}
-
-	static class MoveHelperController extends MovementController {
-		private final WaterBossEntity waterBoss;
-
-		public MoveHelperController(WaterBossEntity waterBoss) {
-			super(waterBoss);
-			this.waterBoss = waterBoss;
-		}
-
-		public void tick() {
-			LivingEntity livingentity = this.waterBoss.getAttackTarget();
-			if(this.waterBoss.doSwimming() && this.waterBoss.isInWater()) {
-				if(livingentity != null && livingentity.posY > this.waterBoss.posY || this.waterBoss.swimmingUp) {
-					this.waterBoss.setMotion(this.waterBoss.getMotion().add(0.0D, 0.002D, 0.0D));
-				}
-
-				if(this.action != MovementController.Action.MOVE_TO || this.waterBoss.getNavigator().noPath()) {
-					this.waterBoss.setAIMoveSpeed(0.0F);
-					return;
-				}
-
-				double d0 = this.posX - this.waterBoss.posX;
-				double d1 = this.posY - this.waterBoss.posY;
-				double d2 = this.posZ - this.waterBoss.posZ;
-				double d3 = (double)MathHelper.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
-				d1 = d1 / d3;
-				float f = (float)(MathHelper.atan2(d2, d0) * (double)(180F / (float)Math.PI)) - 90.0F;
-				this.waterBoss.rotationYaw = this.limitAngle(this.waterBoss.rotationYaw, f, 90.0F);
-				this.waterBoss.renderYawOffset = this.waterBoss.rotationYaw;
-				float f1 = (float)(this.speed * this.waterBoss.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getValue());
-				float f2 = MathHelper.lerp(0.125F, this.waterBoss.getAIMoveSpeed(), f1);
-				this.waterBoss.setAIMoveSpeed(f2);
-				this.waterBoss.setMotion(this.waterBoss.getMotion().add((double)f2 * d0 * 0.005D, (double)f2 * d1 * 0.1D, (double)f2 * d2 * 0.005D));
-			} else {
-				if(!this.waterBoss.onGround) {
-					this.waterBoss.setMotion(this.waterBoss.getMotion().add(0.0D, -0.008D, 0.0D));
-				}
-
-				super.tick();
-			}
-
-		}
 	}
 
 	static class ForceDrownTargetGoal extends Goal {
@@ -240,49 +167,6 @@ public class WaterBossEntity extends MonsterEntity {
 				this.timer++;
 			}
 			super.tick();
-		}
-	}
-
-	static class SwimUpGoal extends Goal {
-		private final WaterBossEntity waterBoss;
-		private final double swimSpeed;
-		private final int targetY;
-		private boolean obstructed;
-
-		public SwimUpGoal(WaterBossEntity waterBoss, double swimSpeed, int targetYPos) {
-			this.waterBoss = waterBoss;
-			this.swimSpeed = swimSpeed;
-			this.targetY = targetYPos;
-		}
-
-		public boolean shouldExecute() {
-			return this.waterBoss.isInWater() && this.waterBoss.posY < (double)(this.targetY - 2);
-		}
-
-		public boolean shouldContinueExecuting() {
-			return this.shouldExecute() && !this.obstructed;
-		}
-
-		public void tick() {
-			if(this.waterBoss.posY < (double)(this.targetY - 1) && (this.waterBoss.getNavigator().noPath() || this.waterBoss.isCloseToPathTarget())) {
-				Vec3d vec3d = RandomPositionGenerator.findRandomTargetBlockTowards(this.waterBoss, 4, 8, new Vec3d(this.waterBoss.posX, (double)(this.targetY - 1), this.waterBoss.posZ));
-				if(vec3d == null) {
-					this.obstructed = true;
-					return;
-				}
-
-				this.waterBoss.getNavigator().tryMoveToXYZ(vec3d.x, vec3d.y, vec3d.z, this.swimSpeed);
-			}
-
-		}
-
-		public void startExecuting() {
-			this.waterBoss.setSwimmingUp(true);
-			this.obstructed = false;
-		}
-
-		public void resetTask() {
-			this.waterBoss.setSwimmingUp(false);
 		}
 	}
 }

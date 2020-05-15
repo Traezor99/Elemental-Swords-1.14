@@ -9,10 +9,14 @@ import net.minecraft.network.IPacket;
 import net.minecraft.particles.IParticleData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
+import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fml.network.NetworkHooks;
 import trazormc.elementalswords.holders.ModEntityTypes;
 
@@ -36,8 +40,12 @@ public class WindSeekerEntity extends DamagingProjectileEntity {
 			if(result.getType() == RayTraceResult.Type.ENTITY) {
 				Entity entity = ((EntityRayTraceResult)result).getEntity();
 				if(this.shootingEntity != null && entity instanceof PlayerEntity) {
-					entity.attackEntityFrom(DamageSource.causeMobDamage(this.shootingEntity), 20.0f);
+					entity.attackEntityFrom(DamageSource.causeExplosionDamage(this.shootingEntity), 20.0f);
 				}
+			} else if(result.getType() == RayTraceResult.Type.BLOCK) {
+				BlockPos pos = ((BlockRayTraceResult)result).getPos();  				
+				Explosion.Mode explosionMode = ForgeEventFactory.getMobGriefingEvent(this.world, this.shootingEntity) ? Explosion.Mode.DESTROY : Explosion.Mode.NONE;
+				this.world.createExplosion(this, pos.getX(), pos.getY(), pos.getZ(), 4.0f, false, explosionMode);
 			}
 		}
 		this.remove();
