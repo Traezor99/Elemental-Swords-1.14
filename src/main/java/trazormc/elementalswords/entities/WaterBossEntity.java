@@ -1,6 +1,6 @@
 package trazormc.elementalswords.entities;
 
-import net.minecraft.entity.Entity;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntitySize;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Pose;
@@ -21,10 +21,12 @@ import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BossInfo;
 import net.minecraft.world.ServerBossInfo;
 import net.minecraft.world.World;
 import trazormc.elementalswords.holders.ModEffects;
+import trazormc.elementalswords.util.ModUtils;
 
 public class WaterBossEntity extends MonsterEntity {	
 	private final ServerBossInfo bossInfo;
@@ -41,6 +43,7 @@ public class WaterBossEntity extends MonsterEntity {
 		this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.5f, false));
 		this.goalSelector.addGoal(4, new WaterBossEntity.ForceDrownTargetGoal(this));
 		this.goalSelector.addGoal(5, new MoveTowardsRestrictionGoal(this, 1.0D));
+		this.goalSelector.addGoal(6, new WaterBossEntity.MoveGoal(this));
 		this.goalSelector.addGoal(8, new LookAtGoal(this, PlayerEntity.class, 7.0F));
 		this.goalSelector.addGoal(8, new LookRandomlyGoal(this));
 
@@ -87,20 +90,8 @@ public class WaterBossEntity extends MonsterEntity {
 
 	@Override
 	public void livingTick() {
-		Entity target = this.getAttackTarget();
-		if(!this.world.isRemote && target != null && this.isInWaterOrBubbleColumn()) {
-			double maxSpeed = 0.3535533906; //sqrt(2) / 4
-			double x = target.posX - this.posX;
-			double y = target.posY - this.posY;
-			double z = target.posZ - this.posZ;
-			double mag = Math.sqrt(x * x + z * z);
-			double pitch = Math.atan2(y, mag);
-			double yaw = Math.atan2(z, x);
-			x = maxSpeed * Math.cos(yaw);
-			y = maxSpeed * Math.sin(pitch);
-			z = maxSpeed * Math.sin(yaw);	
-			this.setMotion(x, y, z);
-		}
+		if(this.world.getBlockState(this.getPosition().up(10)).getBlock() != Blocks.WATER)
+			this.setMotion(0, -0.25, 0);
 		super.livingTick();
 	}
 
@@ -134,12 +125,71 @@ public class WaterBossEntity extends MonsterEntity {
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
 		return SoundEvents.ENTITY_DROWNED_HURT;
 	}
+	
+	private class MoveGoal extends Goal {
+		private WaterBossEntity waterBoss;
+		private BlockPos targetPos;
+		private int timer = 0;
+		
+		private MoveGoal(WaterBossEntity entity) {
+			this.waterBoss = entity;
+			this.targetPos = waterBoss.getPosition();
+		}
 
-	static class ForceDrownTargetGoal extends Goal {
+		@Override
+		public boolean shouldExecute() {
+			return this.waterBoss.isInWaterOrBubbleColumn() && 
+					this.waterBoss.world.getBlockState(this.waterBoss.getPosition().up(10)).getBlock() == Blocks.WATER;
+		}
+		
+		@Override
+		public void startExecuting() {
+			timer = 0;
+			do {
+				this.targetPos = getTarget();
+			}
+			while(this.waterBoss.world.getBlockState(targetPos).getBlock() != Blocks.WATER);				
+		}
+		
+		@Override
+		public void tick() {
+			if(!this.waterBoss.world.isRemote) { 
+				if(timer >= 200 ) {
+					if(this.waterBoss.isInWaterOrBubbleColumn() && targetPos.distanceSq(waterBoss.getPosition()) > 1) { //Does weird stuff when close to target
+						double maxSpeed = 0.1767766953; //sqrt(2) / 8
+						double x = targetPos.getX() - this.waterBoss.posX;
+						double y = targetPos.getY() - this.waterBoss.posY;
+						double z = targetPos.getZ() - this.waterBoss.posZ;
+						double mag = Math.sqrt(x * x + z * z);
+						double pitch = Math.atan2(y, mag);
+						double yaw = Math.atan2(z, x);
+						x = maxSpeed * Math.cos(yaw);
+						y = maxSpeed * Math.sin(pitch);
+						z = maxSpeed * Math.sin(yaw);			
+						this.waterBoss.setMotion(x, y, z);
+					} else {
+						this.startExecuting();
+					}
+				} else {
+					timer++;
+				}
+			}
+			super.tick();
+		}
+		
+		private BlockPos getTarget() {
+			double x = ModUtils.getPos(getRNG(), 15, this.waterBoss.posX);
+			double y = ModUtils.getPos(getRNG(), 5, this.waterBoss.posY - 6);
+			double z = ModUtils.getPos(getRNG(), 15, this.waterBoss.posZ);
+			return new BlockPos(x, y, z);
+		}	
+	}
+
+	private class ForceDrownTargetGoal extends Goal {
 		private WaterBossEntity waterBoss;
 		private int timer = 0;
 
-		public ForceDrownTargetGoal(WaterBossEntity entity) {
+		private ForceDrownTargetGoal(WaterBossEntity entity) {
 			this.waterBoss = entity;
 		}
 
