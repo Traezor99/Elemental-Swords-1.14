@@ -8,7 +8,6 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biomes;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.OreFeatureConfig;
@@ -39,9 +38,6 @@ public class ElementalSwords {
 	public static final String MOD_ID = "trazormc_elemental_swords";
 	public static ElementalSwords instance;
 	public static final Logger logger = LogManager.getLogger(ElementalSwords.MOD_ID);
-
-	public static DimensionType AMETHYST_DIM_TYPE;
-
 	public static IProxy proxy = DistExecutor.runForDist(() -> () -> new ClientProxy(), () -> () -> new ServerProxy());
 
 	public ElementalSwords() {

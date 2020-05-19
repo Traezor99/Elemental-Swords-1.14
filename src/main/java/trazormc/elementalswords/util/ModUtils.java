@@ -16,24 +16,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class ModUtils {
-	/**
-	 * Starts from the world height and finds the top block at the specified x and z coordinates
-	 * @param world the current world
-	 * @param x the x coordinate
-	 * @param z the z coordinate
-	 * @return the y height of the top block at the specified coordinates
-	 */
-	public static int calculateGenerationHeight(World world, int x, int z) {
-		int y = world.getHeight();
-		boolean foundGround = false;
-		
-		while(!foundGround && y-- > 0) {
-			Block block = world.getBlockState(new BlockPos(x, y, z)).getBlock();
-			foundGround = block != Blocks.AIR;
-		}
-		
-		return y;
-	}
 	
 	public static boolean attemptSpawnEntity(Entity spawnerEntity, Entity spawnedEntity, int attempts, int radius) {
 		return ModUtils.attemptSpawnEntity((int)spawnerEntity.posX + 0.5, (int)spawnerEntity.posY, (int)spawnerEntity.posZ + 0.5, spawnerEntity.world, spawnedEntity, attempts, radius);

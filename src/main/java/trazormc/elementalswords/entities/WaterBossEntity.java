@@ -1,5 +1,6 @@
 package trazormc.elementalswords.entities;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntitySize;
 import net.minecraft.entity.EntityType;
@@ -45,7 +46,7 @@ public class WaterBossEntity extends MonsterEntity {
 		this.goalSelector.addGoal(5, new MoveTowardsRestrictionGoal(this, 1.0D));
 		this.goalSelector.addGoal(6, new WaterBossEntity.MoveGoal(this));
 		this.goalSelector.addGoal(8, new LookAtGoal(this, PlayerEntity.class, 7.0F));
-		this.goalSelector.addGoal(8, new LookRandomlyGoal(this));
+		this.goalSelector.addGoal(9, new LookRandomlyGoal(this));
 
 		this.targetSelector.addGoal(0, new HurtByTargetGoal(this, new Class[] {}));
 		this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
@@ -90,9 +91,21 @@ public class WaterBossEntity extends MonsterEntity {
 
 	@Override
 	public void livingTick() {
-		if(this.world.getBlockState(this.getPosition().up(10)).getBlock() != Blocks.WATER)
+		if(calculateWaterHeight(this.world, this.posX, this.posZ) - this.posY <= 10)
 			this.setMotion(0, -0.25, 0);
 		super.livingTick();
+	}
+	
+	private int calculateWaterHeight(World world, double x, double z) {
+		int y = world.getHeight();
+		boolean foundWater = false;
+		
+		while(!foundWater && y-- > 0) {
+			Block block = world.getBlockState(new BlockPos(x, y, z)).getBlock();
+			foundWater = block == Blocks.WATER;
+		}
+		
+		return y;
 	}
 
 	@Override
@@ -130,6 +143,7 @@ public class WaterBossEntity extends MonsterEntity {
 		private WaterBossEntity waterBoss;
 		private BlockPos targetPos;
 		private int timer = 0;
+		private boolean hasTarget = false;
 		
 		private MoveGoal(WaterBossEntity entity) {
 			this.waterBoss = entity;
@@ -138,24 +152,22 @@ public class WaterBossEntity extends MonsterEntity {
 
 		@Override
 		public boolean shouldExecute() {
-			return this.waterBoss.isInWaterOrBubbleColumn() && 
-					this.waterBoss.world.getBlockState(this.waterBoss.getPosition().up(10)).getBlock() == Blocks.WATER;
+			boolean thing = calculateWaterHeight(this.waterBoss.world, this.waterBoss.posX, this.waterBoss.posZ) - this.waterBoss.posY >= 11;
+			return this.waterBoss.isInWaterOrBubbleColumn() && thing;
 		}
 		
 		@Override
 		public void startExecuting() {
-			timer = 0;
-			do {
-				this.targetPos = getTarget();
-			}
-			while(this.waterBoss.world.getBlockState(targetPos).getBlock() != Blocks.WATER);				
+			timer = 0;				
 		}
 		
 		@Override
 		public void tick() {
 			if(!this.waterBoss.world.isRemote) { 
-				if(timer >= 200 ) {
-					if(this.waterBoss.isInWaterOrBubbleColumn() && targetPos.distanceSq(waterBoss.getPosition()) > 1) { //Does weird stuff when close to target
+				if(timer >= 200) {
+					if(!hasTarget)
+						targetPos = getTarget();				
+					if(this.waterBoss.isInWaterOrBubbleColumn() && !reachedTargetPos()) {
 						double maxSpeed = 0.1767766953; //sqrt(2) / 8
 						double x = targetPos.getX() - this.waterBoss.posX;
 						double y = targetPos.getY() - this.waterBoss.posY;
@@ -163,25 +175,41 @@ public class WaterBossEntity extends MonsterEntity {
 						double mag = Math.sqrt(x * x + z * z);
 						double pitch = Math.atan2(y, mag);
 						double yaw = Math.atan2(z, x);
+						this.waterBoss.rotationYaw = (float)(yaw * (180 / Math.PI)) - 90; //Weird rotation when in survival
 						x = maxSpeed * Math.cos(yaw);
 						y = maxSpeed * Math.sin(pitch);
 						z = maxSpeed * Math.sin(yaw);			
 						this.waterBoss.setMotion(x, y, z);
 					} else {
-						this.startExecuting();
+						timer = 0;
+						hasTarget = false;
 					}
 				} else {
 					timer++;
+					this.waterBoss.addVelocity(0, 0.005, 0);
 				}
 			}
 			super.tick();
 		}
 		
+		private boolean reachedTargetPos() {
+			BlockPos current = this.waterBoss.getPosition();
+			return Math.abs(targetPos.getX() - current.getX()) <= 1 && Math.abs(targetPos.getY() - current.getY()) <= 1
+					&& Math.abs(targetPos.getZ() - current.getZ()) <= 1;
+		}
+		
 		private BlockPos getTarget() {
-			double x = ModUtils.getPos(getRNG(), 15, this.waterBoss.posX);
-			double y = ModUtils.getPos(getRNG(), 5, this.waterBoss.posY - 6);
-			double z = ModUtils.getPos(getRNG(), 15, this.waterBoss.posZ);
-			return new BlockPos(x, y, z);
+			BlockPos pos;
+			do {
+				double x = ModUtils.getPos(getRNG(), 15, this.waterBoss.posX);
+				double y = calculateWaterHeight(this.waterBoss.world, this.waterBoss.posX, this.waterBoss.posZ) - this.waterBoss.posY >= 16 ? 
+						ModUtils.getPos(getRNG(), 5, this.waterBoss.posY) : ModUtils.getPos(getRNG(), 5, this.waterBoss.posY - 6);
+				double z = ModUtils.getPos(getRNG(), 15, this.waterBoss.posZ);
+				pos = new BlockPos(x, y, z);
+			}
+			while(this.waterBoss.world.getBlockState(pos).getBlock() != Blocks.WATER);
+			hasTarget = true;
+			return pos;
 		}	
 	}
 

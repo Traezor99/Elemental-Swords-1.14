@@ -24,7 +24,6 @@ import net.minecraftforge.registries.IForgeRegistryEntry;
 import trazormc.elementalswords.ElementalSwords;
 import trazormc.elementalswords.blocks.AmethystOreBlock;
 import trazormc.elementalswords.blocks.ImbuementTableBlock;
-import trazormc.elementalswords.blocks.TeleporterBlock;
 import trazormc.elementalswords.containers.ImbuementTableContainer;
 import trazormc.elementalswords.crafting.ImbuementShapelessRecipes;
 import trazormc.elementalswords.entities.AirBossEntity;
@@ -120,8 +119,7 @@ public class RegistryHandler {
 				setupBlockItems(new BlockItem(ModBlocks.AMETHYST_BLOCK, new Item.Properties().group(ElementalSwords.tabSwords))),
 				setupBlockItems(new BlockItem(ModBlocks.AMETHYST_ORE, new Item.Properties().group(ElementalSwords.tabSwords))),
 				setupBlockItems(new BlockItem(ModBlocks.AMETHYST_STONE, new Item.Properties().group(ElementalSwords.tabSwords))),
-				setupBlockItems(new BlockItem(ModBlocks.IMBUEMENT_TABLE, new Item.Properties().group(ElementalSwords.tabSwords))),
-				setupBlockItems(new BlockItem(ModBlocks.TELEPORTER_BLOCK, new Item.Properties().group(ElementalSwords.tabSwords)))			
+				setupBlockItems(new BlockItem(ModBlocks.IMBUEMENT_TABLE, new Item.Properties().group(ElementalSwords.tabSwords)))
 				);
 	}
 
@@ -131,8 +129,7 @@ public class RegistryHandler {
 				ModBlocks.AMETHYST_BLOCK = new Block(Properties.create(Material.IRON).hardnessAndResistance(4.0f, 10.0f).lightValue(0).sound(SoundType.METAL)).setRegistryName(ElementalSwords.MOD_ID, "amethyst_block"),
 				ModBlocks.AMETHYST_ORE = new AmethystOreBlock(Properties.create(Material.ROCK).hardnessAndResistance(3.0f, 10.0f).lightValue(0).sound(SoundType.STONE)).setRegistryName(ElementalSwords.MOD_ID, "amethyst_ore"),
 				ModBlocks.AMETHYST_STONE = new Block(Properties.create(Material.ROCK).hardnessAndResistance(3.0f, 10.0f).lightValue(0).sound(SoundType.STONE)).setRegistryName(ElementalSwords.MOD_ID, "amethyst_stone"),
-				ModBlocks.IMBUEMENT_TABLE = new ImbuementTableBlock(Properties.create(Material.IRON).hardnessAndResistance(4.0f, 15.0f).lightValue(0).sound(SoundType.METAL)).setRegistryName(ElementalSwords.MOD_ID, "imbuement_table"),
-				ModBlocks.TELEPORTER_BLOCK = new TeleporterBlock(Properties.create(Material.IRON).hardnessAndResistance(5.0f,  15.0f).lightValue(0).sound(SoundType.METAL)).setRegistryName(ElementalSwords.MOD_ID, "teleporter_block")			
+				ModBlocks.IMBUEMENT_TABLE = new ImbuementTableBlock(Properties.create(Material.IRON).hardnessAndResistance(4.0f, 15.0f).lightValue(0).sound(SoundType.METAL)).setRegistryName(ElementalSwords.MOD_ID, "imbuement_table")
 				);
 	}
 
