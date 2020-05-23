@@ -2,6 +2,7 @@ package trazormc.elementalswords.entities;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntitySize;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Pose;
@@ -23,6 +24,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.BossInfo;
 import net.minecraft.world.ServerBossInfo;
 import net.minecraft.world.World;
@@ -42,9 +44,10 @@ public class WaterBossEntity extends MonsterEntity {
 	protected void registerGoals() {
 		this.goalSelector.addGoal(0, new FindWaterGoal(this));
 		this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.5f, false));
-		this.goalSelector.addGoal(4, new WaterBossEntity.ForceDrownTargetGoal(this));
+		this.goalSelector.addGoal(2, new WaterBossEntity.ShootBubbles(this));
+		this.goalSelector.addGoal(3, new WaterBossEntity.ForceDrownTargetGoal(this));
+		this.goalSelector.addGoal(4, new WaterBossEntity.MoveGoal(this));
 		this.goalSelector.addGoal(5, new MoveTowardsRestrictionGoal(this, 1.0D));
-		this.goalSelector.addGoal(6, new WaterBossEntity.MoveGoal(this));
 		this.goalSelector.addGoal(8, new LookAtGoal(this, PlayerEntity.class, 7.0F));
 		this.goalSelector.addGoal(9, new LookRandomlyGoal(this));
 
@@ -139,6 +142,48 @@ public class WaterBossEntity extends MonsterEntity {
 		return SoundEvents.ENTITY_DROWNED_HURT;
 	}
 	
+	private class ShootBubbles extends Goal {
+		private WaterBossEntity waterBoss;
+		private int timer = 0;
+		
+		private ShootBubbles(WaterBossEntity entity) {
+			this.waterBoss = entity;
+		}		
+
+		@Override
+		public boolean shouldExecute() {
+			return this.waterBoss.getAttackTarget() instanceof PlayerEntity;
+		}
+		
+		@Override
+		public void startExecuting() {
+			timer = 0;
+		}
+		
+		@Override
+		public void tick() {
+			if(!this.waterBoss.world.isRemote) {
+				if(timer >= 200) {
+					Entity target = this.waterBoss.getAttackTarget();
+					timer = 0;
+					double x = target.posX - this.waterBoss.posX;
+					double y = target.posY - this.waterBoss.posY;
+					double z = target.posZ - this.waterBoss.posZ;	
+					BubbleEntity bubble = new BubbleEntity(this.waterBoss.world, this.waterBoss, x, y, z);
+					bubble.posX = this.waterBoss.posX + MathHelper.clamp(x, -0.3, 0.3);
+					bubble.posY = this.waterBoss.posY + (double)(this.waterBoss.getHeight() / 2.0F) + 0.5D;
+					bubble.posZ = this.waterBoss.posZ + MathHelper.clamp(z, -0.3, 0.3);
+					this.waterBoss.world.addEntity(bubble);
+				} else {
+					timer++;
+				}
+			}
+			
+			super.tick();
+		}
+		
+	}
+	
 	private class MoveGoal extends Goal {
 		private WaterBossEntity waterBoss;
 		private BlockPos targetPos;
@@ -152,8 +197,7 @@ public class WaterBossEntity extends MonsterEntity {
 
 		@Override
 		public boolean shouldExecute() {
-			boolean thing = calculateWaterHeight(this.waterBoss.world, this.waterBoss.posX, this.waterBoss.posZ) - this.waterBoss.posY >= 11;
-			return this.waterBoss.isInWaterOrBubbleColumn() && thing;
+			return this.waterBoss.isInWaterOrBubbleColumn() && calculateWaterHeight(this.waterBoss.world, this.waterBoss.posX, this.waterBoss.posZ) - this.waterBoss.posY >= 11;
 		}
 		
 		@Override

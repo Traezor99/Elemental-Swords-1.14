@@ -44,8 +44,8 @@ public class EarthBossEntity extends MonsterEntity {
 	protected void registerGoals() {
 		this.goalSelector.addGoal(0, new SwimGoal(this));
 		this.goalSelector.addGoal(0, new MeleeAttackGoal(this, 1.5f, false));
-		this.goalSelector.addGoal(1, new PoundGoal(this));
-		this.goalSelector.addGoal(1, new SpawnMobsGoal(this));
+		this.goalSelector.addGoal(1, new EarthBossEntity.PoundGoal(this));
+		this.goalSelector.addGoal(2, new EarthBossEntity.SpawnMobsGoal(this));
 		this.goalSelector.addGoal(5, new MoveTowardsRestrictionGoal(this, 1.0));
 		this.goalSelector.addGoal(8, new LookAtGoal(this, PlayerEntity.class, 7.0f));
 		this.goalSelector.addGoal(8, new LookRandomlyGoal(this));
@@ -117,11 +117,11 @@ public class EarthBossEntity extends MonsterEntity {
 		return SoundEvents.BLOCK_STONE_HIT;
 	}
 
-	static class PoundGoal extends Goal {
+	private class PoundGoal extends Goal {
 		private final EarthBossEntity earthBoss;
 		private int poundTimer = 0;
 
-		public PoundGoal(EarthBossEntity entity) {
+		private PoundGoal(EarthBossEntity entity) {
 			this.earthBoss = entity;
 		}
 
@@ -170,11 +170,11 @@ public class EarthBossEntity extends MonsterEntity {
 		}
 	}
 
-	static class SpawnMobsGoal extends Goal {
+	private class SpawnMobsGoal extends Goal {
 		private final EarthBossEntity earthBoss;
 		private int spawnTimer = 0;
 
-		public SpawnMobsGoal(EarthBossEntity entity) {
+		private SpawnMobsGoal(EarthBossEntity entity) {
 			this.earthBoss = entity;
 		}
 

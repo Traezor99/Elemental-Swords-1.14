@@ -10,8 +10,6 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.EffectType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import trazormc.elementalswords.ElementalSwords;
 
 public class ForcedDrownEffect extends Effect {
@@ -35,7 +33,6 @@ public class ForcedDrownEffect extends Effect {
 		return true;
 	}
 	
-	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void renderHUDEffect(EffectInstance effect, AbstractGui gui, int x, int y, float z, float alpha) {
 		Minecraft.getInstance().textureManager.bindTexture(texture);
@@ -43,7 +40,6 @@ public class ForcedDrownEffect extends Effect {
 		
 	}
 	
-	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void renderInventoryEffect(EffectInstance effect, DisplayEffectsScreen<?> gui, int x, int y, float z) {
 		Minecraft.getInstance().textureManager.bindTexture(texture);

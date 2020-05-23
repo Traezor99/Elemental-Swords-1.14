@@ -2,6 +2,7 @@ package trazormc.elementalswords.util.handlers;
 
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import trazormc.elementalswords.entities.AirBossEntity;
+import trazormc.elementalswords.entities.BubbleEntity;
 import trazormc.elementalswords.entities.ChargedFireballEntity;
 import trazormc.elementalswords.entities.EarthBossEntity;
 import trazormc.elementalswords.entities.FireBossEntity;
@@ -10,6 +11,7 @@ import trazormc.elementalswords.entities.LightningBossEntity;
 import trazormc.elementalswords.entities.WaterBossEntity;
 import trazormc.elementalswords.entities.WindSeekerEntity;
 import trazormc.elementalswords.entities.render.AirBossRenderer;
+import trazormc.elementalswords.entities.render.BubbleRenderer;
 import trazormc.elementalswords.entities.render.ChargedFireballRenderer;
 import trazormc.elementalswords.entities.render.EarthBossRenderer;
 import trazormc.elementalswords.entities.render.FireBossRenderer;
@@ -27,6 +29,7 @@ public class RenderHandler {
 		RenderingRegistry.registerEntityRenderingHandler(LightningBossEntity.class, new LightningBossRenderer.Factory());
 		RenderingRegistry.registerEntityRenderingHandler(WaterBossEntity.class, new WaterBossRenderer.Factory());
 		
+		RenderingRegistry.registerEntityRenderingHandler(BubbleEntity.class, new BubbleRenderer.Factory());
 		RenderingRegistry.registerEntityRenderingHandler(ChargedFireballEntity.class, new ChargedFireballRenderer.Factory());
 		RenderingRegistry.registerEntityRenderingHandler(HailEntity.class, new HailRenderer.Factory());
 		RenderingRegistry.registerEntityRenderingHandler(WindSeekerEntity.class, new WindSeekerRenderer.Factory());

@@ -3,6 +3,7 @@ package trazormc.elementalswords.holders;
 import net.minecraft.entity.EntityType;
 import net.minecraftforge.registries.ObjectHolder;
 import trazormc.elementalswords.entities.AirBossEntity;
+import trazormc.elementalswords.entities.BubbleEntity;
 import trazormc.elementalswords.entities.ChargedFireballEntity;
 import trazormc.elementalswords.entities.EarthBossEntity;
 import trazormc.elementalswords.entities.LightningBossEntity;
@@ -20,6 +21,7 @@ public class ModEntityTypes {
 	public static EntityType<LightningBossEntity> LIGHTNING_BOSS = null;
 	public static EntityType<WaterBossEntity> WATER_BOSS = null;
 	
+	public static EntityType<BubbleEntity> BUBBLE = null;
 	public static EntityType<ChargedFireballEntity> CHARGED_FIREBALL = null;
 	public static EntityType<HailEntity> HAIL = null;
 	public static EntityType<WindSeekerEntity> WIND_SEEKER = null;

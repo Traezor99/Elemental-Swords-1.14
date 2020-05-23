@@ -111,12 +111,9 @@ public class WindSeekerEntity extends DamagingProjectileEntity {
 				Vec3d vec3d = source.getTrueSource().getLookVec();
 				this.setMotion(vec3d);
 				return true;
-			} else {
-				return false;
-			}
-		} else {
-			return false;
+			} 
 		}
+		return false;
 	}
 
 	@Override

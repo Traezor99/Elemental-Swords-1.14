@@ -44,8 +44,9 @@ public class LightningBossEntity extends MonsterEntity {
 	protected void registerGoals() {
 		this.goalSelector.addGoal(0, new SwimGoal(this));
 		this.goalSelector.addGoal(0, new MeleeAttackGoal(this, 1.5f, false));
-		this.goalSelector.addGoal(1, new LightningStrikeGoal(this));
-		this.goalSelector.addGoal(1, new SpawnCreeperGoal(this));
+		this.goalSelector.addGoal(1, new LightningBossEntity.LightningStrikeGoal(this));
+		this.goalSelector.addGoal(2, new LightningBossEntity.SpawnCreeperGoal(this));
+		this.goalSelector.addGoal(2, new LightningBossEntity.AngryGoal(this));
 		this.goalSelector.addGoal(5, new MoveTowardsRestrictionGoal(this, 1.0));
 		this.goalSelector.addGoal(7, new WaterAvoidingRandomWalkingGoal(this, 1.0D, 0.0F));
 		this.goalSelector.addGoal(8, new LookAtGoal(this, PlayerEntity.class, 7.0f));
@@ -124,13 +125,13 @@ public class LightningBossEntity extends MonsterEntity {
 		return SoundEvents.ENTITY_ENDER_DRAGON_HURT;
 	}
 	
-	static class AngryGoal extends Goal {
+	private class AngryGoal extends Goal {
 		private final LightningBossEntity lightningBoss;
 		private int angerDuration = 0; 
 		private int step = 0; 
 		private int timer = 0; 
 
-		public AngryGoal(LightningBossEntity entity) {
+		private AngryGoal(LightningBossEntity entity) {
 			this.lightningBoss = entity;
 		}
 		
@@ -183,11 +184,11 @@ public class LightningBossEntity extends MonsterEntity {
 		
 	}
 
-	static class LightningStrikeGoal extends Goal {
+	private class LightningStrikeGoal extends Goal {
 		private final LightningBossEntity lightningBoss;
 		private int lightningTimer = 0;
 
-		public LightningStrikeGoal(LightningBossEntity entity) {
+		private LightningStrikeGoal(LightningBossEntity entity) {
 			this.lightningBoss = entity;
 		}
 
@@ -218,11 +219,11 @@ public class LightningBossEntity extends MonsterEntity {
 		}
 	}
 
-	static class SpawnCreeperGoal extends Goal {
+	private class SpawnCreeperGoal extends Goal {
 		private final LightningBossEntity lightningBoss;
 		private int summonMobsTimer = 300;
 
-		public SpawnCreeperGoal(LightningBossEntity entity) {
+		private SpawnCreeperGoal(LightningBossEntity entity) {
 			this.lightningBoss = entity;
 		}
 

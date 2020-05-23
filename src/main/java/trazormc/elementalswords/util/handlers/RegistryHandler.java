@@ -27,6 +27,7 @@ import trazormc.elementalswords.blocks.ImbuementTableBlock;
 import trazormc.elementalswords.containers.ImbuementTableContainer;
 import trazormc.elementalswords.crafting.ImbuementShapelessRecipes;
 import trazormc.elementalswords.entities.AirBossEntity;
+import trazormc.elementalswords.entities.BubbleEntity;
 import trazormc.elementalswords.entities.ChargedFireballEntity;
 import trazormc.elementalswords.entities.EarthBossEntity;
 import trazormc.elementalswords.entities.FireBossEntity;
@@ -156,7 +157,8 @@ public class RegistryHandler {
 				ModEntityTypes.FIRE_BOSS = setup(EntityType.Builder.create(FireBossEntity::new, EntityClassification.MONSTER).setTrackingRange(85).size(0.6F, 1.95F).immuneToFire().build(ElementalSwords.MOD_ID + ":fire_boss"), "fire_boss"),
 				ModEntityTypes.LIGHTNING_BOSS = setup(EntityType.Builder.create(LightningBossEntity::new, EntityClassification.MONSTER).setTrackingRange(85).size(0.6F, 1.95F).build(ElementalSwords.MOD_ID + ":lightning_boss"), "lightning_boss"),
 				ModEntityTypes.WATER_BOSS = setup(EntityType.Builder.create(WaterBossEntity::new, EntityClassification.MONSTER).setTrackingRange(85).size(0.6F, 1.95F).build(ElementalSwords.MOD_ID + ":water_boss"), "water_boss"),
-
+				
+				ModEntityTypes.BUBBLE = setup(EntityType.Builder.<BubbleEntity>create(BubbleEntity::new, EntityClassification.MISC).setTrackingRange(85).setCustomClientFactory((spawnEntity, world) -> new BubbleEntity(world)).build(ElementalSwords.MOD_ID + ":bubble"), "bubble"),
 				ModEntityTypes.CHARGED_FIREBALL = setup(EntityType.Builder.<ChargedFireballEntity>create(ChargedFireballEntity::new, EntityClassification.MISC).setTrackingRange(85).setCustomClientFactory((spawnEntity, world) -> new ChargedFireballEntity(world)).build(ElementalSwords.MOD_ID + ":charged_fireball"), "charged_fireball"),
 				ModEntityTypes.HAIL = setup(EntityType.Builder.<HailEntity>create(HailEntity::new, EntityClassification.MISC).setTrackingRange(85).setCustomClientFactory((spawnEntity, world) -> new HailEntity(world)).build(ElementalSwords.MOD_ID + ":hail"), "hail"),
 				ModEntityTypes.WIND_SEEKER = setup(EntityType.Builder.<WindSeekerEntity>create(WindSeekerEntity::new, EntityClassification.MISC).setTrackingRange(85).setCustomClientFactory((spawnEntity, world) -> new WindSeekerEntity(world)).build(ElementalSwords.MOD_ID + ":wind_seeker"), "wind_seeker")
