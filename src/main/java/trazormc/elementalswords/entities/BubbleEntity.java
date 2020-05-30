@@ -73,6 +73,8 @@ public class BubbleEntity extends DamagingProjectileEntity implements IRendersAs
 				this.remove();
 			}
 		}
+		
+		this.world.addParticle(this.getParticle(), this.posX, this.posY + 0.25, this.posZ, 0.0D, 0.0D, 0.0D);
 	}
 	
 	@Override

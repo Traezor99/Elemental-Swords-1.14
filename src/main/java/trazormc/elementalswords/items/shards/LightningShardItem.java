@@ -3,6 +3,7 @@ package trazormc.elementalswords.items.shards;
 import java.util.List;
 
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
@@ -30,6 +31,16 @@ public class LightningShardItem extends Item {
 				context.getItem().grow(-1);
 		}
 		return ActionResultType.SUCCESS;
+	}
+	
+	@Override
+	public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entity) {
+		if(entity.getFireTimer() >= 0)
+			entity.setInvulnerable(true);
+		else
+			entity.setInvulnerable(false);
+		
+		return super.onEntityItemUpdate(stack, entity);
 	}
 	
 	@Override
