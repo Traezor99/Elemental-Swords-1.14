@@ -42,7 +42,7 @@ public class WindSeekerRenderer extends EntityRenderer<WindSeekerEntity> {
 	public void doRender(WindSeekerEntity entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		GlStateManager.pushMatrix();
 		GlStateManager.disableCull();
-		GlStateManager.translatef((float)x, (float)y, (float)z);
+		GlStateManager.translatef((float)x, (float)y + 0.35f, (float)z);
 		this.bindEntityTexture(entity);
 		if(this.renderOutlines) {
 			GlStateManager.enableColorMaterial();

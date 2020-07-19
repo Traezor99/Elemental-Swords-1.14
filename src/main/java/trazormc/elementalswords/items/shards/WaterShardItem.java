@@ -7,6 +7,7 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
@@ -17,7 +18,7 @@ import trazormc.elementalswords.holders.ModEntityTypes;
 import trazormc.elementalswords.util.ModUtils;
 
 public class WaterShardItem extends Item {
-
+	
 	public WaterShardItem(Properties properties) {
 		super(properties);
 	}
@@ -30,11 +31,11 @@ public class WaterShardItem extends Item {
 	@Override
 	public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entity) {
 		World world = entity.world;
-		if(!world.isRemote && isOcean(world.getBiome(entity.getPosition())) && entity.isInWater() && world.getBlockState(entity.getPosition().up(5)).getBlock() == Blocks.WATER) {
+		if(!world.isRemote && isOcean(world.getBiome(entity.getPosition())) && entity.isInWater() && world.getSeaLevel() - entity.posY >= 6) {
 			WaterBossEntity waterBoss = new WaterBossEntity(ModEntityTypes.WATER_BOSS, world);
-			for(int i = 0; i < 10; i++) {
+			for(int i = 0; i < 15; i++) {
 				waterBoss.setPosition(ModUtils.getPos(random, 10, (int)entity.posX + 0.5), (int)entity.posY, ModUtils.getPos(random, 10, (int)entity.posZ + 0.5));
-				if(entity.world.getBlockState(waterBoss.getPosition()).getBlock() == Blocks.WATER && entity.world.getBlockState(waterBoss.getPosition().up()).getBlock() == Blocks.WATER) {
+				if(canSpawnHere(waterBoss)) {
 					entity.world.addEntity(waterBoss);
 					entity.remove();
 					break;
@@ -42,6 +43,12 @@ public class WaterShardItem extends Item {
 			} 
 		}
 		return super.onEntityItemUpdate(stack, entity);
+	}
+	
+	private boolean canSpawnHere(WaterBossEntity waterBoss) {
+		return waterBoss.world.getBlockState(waterBoss.getPosition()).getBlock() == Blocks.WATER && 
+				waterBoss.world.getBlockState(waterBoss.getPosition().up()).getBlock() == Blocks.WATER &&
+				waterBoss.world.getBlockState(new BlockPos(waterBoss.posX, 52, waterBoss.posZ)).getBlock() == Blocks.WATER;
 	}
 
 	/**

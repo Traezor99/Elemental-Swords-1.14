@@ -1,6 +1,5 @@
 package trazormc.elementalswords.entities;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntitySize;
@@ -94,21 +93,9 @@ public class WaterBossEntity extends MonsterEntity {
 
 	@Override
 	public void livingTick() {
-		if(calculateWaterHeight(this.world, this.posX, this.posZ) - this.posY <= 10)
+		if(this.world.getSeaLevel() - this.posY <= 10)
 			this.setMotion(0, -0.25, 0);
 		super.livingTick();
-	}
-	
-	private int calculateWaterHeight(World world, double x, double z) {
-		int y = world.getHeight();
-		boolean foundWater = false;
-		
-		while(!foundWater && y-- > 0) {
-			Block block = world.getBlockState(new BlockPos(x, y, z)).getBlock();
-			foundWater = block == Blocks.WATER;
-		}
-		
-		return y;
 	}
 
 	@Override
@@ -197,7 +184,7 @@ public class WaterBossEntity extends MonsterEntity {
 
 		@Override
 		public boolean shouldExecute() {
-			return this.waterBoss.isInWaterOrBubbleColumn() && calculateWaterHeight(this.waterBoss.world, this.waterBoss.posX, this.waterBoss.posZ) - this.waterBoss.posY >= 11;
+			return this.waterBoss.isInWaterOrBubbleColumn() && this.waterBoss.world.getSeaLevel() - this.waterBoss.posY >= 11;
 		}
 		
 		@Override
@@ -246,7 +233,7 @@ public class WaterBossEntity extends MonsterEntity {
 			BlockPos pos;
 			do {
 				double x = ModUtils.getPos(getRNG(), 15, this.waterBoss.posX);
-				double y = calculateWaterHeight(this.waterBoss.world, this.waterBoss.posX, this.waterBoss.posZ) - this.waterBoss.posY >= 16 ? 
+				double y = this.waterBoss.world.getSeaLevel() - this.waterBoss.posY >= 16 ? 
 						ModUtils.getPos(getRNG(), 5, this.waterBoss.posY) : ModUtils.getPos(getRNG(), 5, this.waterBoss.posY - 6);
 				double z = ModUtils.getPos(getRNG(), 15, this.waterBoss.posZ);
 				pos = new BlockPos(x, y, z);
@@ -279,12 +266,12 @@ public class WaterBossEntity extends MonsterEntity {
 		public void tick() {
 			if(this.timer >= 1200) {
 				this.timer = 0;
-				if(this.waterBoss.rand.nextInt(2) == 0) {
+				//if(this.waterBoss.rand.nextInt(2) == 0) {
 					PlayerEntity player = (PlayerEntity)this.waterBoss.getAttackTarget();
 					player.addPotionEffect(new EffectInstance(Effects.BLINDNESS, 100));
 					player.addPotionEffect(new EffectInstance(Effects.SLOWNESS, 100, 2));
-					player.addPotionEffect(new EffectInstance(ModEffects.FORCED_DROWN, 100, 4));
-				}
+					player.addPotionEffect(new EffectInstance(ModEffects.FORCED_DROWN, 100, 2));
+				//}
 			} else {
 				this.timer++;
 			}
