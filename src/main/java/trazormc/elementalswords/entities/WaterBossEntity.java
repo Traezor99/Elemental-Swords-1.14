@@ -6,6 +6,7 @@ import net.minecraft.entity.EntitySize;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Pose;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.controller.LookController;
 import net.minecraft.entity.ai.goal.FindWaterGoal;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.HurtByTargetGoal;
@@ -36,6 +37,7 @@ public class WaterBossEntity extends MonsterEntity {
 	public WaterBossEntity(EntityType<? extends WaterBossEntity> type, World worldIn) {
 		super(type, worldIn);
 		this.experienceValue = 100;	
+		this.lookController = new LookController(this);
 		bossInfo = (ServerBossInfo)(new ServerBossInfo(this.getDisplayName(), BossInfo.Color.PURPLE, BossInfo.Overlay.PROGRESS)).setDarkenSky(false);
 	}
 
@@ -47,8 +49,8 @@ public class WaterBossEntity extends MonsterEntity {
 		this.goalSelector.addGoal(3, new WaterBossEntity.ForceDrownTargetGoal(this));
 		this.goalSelector.addGoal(4, new WaterBossEntity.MoveGoal(this));
 		this.goalSelector.addGoal(5, new MoveTowardsRestrictionGoal(this, 1.0D));
-		this.goalSelector.addGoal(8, new LookAtGoal(this, PlayerEntity.class, 7.0F));
-		this.goalSelector.addGoal(9, new LookRandomlyGoal(this));
+		//this.goalSelector.addGoal(8, new LookAtGoal(this, PlayerEntity.class, 7.0F));
+		//this.goalSelector.addGoal(9, new LookRandomlyGoal(this));
 
 		this.targetSelector.addGoal(0, new HurtByTargetGoal(this, new Class[] {}));
 		this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
@@ -75,7 +77,7 @@ public class WaterBossEntity extends MonsterEntity {
 		super.removeTrackingPlayer(player);
 		bossInfo.removePlayer(player);
 	}
-
+	
 	@Override
 	public boolean isNonBoss() {
 		return false;
@@ -128,11 +130,11 @@ public class WaterBossEntity extends MonsterEntity {
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
 		return SoundEvents.ENTITY_DROWNED_HURT;
 	}
-	
+
 	private class ShootBubbles extends Goal {
 		private WaterBossEntity waterBoss;
 		private int timer = 0;
-		
+
 		private ShootBubbles(WaterBossEntity entity) {
 			this.waterBoss = entity;
 		}		
@@ -141,12 +143,12 @@ public class WaterBossEntity extends MonsterEntity {
 		public boolean shouldExecute() {
 			return this.waterBoss.getAttackTarget() instanceof PlayerEntity;
 		}
-		
+
 		@Override
 		public void startExecuting() {
 			timer = 0;
 		}
-		
+
 		@Override
 		public void tick() {
 			if(!this.waterBoss.world.isRemote) {
@@ -165,18 +167,18 @@ public class WaterBossEntity extends MonsterEntity {
 					timer++;
 				}
 			}
-			
+
 			super.tick();
 		}
-		
+
 	}
-	
+
 	private class MoveGoal extends Goal {
 		private WaterBossEntity waterBoss;
 		private BlockPos targetPos;
 		private int timer = 0;
 		private boolean hasTarget = false;
-		
+
 		private MoveGoal(WaterBossEntity entity) {
 			this.waterBoss = entity;
 			this.targetPos = waterBoss.getPosition();
@@ -184,14 +186,15 @@ public class WaterBossEntity extends MonsterEntity {
 
 		@Override
 		public boolean shouldExecute() {
-			return this.waterBoss.isInWaterOrBubbleColumn() && this.waterBoss.world.getSeaLevel() - this.waterBoss.posY >= 11;
+			return this.waterBoss.isInWaterOrBubbleColumn() && this.waterBoss.world.getSeaLevel() - this.waterBoss.posY >= 11 && 
+					this.waterBoss.getAttackTarget() instanceof PlayerEntity;
 		}
-		
+
 		@Override
 		public void startExecuting() {
 			timer = 0;				
 		}
-		
+
 		@Override
 		public void tick() {
 			if(!this.waterBoss.world.isRemote) { 
@@ -206,7 +209,7 @@ public class WaterBossEntity extends MonsterEntity {
 						double mag = Math.sqrt(x * x + z * z);
 						double pitch = Math.atan2(y, mag);
 						double yaw = Math.atan2(z, x);
-						this.waterBoss.rotationYaw = (float)(yaw * (180 / Math.PI)) - 90; //Weird rotation when in survival
+						//this.waterBoss.rotationYaw = (float)(yaw * (180 / Math.PI)) - 90; //Weird rotation when in survival
 						x = maxSpeed * Math.cos(yaw);
 						y = maxSpeed * Math.sin(pitch);
 						z = maxSpeed * Math.sin(yaw);			
@@ -217,26 +220,27 @@ public class WaterBossEntity extends MonsterEntity {
 					}
 				} else {
 					timer++;
-					this.waterBoss.addVelocity(0, 0.005, 0);
+					this.waterBoss.getLookController().setLookPositionWithEntity(this.waterBoss.getAttackTarget(), 90.0f, 90.0f);
+					this.waterBoss.addVelocity(0, 0.005, 0); //Keeps it from sinking
 				}
 			}
 			super.tick();
 		}
-		
+
 		private boolean reachedTargetPos() {
 			BlockPos current = this.waterBoss.getPosition();
 			return Math.abs(targetPos.getX() - current.getX()) <= 1 && Math.abs(targetPos.getY() - current.getY()) <= 1
 					&& Math.abs(targetPos.getZ() - current.getZ()) <= 1;
 		}
-		
+
 		private BlockPos getTarget() {
 			BlockPos pos;
 			do {
 				double x = ModUtils.getPos(getRNG(), 15, this.waterBoss.posX);
 				double y = this.waterBoss.world.getSeaLevel() - this.waterBoss.posY >= 16 ? 
 						ModUtils.getPos(getRNG(), 5, this.waterBoss.posY) : ModUtils.getPos(getRNG(), 5, this.waterBoss.posY - 6);
-				double z = ModUtils.getPos(getRNG(), 15, this.waterBoss.posZ);
-				pos = new BlockPos(x, y, z);
+						double z = ModUtils.getPos(getRNG(), 15, this.waterBoss.posZ);
+						pos = new BlockPos(x, y, z);
 			}
 			while(this.waterBoss.world.getBlockState(pos).getBlock() != Blocks.WATER);
 			hasTarget = true;
@@ -266,12 +270,10 @@ public class WaterBossEntity extends MonsterEntity {
 		public void tick() {
 			if(this.timer >= 1200) {
 				this.timer = 0;
-				//if(this.waterBoss.rand.nextInt(2) == 0) {
-					PlayerEntity player = (PlayerEntity)this.waterBoss.getAttackTarget();
-					player.addPotionEffect(new EffectInstance(Effects.BLINDNESS, 100));
-					player.addPotionEffect(new EffectInstance(Effects.SLOWNESS, 100, 2));
-					player.addPotionEffect(new EffectInstance(ModEffects.FORCED_DROWN, 100, 2));
-				//}
+				PlayerEntity player = (PlayerEntity)this.waterBoss.getAttackTarget();
+				player.addPotionEffect(new EffectInstance(Effects.BLINDNESS, 100));
+				player.addPotionEffect(new EffectInstance(Effects.SLOWNESS, 100, 2));
+				player.addPotionEffect(new EffectInstance(ModEffects.FORCED_DROWN, 100, 2));
 			} else {
 				this.timer++;
 			}
