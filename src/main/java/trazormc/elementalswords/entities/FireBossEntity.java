@@ -214,7 +214,11 @@ public class FireBossEntity extends BlazeEntity {
 			super.tick();
 			if(this.spawnTime >= 200 && !this.fireBoss.world.isRemote) {
 				this.spawnTime = 0;
-				ModUtils.attemptSpawnEntity(this.fireBoss, new BlazeEntity(EntityType.BLAZE, this.fireBoss.world), 10, 5);
+				BlazeEntity blaze = new BlazeEntity(EntityType.BLAZE, this.fireBoss.world);
+				if(ModUtils.attemptSpawnEntity(this.fireBoss, blaze, 10, 5)) 
+					blaze.setAttackTarget(this.fireBoss.getAttackTarget());
+				else
+					blaze.remove();		
 			} else {
 				this.spawnTime++;
 			}

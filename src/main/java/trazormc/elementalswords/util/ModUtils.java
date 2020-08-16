@@ -16,11 +16,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class ModUtils {
-	
+
 	public static boolean attemptSpawnEntity(Entity spawnerEntity, Entity spawnedEntity, int attempts, int radius) {
 		return ModUtils.attemptSpawnEntity((int)spawnerEntity.posX + 0.5, (int)spawnerEntity.posY, (int)spawnerEntity.posZ + 0.5, spawnerEntity.world, spawnedEntity, attempts, radius);
 	}
-	
+
 	/**
 	 * Attempts to spawn the given entity in a safe location within 5 blocks of the starting coordinates up to the specified number of times
 	 * @param xIn  the center x coordinate
@@ -32,7 +32,6 @@ public class ModUtils {
 	 * @return true if an entity is spawned, false if not
 	 */
 	public static boolean attemptSpawnEntity(double xStart, int yStart, double zStart, World world, Entity spawnedEntity, int attempts, int radius) {
-		boolean repeat = false;
 		int attemptsTried = 0;
 		do {
 			double x = ModUtils.getPos(new Random(), radius, xStart);
@@ -44,14 +43,13 @@ public class ModUtils {
 				return true;
 			}
 			else {
-				repeat = true;
 				attemptsTried++;
 			}
-		} while(repeat && attemptsTried < attempts);
-		
+		} while(attemptsTried < attempts);
+
 		return false;
 	}
-	
+
 	/**
 	 * Used to find a safe height for spawning entities near a boss. Checks 10 blocks above and below the entity for a safe y height.
 	 * Only checks for safety at the specified x and z, not any surrounding blocks.
@@ -64,7 +62,7 @@ public class ModUtils {
 	public static int calculateMobSpawnHeight(World world, int yEntity, double x, double z) {
 		int y = yEntity + 10;
 		boolean isSafe = false;
-		
+
 		while(y > yEntity - 10) {
 			Block block = world.getBlockState(new BlockPos(x, y, z)).getBlock();
 			Block block1 = world.getBlockState(new BlockPos(x, y - 1, z)).getBlock();
@@ -83,7 +81,7 @@ public class ModUtils {
 		}
 		return 0;
 	}
-	
+
 	/**
 	 * Adds the specified potion effect to the player for 10 seconds. Checks that the effect is either not currently active 
 	 * or is just about to end before doing so.
@@ -97,7 +95,7 @@ public class ModUtils {
 			player.addPotionEffect(new EffectInstance(effect, duration, amplifier));
 		}
 	}
-	
+
 	/**
 	 * Randomly generates a number within the specified radius of the start value
 	 * @param rand
@@ -113,7 +111,7 @@ public class ModUtils {
 			return (rand.nextInt(radius * 2 + 1) + start - radius) * -1;
 		} 	
 	}
-	
+
 	/**
 	 * Checks which block the player clicked and plays the appropriate sound
 	 * @param worldIn the current world
@@ -121,19 +119,20 @@ public class ModUtils {
 	 * @param pos the position clicked
 	 */
 	public static void playSound(World worldIn, PlayerEntity player, BlockPos pos) {
-		for(MaterialSounds material : MaterialSounds.values()) {
-			if(worldIn.getBlockState(pos) == Blocks.GRAVEL.getDefaultState()) {
-				repeatSound(SoundEvents.BLOCK_GRAVEL_BREAK, SoundCategory.BLOCKS, worldIn, player, pos);
-				break;
-			} else if(worldIn.getBlockState(pos).getBlock() == Blocks.DEAD_BUSH) {
-				repeatSound(SoundEvents.BLOCK_SAND_BREAK, SoundCategory.BLOCKS, worldIn, player, pos);
-				break;
-			} else if(material.getMaterial() == worldIn.getBlockState(pos).getMaterial()) {
-				repeatSound(material.getSound(), SoundCategory.BLOCKS, worldIn, player, pos);
+		if(worldIn.getBlockState(pos) == Blocks.GRAVEL.getDefaultState()) {
+			repeatSound(SoundEvents.BLOCK_GRAVEL_BREAK, SoundCategory.BLOCKS, worldIn, player, pos);
+		} else if(worldIn.getBlockState(pos).getBlock() == Blocks.DEAD_BUSH) {
+			repeatSound(SoundEvents.BLOCK_SAND_BREAK, SoundCategory.BLOCKS, worldIn, player, pos);
+		} else {
+			for(MaterialSounds material : MaterialSounds.values()) {
+				if(material.getMaterial() == worldIn.getBlockState(pos).getMaterial()) {
+					repeatSound(material.getSound(), SoundCategory.BLOCKS, worldIn, player, pos);
+					break;
+				}
 			}
 		}
-	}
-	
+	} //Maybe instead of doing it based on the block clicked, I can play a sound for every block a particle is spawned in?
+
 	/**
 	 * Plays the specified sound 3 times
 	 * @param soundIn

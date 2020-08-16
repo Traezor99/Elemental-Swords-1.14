@@ -69,25 +69,23 @@ public class EventHandler {
 	@SubscribeEvent
 	public void onEntityHit(LivingAttackEvent event) {
 		Entity entity = event.getEntity();
-		if(event.getSource() != DamageSource.OUT_OF_WORLD) {
-			if(!entity.world.isRemote) {
-				if(entity instanceof FireBossEntity) {
-					AxisAlignedBB aoe = new AxisAlignedBB(entity.posX - 40, entity.posY - 40, entity.posZ - 40, entity.posX + 40, entity.posY + 40, entity.posZ + 40);
-					List<Entity> entities = entity.getEntityWorld().getEntitiesWithinAABBExcludingEntity(entity, aoe);
-					for(Entity e : entities) {
-						if(e instanceof BlazeEntity && !(e instanceof FireBossEntity)) {
-							event.setCanceled(true);
-							break;
-						}
+		if(event.getSource() != DamageSource.OUT_OF_WORLD && !entity.world.isRemote) {
+			if(entity instanceof FireBossEntity) {
+				AxisAlignedBB aoe = new AxisAlignedBB(entity.posX - 40, entity.posY - 40, entity.posZ - 40, entity.posX + 40, entity.posY + 40, entity.posZ + 40);
+				List<Entity> entities = entity.getEntityWorld().getEntitiesWithinAABBExcludingEntity(entity, aoe);
+				for(Entity e : entities) {
+					if(e instanceof BlazeEntity && !(e instanceof FireBossEntity)) {
+						event.setCanceled(true);
+						break;
 					}
-				} else if(entity instanceof AirBossEntity) {
-					PlayerEntity player = (PlayerEntity)((AirBossEntity)entity).getAttackTarget();
-					if(player != null) {
-						if(!player.isElytraFlying() && !player.abilities.isFlying)
-							event.setCanceled(true);
-					}
-
 				}
+			} else if(entity instanceof AirBossEntity) {
+				PlayerEntity player = (PlayerEntity)((AirBossEntity)entity).getAttackTarget();
+				if(player != null) {
+					if(!player.isElytraFlying() && !player.abilities.isFlying)
+						event.setCanceled(true);
+				}
+
 			}
 		}
 	}

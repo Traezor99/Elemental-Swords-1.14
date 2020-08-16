@@ -242,11 +242,13 @@ public class LightningBossEntity extends MonsterEntity {
 			if(summonMobsTimer >= 300 && !this.lightningBoss.world.isRemote) {   
 				summonMobsTimer = 0;
 				CreeperEntity creeper = new CreeperEntity(EntityType.CREEPER, this.lightningBoss.world);
-				ModUtils.attemptSpawnEntity(this.lightningBoss, creeper, 10, 5);
-
-				LightningBoltEntity lightning = new LightningBoltEntity(this.lightningBoss.world, creeper.posX, creeper.posY, creeper.posZ, true);
-				lightning.setPosition(creeper.posX, creeper.posY, creeper.posZ);
-				this.lightningBoss.world.addEntity(lightning);    		
+				if(ModUtils.attemptSpawnEntity(this.lightningBoss, creeper, 10, 5)) {
+					LightningBoltEntity lightning = new LightningBoltEntity(this.lightningBoss.world, creeper.posX, creeper.posY, creeper.posZ, true);
+					lightning.setPosition(creeper.posX, creeper.posY, creeper.posZ);
+					this.lightningBoss.world.addEntity(lightning);    
+				} else {
+					creeper.remove();
+				}
 			} else {
 				summonMobsTimer++;
 			}

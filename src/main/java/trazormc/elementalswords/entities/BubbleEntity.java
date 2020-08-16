@@ -16,7 +16,6 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 import trazormc.elementalswords.holders.ModEntityTypes;
-import trazormc.elementalswords.util.ModUtils;
 
 public class BubbleEntity extends DamagingProjectileEntity implements IRendersAsItem {
 
@@ -79,7 +78,7 @@ public class BubbleEntity extends DamagingProjectileEntity implements IRendersAs
 		this.world.addParticle(this.getParticle(), this.posX + 0.2, this.posY + 0.25, this.posZ, 0, 0, 0);
 		this.world.addParticle(this.getParticle(), this.posX - 0.2, this.posY + 0.25, this.posZ, 0, 0, 0);
 		this.world.addParticle(this.getParticle(), this.posX, this.posY + 0.25, this.posZ + 0.2, 0, 0, 0);
-		this.world.addParticle(this.getParticle(), this.posX, this.posY + 0.25, this.posZ - 0.2, 0, 0, 0);		
+		this.world.addParticle(this.getParticle(), this.posX, this.posY + 0.25, this.posZ - 0.2, 0, 0, 0);
 	}
 	
 	@Override
