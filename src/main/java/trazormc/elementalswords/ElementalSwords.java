@@ -45,7 +45,6 @@ public class ElementalSwords {
 		MinecraftForge.EVENT_BUS.register(new EventHandler());
 	}
 	
-	//Test change for git 
 	@SubscribeEvent
 	public static void setup(FMLCommonSetupEvent event) {			
 		for(Biome biome : ForgeRegistries.BIOMES) {
